@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIのハズレを減らしたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-ai">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Evaluation</span>
+    <h1>AIのハズレを、減らす</h1>
+    <p class="lead">AIの出力は毎回ぶれます。もっともらしさで判断せず、具体的な良い例と失敗例、そして合格条件で確かめる。お願いの言葉を強める前に、まず「測れる」状態を作ります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">良い例と失敗例でAIの出力を検証し、<strong>失敗・遅延・出力の揺れを想定した上で</strong>、変更前後を比べられるようになる。</p>
+  </div>
+
+  <h2>「要約が、勝手に予定を足してくる」</h2>
+  <p>たとえばメモを要約させるAI機能を作ったとします。だいたいうまくいくのに、ときどき<strong>元のメモに無い予定を勝手に書き足す</strong>。これがAIの「揺れ」です。同じ頼み方でも、出力は毎回少しずつ変わります。</p>
+  <p>ここで多くの人がやりがちなのが、プロンプト（お願いの文）をどんどん強くすること。「絶対に予定を足すな」と書き足す。けれど、言葉を強めても揺れは消えません。必要なのは、<strong>ハズレを見つけられる仕組み</strong>です。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">言葉で押さえ込む</span>
+      「絶対に」「必ず」を足してプロンプトを強くする。直った気はするが、確かめる手段が無い。</div>
+    <div class="ex good"><span class="tagline">例で確かめる</span>
+      代表的なメモを数件用意し、「予定を足していないか」を毎回チェックして比べる。</div>
+  </div>
+
+  <h2>「良い例・失敗例」と「合格条件」をセットにする</h2>
+  <p>検証の仕組みといっても、大がかりなものは要りません。最初は次の3つで十分です。</p>
+  <ol>
+    <li><strong>代表的な入力</strong>：実際にありそうなメモを数件（良い例・失敗しやすい例の両方）</li>
+    <li><strong>合格条件</strong>：何が満たされていればOKか（例: 元のメモに無い予定を足していない）</li>
+    <li><strong>比較</strong>：プロンプトを変える前と後で、合格数がどう変わったか</li>
+  </ol>
+  <p>こうしておくと、「強めた気がする」ではなく「失敗例3件のうち2件が直った」と、数で言えるようになります。AIの揺れは消せませんが、<strong>許せる範囲に収まっているか</strong>は測れます。</p>
+
+  <h2>AIへは「強める前に検証の仕組みを」と言う</h2>
+  <div class="box">
+    <p style="margin:0">プロンプトを強める前に、良い例と失敗例で出力を検証する仕組みを作ってください。代表的な入力を数件と、合格条件（元のメモに無い予定を足していない、など）を用意し、変更前後で合格数を比べられるようにしてください。失敗・遅延・出力の揺れも想定してください。</p>
+  </div>
+  <p>「強める前に検証を」「変更前後で比べたい」。この順番が大事です。直したかどうかを測れる土台があってはじめて、プロンプトの改善が意味を持ちます。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>AIの出力は揺れる。言葉を強めても揺れ自体は消えない。</li>
+      <li>代表的な入力＋合格条件で、ハズレを見つけられる仕組みを先に作る。</li>
+      <li>変更の効果は「数で」比べる。失敗・遅延・揺れも最初から想定する。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>いま使っている（または作りたい）AI機能で、「ときどき起きるハズレ」を1つ挙げてください。そのハズレが出やすい入力を2〜3件と、「これが満たされればOK」という合格条件を1文で書き出します。これがそのまま検証の最小セットになります。書けたら上の依頼文をAIへ渡しましょう。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>お願いの言葉を強めることと、出力を検証できることは別だ、と言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="api.html"><span class="dir">前の単元</span>AIを安全につなぎたい</a>
+    <a class="next" href="ai-cost.html"><span class="dir">次の単元</span>使いすぎと料金を抑えたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

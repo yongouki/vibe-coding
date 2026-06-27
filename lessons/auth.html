@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人ごとに分けて守りたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-server">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Authentication / Authorization</span>
+    <h1>人ごとに分けて、守る</h1>
+    <p class="lead">「誰なのか」を確かめ、その本人が見たり変えたりしてよい範囲だけを許可する。複数人で使うアプリになった瞬間に、この2つが必要になります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0"><strong>認証（誰かを確かめる）と認可（何をしてよいか決める）を別々の判断として扱い</strong>、本人のデータだけを本人が読み書きできる形を頼めるようになる。</p>
+  </div>
+
+  <h2>「全員の記録が、同じ一覧に出てしまった」</h2>
+  <p>データベースに保存して共有できるようにした途端、こんなことが起こります。Aさんの支出も、Bさんの支出も、全部まとめて一つの一覧に出てしまう。共有はできたけれど、<strong>人ごとに分かれていない</strong>状態です。</p>
+  <p>これを直すには、2つの別々の判断が要ります。混ぜて考えると、どこを直せばよいか分からなくなります。</p>
+  <ul>
+    <li><strong>認証（Authentication）</strong>：いま操作しているのが誰なのかを確かめる（ログイン）</li>
+    <li><strong>認可（Authorization）</strong>：その人が、どのデータに何をしてよいかを決める（権限）</li>
+  </ul>
+
+  <h2>「誰か分かる」と「何をしてよいか」は別</h2>
+  <p>ログインできた＝何でもしてよい、ではありません。誰かは分かっても、他人の記録まで消せてよいわけではない。だから2段階で考えます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">認証だけで満足する</span>
+      ログインは付けたが、ログインさえすれば全員ぶんの記録を見たり消したりできてしまう。</div>
+    <div class="ex good"><span class="tagline">認可まで分ける</span>
+      ログインで本人を確かめ、さらに「自分の持ち物だけ」読み書きできるよう範囲を絞る。</div>
+  </div>
+
+  <p>前の単元でデータに「持ち主」の項目を入れたのを思い出してください。認可は、その持ち主と、いまログインしている人が一致するかで判断します。だから保存の段階で「誰のものか」を持っておくことが、ここで効いてきます。</p>
+
+  <h2>AIへは「認証と認可の両方」と言う</h2>
+  <p>片方だけ頼むと、片方が抜けがちです。両方を、別々の役割として頼みます。</p>
+  <div class="box">
+    <p style="margin:0">ログイン（本人確認＝認証）と、各データの持ち主だけが読み書きできる制御（権限＝認可）の両方を入れてください。いまは全員の記録が同じ一覧に出てしまうので、ログイン中の人の記録だけを表示し、他人の記録は読み書きできないようにしてください。変更点も説明してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>認証は「誰か」を確かめる。認可は「何をしてよいか」を決める。別の判断。</li>
+      <li>ログインできた＝全部できる、ではない。範囲を別途絞る。</li>
+      <li>認可はデータの「持ち主」と照らして判断する。だから保存時に持ち主を残す。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>いま作っているもので「他人に見られたら困るデータ」を1つ挙げ、それについて「誰なら見てよいか」「誰なら変えてよいか」を分けて書き出してください。前者が認証、後者が認可の入口です。書けたら、上の依頼文をそのままAIへ渡してみましょう。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「誰か分かること（認証）」と「何をしてよいか（認可）」が別の判断だと言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="database.html"><span class="dir">前の単元</span>端末を越えて残したい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIが何を変えたか読む ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DIFF / REVIEW</span>
+    <h1>AIが「どこを変えたか」を自分で確かめる</h1>
+    <p class="lead">一つ動くものができた後は、育てる段階に入ります。AIに直してもらうたび、頼んだ場所以外も変わっていないか。差分（diff）を読めることが、安心して任せるための最初の安全装置です。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">AIの返答を鵜呑みにせず、<strong>変わったファイルと範囲</strong>を自分の目で確認し、想定外の変更に気づけるようになる。</p>
+  </div>
+
+  <h2>「直しました」を、そのまま信じない</h2>
+  <p>動くものができると、修正の頼みごとが増えます。「ボタンの色を変えて」「この計算を直して」。AIは応えてくれますが、ついでに別の場所まで書き換えることがあります。悪気はなく、整えようとした結果です。</p>
+  <p>だから完成した文章ではなく、<strong>差分</strong>を見ます。差分とは「前と後で、どの行がどう変わったか」だけを抜き出したものです。全体を読み直すより速く、変更点だけを追えます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">結果だけ確認</span>
+      画面で動いたから、たぶん大丈夫だろうと次へ進む。</div>
+    <div class="ex good"><span class="tagline">変更点を確認</span>
+      頼んだ1か所だけが変わり、他のファイルは触られていないと差分で確かめる。</div>
+  </div>
+
+  <h2>差分は「入口・データ・副作用・出口」で追う</h2>
+  <p>差分をただ眺めると、行の増減に目が行きがちです。代わりに、変更が処理の流れのどこに当たるかで見ると、見落としが減ります。</p>
+  <ol>
+    <li><strong>入口</strong>：受け取る値や条件は変わったか</li>
+    <li><strong>データ</strong>：保存・計算される中身は変わったか</li>
+    <li><strong>副作用</strong>：頼んでいない別の機能まで触っていないか</li>
+    <li><strong>出口</strong>：画面に出る結果や戻り値は意図どおりか</li>
+  </ol>
+  <p>とくに気をつけるのは副作用です。「色を変えて」と頼んだのに保存処理の行まで差分に出ていたら、理由を聞く価値があります。</p>
+
+  <h2>AIに差分の要点を説明させる</h2>
+  <p>差分の読み方が分からないときは、AI自身に要点を言わせます。全部を自力で読まなくても、「どこを・なぜ変えたか」を聞けば、想定外を一緒に探せます。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">どのファイルの何を変えたか、差分（diff）で要点を説明してください。頼んだ修正に直接関係する変更と、それ以外に触れた箇所を分けて挙げてください。想定外の変更がないか一緒に確認したいです。</p>
+  </div>
+
+  <p>「直接関係する変更」と「それ以外」を分けさせるのがコツです。後者が空なら安心して進めますし、何かあれば、そこだけ深く見れば済みます。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>完成した文章ではなく、前後の差分を見て変更点を確かめる。</li>
+      <li>入口・データ・副作用・出口の順で、頼んでいない変更がないか追う。</li>
+      <li>読みにくければ、AIに「直接の変更」と「それ以外」を分けて説明させる。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>直前にAIへ頼んだ修正について、「差分で要点を説明して。頼んだ箇所以外に触れた行があれば理由も教えて」と聞いてください。返ってきた答えを、上の4つの観点と照らし合わせます。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>差分を読む・Gitで戻れる・テストで気づける。この3つがそろって、はじめて「安全装置」になります。今回はその一つ目です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <span class="soon"><span class="dir">前の単元</span>一つの形にする（準備中）</span>
+    <a class="next" href="debug.html"><span class="dir">次の単元</span>なぜ動かないか突き止めたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

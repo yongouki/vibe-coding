@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まず一つ動かす ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">ONE WORKING THING</span>
+    <h1>まず、一つ動くものを完成させる</h1>
+    <p class="lead">ここは、どの道を通ってきても合流する地点です。画面を出す、データを流す、認証を付ける、AIに評価させる──どれか一つでも実際に動いたなら、もう「作れる人」です。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">機能を増やす前に、<strong>一つ動くもの</strong>を、自分にも他の人にも再現できる形で締めくくれるようになる。</p>
+  </div>
+
+  <h2>どの枝から来ても、ゴールは同じ</h2>
+  <p>このツリーには複数の道があります。ブラウザに画面を出す道、ファイルやデータを一括で処理する道、サーバーや認証を立てる道、AIの出力を確かめる道。どれも別々のことに見えますが、たどり着く先は一つです。</p>
+  <p><strong>「決めた範囲のことが、実際に最後まで動く」</strong>。これが達成できていれば、通ってきた道に関係なく、あなたは一度ものを完成させたことになります。残りは、ここから少しずつ足していくだけです。</p>
+
+  <h2>技術が多いほど偉い、ではない</h2>
+  <p>作っていると、つい足したくなります。ログイン、データベース、外部API、きれいなデザイン。でも、いま欲しいものに対して技術が過剰だと、完成は遠のき、壊れたときに調べる範囲も広がります。</p>
+  <p>判断の軸は一つだけ。<strong>「いま、他の人や他の端末が要るか」</strong>です。要らないうちは、ブラウザの中だけで十分なことがほとんどです。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">先に盛る</span>
+      自分用のメモなのに、最初からログインとデータベースとデプロイをまとめて用意する。</div>
+    <div class="ex good"><span class="tagline">いまに合わせる</span>
+      自分・1端末・記録を残すだけなら、HTML / CSS / JS と localStorage で一度完成させる。</div>
+  </div>
+
+  <p>右側で一度動かしてから、「次に他の人にも使わせたい」と思った時に、はじめて公開や認証を足します。捨てているのではなく、順番を後ろに置いているだけです。</p>
+
+  <h2>「動いた」を、再現できる状態にする</h2>
+  <p>自分の画面で一度動いただけでは、まだ半分です。明日の自分や、見せたい相手が、同じ手順で同じ結果にたどり着けて、はじめて「完成」と言えます。最低限、次の3つがそろっていれば十分です。</p>
+  <ol>
+    <li><strong>動かし方</strong>：このファイルをブラウザで開く、など一行で書ける手順</li>
+    <li><strong>成功の合図</strong>：何をすると、何が見えれば成功か</li>
+    <li><strong>今回の範囲</strong>：何ができて、何はまだやらないか</li>
+  </ol>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">いま動いているこのページを、いったん完成として締めたいです。今の欲しいものに対して過剰にせず、最小構成のままにしてください。要らない技術は今は足さないでください。あわせて、開き方・成功の確認手順・今回やらないことを、短いメモにまとめてください。</p>
+  </div>
+
+  <h2>よくある失敗</h2>
+  <ul>
+    <li>完成間際に「ついでに」機能を足し始め、動いていたものまで壊す。</li>
+    <li>自分の環境でしか動かず、手順を書かないので他の端末で再現できない。</li>
+    <li>まだ一人でしか使わないのに、公開や認証を先に組み込んで止まってしまう。</li>
+  </ul>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>どの枝から来ても、ゴールは「決めた範囲が最後まで動く」ことで同じ。</li>
+      <li>他の人・他の端末が要らないうちは、ブラウザの中だけで足りる。</li>
+      <li>動かし方・成功の合図・今回の範囲を残し、再現できる形で締める。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま手元で動いているものを一つ選び、次の3行を書いてください。これがそろえば、一度「完成」と宣言してかまいません。</p>
+    <p style="margin:0"><strong>動かし方：</strong>＿＿＿＿＿＿＿＿<br>
+      <strong>成功の合図：</strong>＿＿＿＿＿＿＿＿<br>
+      <strong>今回やらないこと：</strong>＿＿＿＿＿＿＿＿</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「他の人・他の端末が要るか」で必要な技術を判断でき、一つを再現できる形で締められたら十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <span class="soon"><span class="dir">前の単元</span>各枝から合流</span>
+    <span class="next soon"><span class="dir">次の単元</span>動いたら、まず読む（準備中）</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

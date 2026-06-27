@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>勝手に動いてほしい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-auto">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Scheduler / Cron / Webhook</span>
+    <h1>決まった時間や合図で、勝手に動かす</h1>
+    <p class="lead">毎回手で実行していた処理は、時間や外部の合図をきっかけに自動で動かせます。鍵になるのは、二度動いても壊れないことです。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">この単元でできるようになること</span>
+    <ul>
+      <li>同じ処理が重なって動いても、結果が壊れないようにできる。</li>
+      <li>実行できたか、失敗したかを通知・記録して、後から確認できる。</li>
+    </ul>
+  </div>
+
+  <h2>自動実行のきっかけは2種類</h2>
+  <p>自動で動かす合図には、大きく2つあります。組み合わせて使うこともあります。</p>
+  <ul>
+    <li><strong>時間で動く（Cron / Scheduler）</strong>：毎朝7時など、決まった時刻に実行する。</li>
+    <li><strong>合図で動く（Webhook）</strong>：外部で何かが起きた瞬間に実行する。</li>
+  </ul>
+  <p>「毎日決まった時間に集計する」なら、時間で動くタイプから始めるのが分かりやすいです。</p>
+
+  <h2>二度動いても壊れない＝冪等（べきとう）</h2>
+  <p>自動実行で一番怖いのは、同じ処理が二度走ってしまうことです。時間が重なったり、再試行が走ったりで起こります。このとき、二度動いても結果が同じになる作りを「冪等」と呼びます。</p>
+  <p>難しい言葉ですが、やることは単純です。「すでに処理済みか」を先に確かめ、済みなら何もしない。これだけで、重複しても二重集計や二重送信を防げます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">二度動くと壊れる</span>
+      実行のたびに合計へ足し込む → 同じジョブが2回走り、売上が二重に計上される。</div>
+    <div class="ex good"><span class="tagline">冪等にする</span>
+      「その日の分は処理済みか」を先に確認 → 済みなら何もしない。何回動いても結果は同じ。</div>
+  </div>
+
+  <h2>動いたかどうかが分かるようにする</h2>
+  <p>自動化の弱点は、失敗しても気づきにくいことです。誰も見ていない時間に止まっていた、では困ります。だから、実行のたびに記録を残し、失敗したときは通知が飛ぶようにします。</p>
+  <ul>
+    <li>実行履歴：いつ動いて、成功か失敗かを残す</li>
+    <li>再試行：一時的な失敗は、少し待って自動でもう一度だけ試す</li>
+    <li>通知：それでもダメなら、メールやチャットへ知らせる</li>
+  </ul>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">毎朝決まった時間に動かしてください。二度実行されても結果が壊れないように（冪等に）して、失敗時は通知してください。実行履歴も残してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li>「一度しか呼ばれない」前提に頼らない。二度動いても同じ結果にする（冪等）。</li>
+      <li>処理の前に「すでに済みか」を確認してから動かす。</li>
+      <li>実行履歴を残し、失敗は再試行と通知で気づけるようにする。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>毎日1回の集計を、安全に再実行できるジョブとして設計しましょう。次の文をそのままAIに渡してみてください。</p>
+    <p style="margin:0">毎日決まった時間にCSVを集計するジョブを設計してください。CronまたはSchedulerを使い、重複実行への冪等性、実行履歴、失敗時の再試行と通知を含めてください。初心者向けの最小構成と確認方法も説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「一度しか呼ばれない」前提に依存せず、二度動いても同じ結果になる（冪等）設計にできていれば十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="dataflow.html"><span class="dir">前の単元</span>まとめて変換・集計したい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

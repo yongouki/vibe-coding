@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>端末を越えて残したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-server">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Database</span>
+    <h1>端末を越えて、データを残す</h1>
+    <p class="lead">たくさんのデータを、端末をまたいで保存し、後から探し出せる場所がデータベースです。「他の人とも共有したい」「履歴を残したい」が出てきたら、その出番です。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">保存したい項目とその関係を決め、<strong>localStorageとデータベースの違い（共有・検索）を理解して</strong>使い分けられるようになる。</p>
+  </div>
+
+  <h2>localStorageは「その端末の中」にしか残らない</h2>
+  <p>これまで使ってきた localStorage は手軽ですが、保存先はあくまで<strong>その人のブラウザの中</strong>です。便利な反面、こんな限界があります。</p>
+  <ul>
+    <li>別の端末で開くと、データが無い（同じ人でもスマホとPCで共有されない）</li>
+    <li>他の人からは、その内容を見られない（共有できない）</li>
+    <li>「条件で探す」「並べ替える」が苦手（検索に向かない）</li>
+  </ul>
+  <p>つまり「自分の、この端末の中だけ」で完結するうちは localStorage で十分。けれど、共有や検索が欲しくなった瞬間に、保存する場所そのものを変える必要が出てきます。それがデータベースです。</p>
+
+  <h2>まず「何を・どんな形で残すか」を決める</h2>
+  <p>データベースに移すときに一番大事なのは、仕組みより<strong>保存する項目を先に決める</strong>ことです。支出メモなら、たとえばこう。</p>
+  <div class="box">
+    <pre style="margin:0;overflow:auto;color:#cfe5ef;font:12px/1.7 'SFMono-Regular',Consolas,monospace;white-space:pre"><code>支出（1件ぶん）
+  ├ 金額   … 数値
+  ├ メモ   … 文字
+  ├ 日付   … いつの記録か
+  └ 持ち主 … 誰の記録か（共有するなら必要）</code></pre>
+  </div>
+  <p>項目と、その関係（誰の記録か、など）がはっきりしていれば、後の検索や共有がやりやすくなります。先に全部を完璧に決める必要はありません。今欲しい項目から始めて、後で足せます。</p>
+
+  <h2>AIへは「共有したいからDBへ移す」と言う</h2>
+  <p>「保存して」とだけ言うと、AIは手軽な localStorage を選びがちです。端末をまたいで残したい意図と、残す項目を伝えると、データベースを使う構成にしてもらえます。</p>
+  <div class="box">
+    <p style="margin:0">いまlocalStorageに保存している支出メモを、端末をまたいで残したいので、localStorageではなくデータベースに保存する形へ移してください。保存する項目は金額・メモ・日付・持ち主です。まずは一番小さく動く構成で作り、変更点も説明してください。</p>
+  </div>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">場所を言わない</span>
+      「データを保存できるようにして」とだけ頼み、結局その端末の中だけに残る形になる。</div>
+    <div class="ex good"><span class="tagline">場所と項目を言う</span>
+      「端末をまたいで残したいのでDBへ。項目は金額・メモ・日付・持ち主」と伝える。</div>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>localStorageは「その端末の中」にしか残らない。共有・検索には向かない。</li>
+      <li>端末をまたいで残す・探す・共有する、が欲しくなったらデータベース。</li>
+      <li>移すときは、まず保存する項目とその関係を先に決める。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>いまlocalStorageに残しているデータを1つ思い浮かべ、「端末をまたいで共有したくなる場面」を1つ書き出してください。そのうえで、保存したい項目を3〜4個、上の図のように並べてみましょう。これがそのままAIへの依頼の土台になります。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>localStorageが“どこに”保存されるか、そして端末をまたぐ共有には共有のデータベースが要ることを言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="backend.html"><span class="dir">前の単元</span>ブラウザの外で動かしたい</a>
+    <a class="next" href="auth.html"><span class="dir">次の単元</span>人ごとに分けて守りたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

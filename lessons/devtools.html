@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>何が起きたかを伝える ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DEVTOOLS / CONSOLE / NETWORK</span>
+    <h1>「壊れた」ではなく、証拠を渡す</h1>
+    <p class="lead">動くものができた後、いつか不具合に出会います。そのとき画面の見た目だけを伝えても、AIは推測で直すしかありません。ブラウザが内部に持っているエラーと通信の記録を、そのまま材料として渡しましょう。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">不具合を「動かない」で終わらせず、<strong>再現手順・Consoleのエラー・Networkの記録</strong>をそろえて、AIへ渡せるようになる。</p>
+  </div>
+
+  <h2>DevToolsは、ブラウザの計器盤</h2>
+  <p>多くのブラウザは、右クリックして「検証」、またはF12でDevToolsという開発者向けの画面を開けます。中でも最初に使うのは2つです。</p>
+  <ul>
+    <li><strong>Console</strong>：コードがつまずいたときの赤いエラーが出る場所</li>
+    <li><strong>Network</strong>：サーバーとやり取りした通信の一覧が出る場所</li>
+  </ul>
+  <p>画面には「保存できなかった」としか出なくても、Consoleには原因の一行が、Networkには失敗した通信が残っていることがあります。これが推測を減らす材料になります。</p>
+
+  <h2>渡すと直りやすい情報、渡すと迷う情報</h2>
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">推測しか頼めない</span>
+      ボタンを押しても何も起きません。直してください。</div>
+    <div class="ex good"><span class="tagline">原因を絞れる</span>
+      追加ボタンを押すと、Consoleに「undefined is not a function」と出て、NetworkのPOSTがStatus 500で失敗します。</div>
+  </div>
+  <p>右側には、再現手順（押した操作）・Consoleのエラー文・NetworkのStatusが入っています。AIはこの3点から、画面を見なくても原因を絞れます。</p>
+
+  <h2>Networkでは Request・Response・Status を見る</h2>
+  <p>通信が絡む不具合では、Networkの一覧から該当の通信をクリックし、3点を確認します。</p>
+  <ol>
+    <li><strong>Request</strong>：こちらが何を送ったか（送り先・中身）</li>
+    <li><strong>Response</strong>：相手が何を返したか（エラーメッセージが入ることが多い）</li>
+    <li><strong>Status</strong>：成功か失敗か（200番台は成功、400・500番台は失敗の合図）</li>
+  </ol>
+  <p>専門用語に見えますが、覚えるのは「送ったもの・返ってきたもの・成否」だけです。これをコピーして渡せば十分です。</p>
+
+  <div class="box">
+    <h3>AIへ渡すときの言い方</h3>
+    <p style="margin:0">推測で直す前に、再現手順・Consoleのエラー・NetworkのRequest/Response/Statusを見て、原因を絞ってください。私が貼り付けるので、足りない情報があれば先に質問してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>画面の症状だけでなく、Consoleのエラーを再現手順とセットで渡す。</li>
+      <li>通信の不具合は、NetworkのRequest・Response・Statusを確認する。</li>
+      <li>証拠を先に渡すと、AIは推測ではなく原因から直せる。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>ブラウザのDevToolsでConsoleとNetworkを開き、手元の不具合からエラー1件を選んで、AIへ渡せる形に整理してください。整理を手伝ってもらうには、次の文をそのまま貼ります。</p>
+    <p style="margin:0">これからブラウザで起きた不具合を相談します。推測で修正せず、まず必要な再現手順、Consoleエラー、NetworkのRequest・Response・Status、関連コードを順番に質問してください。集めた情報から原因候補を一つずつ絞ってください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>画面に見える結果だけでなく、ブラウザ内部の記録を取り出してAIへ渡せれば、原因探しはぐっと速くなります。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <span class="soon"><span class="dir">前の単元</span>一つの形にする（準備中）</span>
+    <a class="next" href="debug.html"><span class="dir">次の単元</span>なぜ動かないか突き止めたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

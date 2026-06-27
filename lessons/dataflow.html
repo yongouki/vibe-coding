@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まとめて変換・集計したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-auto">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Data processing</span>
+    <h1>入力を読んで、変換して、安全に保存する</h1>
+    <p class="lead">大量のデータをまとめて処理したいとき、画面は要りません。入力・変換・出力の3つに分けて考えると、最短で組めて、壊れにくくなります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">この単元でできるようになること</span>
+    <ul>
+      <li>処理を「入力・変換・出力」に分けて考えられる。</li>
+      <li>途中経過と失敗した理由を記録して、後から原因を追える。</li>
+    </ul>
+  </div>
+
+  <h2>処理は、入力・変換・出力の3段で考える</h2>
+  <p>「CSVを集計して」と一息に頼むと、どこで失敗したのか分からなくなります。最初に3つの段に分けておくと、問題が起きた場所がすぐ特定できます。</p>
+  <ol>
+    <li><strong>入力</strong>：元データを読む（ここでは絶対に書き換えない）</li>
+    <li><strong>変換</strong>：集計や整形をする（途中の作業はコピーの上で）</li>
+    <li><strong>出力</strong>：結果を保存する（最後にまとめて書き出す）</li>
+  </ol>
+  <p>特に大切なのは、入力の元データを処理の途中で上書きしないことです。元が無事なら、失敗しても何度でもやり直せます。</p>
+
+  <h2>元データを壊さない「置き換え方式」</h2>
+  <p>1万行のような大きなデータでは、途中で止まる可能性を最初から織り込みます。直接本ファイルへ書き込むのではなく、一時ファイルに書いてから、全部うまくいったときだけ本ファイルへ差し替えます。</p>
+  <ol>
+    <li>先に1〜2行だけ試して、変換のルールが正しいか検証する</li>
+    <li>結果は一時ファイルへ書き出す（本ファイルにはまだ触らない）</li>
+    <li>全行が成功したら、一時ファイルを本ファイルへ置き換える</li>
+  </ol>
+  <p>途中で止まっても、本ファイルは手付かずのまま。「開始前の状態へいつでも戻れる」状態を、設計で先に確保しておきます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">直書きで止まる</span>
+      元のCSVに直接上書き → 5000行目でエラー → 半分書き換わったファイルだけが残る。</div>
+    <div class="ex good"><span class="tagline">置き換え方式</span>
+      一時ファイルへ書き出し → 全成功なら差し替え。失敗しても元データは無傷。</div>
+  </div>
+
+  <h2>失敗は止めずに、行ごとに記録する</h2>
+  <p>1行おかしいだけで全部を止めると、最後の1行まで進めません。エラーが出た行はスキップして記録に残し、処理は続ける。終わった後で「どの行が、なぜダメだったか」を見返せるようにします。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">入力を読んで変換して保存する流れにしてください。途中で失敗しても元データは壊さず、一時ファイルに書いてから全成功時だけ本ファイルへ置き換える形でお願いします。行ごとのエラーは記録に残して、処理は止めずに続けてください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li>処理は入力・変換・出力に分け、入力の元データは絶対に上書きしない。</li>
+      <li>先に検証 → 一時ファイル → 全成功時のみ本ファイルへ置き換える。</li>
+      <li>失敗した行は記録して飛ばし、途中で全体を止めない。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>1万行のCSVを安全に変換する流れを、AIと一緒に設計してみましょう。次の文をそのまま渡してみてください。</p>
+    <p style="margin:0">1万行のCSVを別の形式に変換するスクリプトを設計してください。元データは壊さず、一時ファイルに書いてから全成功時だけ本ファイルへ置き換える方式にし、行ごとのエラーをログに残してください。初めての人向けに、確認手順も説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>途中で止まっても開始前の状態へ戻れる設計（検証 → 一時ファイル → 全成功時のみ置換）になっていれば十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="python.html"><span class="dir">前の単元</span>繰り返しを任せたい</a>
+    <a class="next" href="scheduler.html"><span class="dir">次の単元</span>勝手に動いてほしい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

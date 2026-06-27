@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>画面が増えても整理したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-web">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Components / State / Routing</span>
+    <h1>画面が増えても、追える形に整理する</h1>
+    <p class="lead">画面や状態が増えて、一枚のコードでは追いにくくなったら整理の合図です。部品（Component）・状態（State）・ページ遷移（Routing）の3つに分けて、見通しを取り戻します。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">UIを役割ごとのComponentに分け、<strong>状態の置き場所とページ遷移（Routing）を決められる</strong>ようになる。</p>
+  </div>
+
+  <h2>分けるのは「大きくなって追えなくなってから」でいい</h2>
+  <p>最初から部品に分ける必要はありません。1ファイルで動くうちは、それが一番速いからです。整理を考えるのは、こういう兆候が出てきたときです。</p>
+  <ul>
+    <li>1つ直すと、関係ないところまで壊れる</li>
+    <li>同じような表示を、あちこちにコピーして書いている</li>
+    <li>どの値が今どうなっているのか、自分でも追えなくなってきた</li>
+  </ul>
+  <p>これは設計の失敗ではなく、作るものが育った証拠です。育ったぶんだけ、整理し直せば先へ進めます。</p>
+
+  <h2>3つに分けて考える</h2>
+  <p>整理の軸は、保存場所の話ではありません。「画面の責任」と「状態の持ち主」を決めることです。次の3つに分けます。</p>
+  <ol>
+    <li><strong>Component（部品）</strong>：画面を役割ごとの部品に切る。結果表示は結果表示、履歴は履歴。</li>
+    <li><strong>State（状態）</strong>：どの値を、どの部品が持つかを決める。共有する値は1段上に置く。</li>
+    <li><strong>Routing（ページ遷移）</strong>：画面の切り替えを、URLや画面の状態として整理する。</li>
+  </ol>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">追えなくなる</span>
+      全部の表示と値を1ファイルに詰め、どこが何を持っているか分からないまま足し続ける。</div>
+    <div class="ex good"><span class="tagline">責任を分ける</span>
+      表示を部品に切り、共有する値の持ち主を1か所に決めてから足していく。</div>
+  </div>
+
+  <h2>フレームワークへ移すかは、分けた「後」で決める</h2>
+  <p>整理＝Reactなどへの移行、ではありません。Vanilla JS（素のJavaScript）のままでも、関数やファイルを役割ごとに分ければ見通しは良くなります。フレームワークが効いてくるのは、部品や画面が十分に増えてからです。</p>
+  <p>だからAIに頼むときも、いきなり移行を前提にせず「Vanilla JSを続ける案」と並べて比較してもらうと、過剰にならずに済みます。</p>
+
+  <h2>AIへ頼むときは「責任の分け方」を聞く</h2>
+  <div class="box">
+    <p style="margin:0">1ファイルが大きくなってきました。役割ごとの部品（Component）に分けて、状態（State）の置き場所とページ遷移（Routing）を整理してください。まだフレームワークへ移行すべきかも、Vanilla JSを続ける案と比較してください。</p>
+  </div>
+  <p>「状態の置き場所」「Vanilla JSを続ける案と比較」と添えるのがポイントです。これで、ただ書き直すのではなく、責任の分け方とその理由を一緒に出してもらえます。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>分けるのは「一枚では追えなくなってから」で十分。</li>
+      <li>軸は保存場所ではなく、画面の責任（Component）と状態の持ち主（State）。</li>
+      <li>フレームワーク移行は整理の後で判断。Vanilla JS継続案と比べて決める。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>運勢アプリを、結果表示・履歴・設定の3つの部品に分ける設計図を作ってみましょう。下の文をそのままAIへ渡せます。</p>
+    <p style="margin:0">現在は1ファイルのHTMLとJavaScriptで運勢アプリを作っています。結果表示、履歴、設定の責任を分けるComponent構成と、どこにStateを置くかを提案してください。まだフレームワークへ移行すべきかも、Vanilla JSを続ける案と比較してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>整理の問題は「保存場所」ではなく「画面の責任と状態の所有者」を決めることです。そう言い換えられたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="jsdom.html"><span class="dir">前の単元</span>押したら動いてほしい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

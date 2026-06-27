@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>繰り返しを任せたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-auto">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Python</span>
+    <h1>小さなスクリプトを書いて、同じ手順を任せる</h1>
+    <p class="lead">手で繰り返している作業は、短いプログラムにすると一発で終わります。大事なのは、書いたものが別のPCでも同じように動くことです。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">この単元でできるようになること</span>
+    <ul>
+      <li>変数・条件分岐・関数を使って、簡単な処理を組み立てられる。</li>
+      <li>使ったライブラリと手順を、別のPCでも再現できる形で残せる。</li>
+    </ul>
+  </div>
+
+  <h2>「今回だけ動く」と「いつでも動く」は別物</h2>
+  <p>自分のPCで動いたから完成、ではありません。スクリプトは、外から持ってきた部品（ライブラリ）に頼って動いていることが多く、その部品が無いPCでは止まります。</p>
+  <p>だから、コードと一緒に「どの部品が必要か」「どう実行するか」を残しておきます。Pythonでは、必要な部品の一覧を <span class="mono">requirements.txt</span> というファイルに書き出しておくのが定番です。これがあると、別のPCでも同じ状態を一行で作り直せます。</p>
+  <ol>
+    <li>スクリプト本体（やりたい処理）</li>
+    <li>必要なライブラリの一覧（requirements.txt）</li>
+    <li>実行手順（どう動かすかのメモ）</li>
+  </ol>
+
+  <h2>AIには「再現できる形で」と一言足す</h2>
+  <p>ただ「Pythonで書いて」だと、自分のPCでしか動かないコードになりがちです。再現性まで頼むと、必要なファイルと手順がセットで返ってきます。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">これはPythonの短いスクリプトでお願いします。必要なライブラリと実行手順も、別のPCで再現できる形（requirements.txt と起動コマンド）で書いてください。Pythonは初めて触ります。</p>
+  </div>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">手元でしか動かない</span>
+      コードだけ受け取る → 別のPCで実行したら「ライブラリが無い」で止まる。</div>
+    <div class="ex good"><span class="tagline">どこでも再現できる</span>
+      コード＋requirements.txt＋手順を受け取る → 別のPCでも一行で同じ状態を作れる。</div>
+  </div>
+
+  <h2>長い1本より、小さな関数に分ける</h2>
+  <p>処理が長くなってきたら、意味のまとまりごとに関数へ切り分けます。名前を付けて分けておくと、後で読み返したときに「どこが何をしているか」がすぐ分かり、直したい場所だけ直せます。</p>
+  <ul>
+    <li>変数：途中の値に名前を付けて置いておく場所</li>
+    <li>条件分岐：「もし◯◯なら」で処理を変える</li>
+    <li>関数：一つの役割をまとめて、名前で呼び出せるようにする</li>
+  </ul>
+  <p>用語を覚えるより、「この処理に名前を付けて分けて」とAIに頼める方が役に立ちます。</p>
+
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li>動いた＝完成ではない。別のPCでも同じ状態を作れるかまで確認する。</li>
+      <li>コードと一緒に、必要なライブラリ（requirements.txt）と手順を残す。</li>
+      <li>長い処理は、役割ごとに名前を付けた関数へ分ける。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>数字を入れると合計と平均を返す、小さなPythonスクリプトを作りましょう。次の文をそのままAIに渡してみてください。</p>
+    <p style="margin:0">Pythonで、数値のリストを受け取って合計と平均を表示する短いスクリプトを書いてください。実行方法と、自分の数字に差し替える箇所も説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「今回だけ動く」ではなく、別のPCでも同じ状態を作れる形（依存と手順）で残せていれば十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="files.html"><span class="dir">前の単元</span>大量のファイルを扱いたい</a>
+    <a class="next" href="dataflow.html"><span class="dir">次の単元</span>まとめて変換・集計したい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

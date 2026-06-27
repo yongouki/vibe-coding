@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URLで見せたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-web">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Static Hosting</span>
+    <h1>作ったものを、URLで見せたい</h1>
+    <p class="lead">ブラウザだけで動くものは、無料で誰でも開ける場所に置けます。サーバーの契約は要りません。手元のファイルを、URLを共有するだけで見せられる状態にします。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">HTML/CSS/JSをそのまま公開でき、<strong>URLを共有すれば誰でも開ける</strong>状態を作れるようになる。</p>
+  </div>
+
+  <h2>バックエンドが無いなら、サーバー契約は要らない</h2>
+  <p>ここまでに作ってきた画面は、ブラウザの中だけで動いています。サーバー側で計算したりデータベースに書き込んだりする処理（バックエンド）がありません。こういうものは <strong>静的ホスティング</strong> という仕組みに置くだけで公開できます。</p>
+  <p>「静的」とは、置いたファイルをそのまま配るだけ、という意味です。常時動くサーバーを借りる必要も、月額を払う必要もありません。多くは無料で使えます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">過剰になりがち</span>
+      ブラウザだけで動くページなのに、公開のためにサーバーを契約して常時動かそうとする。</div>
+    <div class="ex good"><span class="tagline">これで足りる</span>
+      ファイルを静的ホスティングへ置き、発行されたURLを共有して見てもらう。</div>
+  </div>
+
+  <h2>GitHub Pagesは「一例」であって唯一解ではない</h2>
+  <p>静的ホスティングの代表として、この単元では <strong>GitHub Pages</strong> を実習に使います。ただし、これだけが正解ではありません。ほかにも Netlify、Cloudflare Pages、Vercel など、同じように静的なファイルを無料で公開できるサービスがあります。</p>
+  <p>違いは、操作画面や連携方法の好み程度で、最初のうちは大きくありません。だから「みんなが使っているから」で1つ選び、まず一度URLで開けるところまで通すのが近道です。乗り換えは後からでもできます。</p>
+
+  <h2>AIへ頼むときは「手順を、初めての人向けに」</h2>
+  <div class="box">
+    <p style="margin:0">これはブラウザだけで動くので、GitHub Pagesなどの静的ホスティングで公開する手順を、初めての人向けに教えてください。GitHub Pagesだけが唯一の選択肢ではないことを明記し、他の候補との違いを短く説明してから、リポジトリ作成からURLで開けるまでを案内してください。</p>
+  </div>
+  <p>「初めての人向けに」「リポジトリ作成からURLで開けるまで」と範囲を区切ると、AIが手順を飛ばさず順を追って説明してくれます。「唯一の選択肢ではない」と添えるのは、過剰に1つへ縛られないためです。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>バックエンドが無いアプリは、静的ホスティングに置くだけで公開できる。</li>
+      <li>多くは無料。常時動くサーバーの契約は要らない。</li>
+      <li>GitHub Pagesは便利な一例。唯一解ではなく、後から乗り換えられる。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>手元の <code>index.html</code> を、GitHub Pages を使ってURLで開ける状態にしてみましょう。下の文をそのままAIへ渡せます。</p>
+    <p style="margin:0">静的ホスティングの学習例として、手元の index.html を GitHub Pages で公開する手順を初めての人向けに教えてください。GitHub Pagesだけが唯一の選択肢ではないことを明記し、他の静的ホスティング候補との違いを短く説明してから、リポジトリ作成からURLで開けるまでを案内してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>バックエンドの処理が無いアプリに、サーバー契約は要りません。なぜ静的ホスティングで足りるのかを言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="jsdom.html"><span class="dir">前の単元</span>押したら動いてほしい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

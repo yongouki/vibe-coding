@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ちゃんと公開して見守る ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DEPLOY &amp; WATCH</span>
+    <h1>出して終わりではなく、戻せる形で出す</h1>
+    <p class="lead">テストも通り、保存点も残せるようになりました。いよいよ他の人が使える場所へ出します。大事なのは、落ちても気づけて、まずければ戻せること。公開は「やり直せる前提」で進めます。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">秘密情報を分離して安全に公開し、<strong>ログやエラーで様子を見られ、まずければ戻せる</strong>状態を作れるようになる。</p>
+  </div>
+
+  <h2>秘密情報は、コードと一緒に出さない</h2>
+  <p>公開すると、コードは他の人やサービスの目に触れます。パスワードやAPIキーのような秘密情報をコードに直書きしたまま出すと、そのまま漏れます。これらはコードから切り離し、公開しない場所（環境変数など）に置きます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">そのまま埋め込む</span>
+      APIキーをコードに直接書いて、その状態で公開する。</div>
+    <div class="ex good"><span class="tagline">分離して渡す</span>
+      キーは環境変数に置き、コードからは名前で参照する。公開対象に含めない。</div>
+  </div>
+
+  <h2>落ちたときに気づける状態を先に作る</h2>
+  <p>公開後は、自分の目の前で動くとは限りません。だから、何かあったときに後から分かるよう、ログとエラーを確認できるようにしておきます。「いつ・どこで・何が起きたか」が残れば、前の単元のデバッグがそのまま使えます。</p>
+  <ul>
+    <li>エラーが起きたら記録に残る</li>
+    <li>記録を後から見られる場所がある</li>
+    <li>大事な失敗には気づける（通知など）</li>
+  </ul>
+
+  <h2>一気に切り替えず、戻せる形で進める</h2>
+  <p>新しい版に全部入れ替えてから不具合に気づくと、戻すあいだ全員が使えなくなります。代わりに、旧版を残したまま段階的に切り替え、まずければ元へ戻す（ロールバックする）形にします。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">バックアップとロールバック手順を用意して、旧版と共存できる形で段階的に公開してください。秘密情報はコードから分離し、公開対象に含めないでください。エラーとログを後から確認できるようにして、監視しながら進めたいです。</p>
+  </div>
+
+  <p>「段階的に」「戻せる手順つきで」と最初に伝えるのが肝心です。これがないと、一気に切り替える構成になりがちです。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>秘密情報はコードから分離し、公開対象に含めない。</li>
+      <li>公開前に、ログとエラーを後から確認できる状態を作る。</li>
+      <li>一気に入れ替えず、旧版と共存させ、戻せる手順を用意する。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>公開前に、3点を一文ずつ書き出してください。「秘密情報はどこに分離するか」「エラーはどこで確認するか」「まずいときどう戻すか」。書けない項目があれば、AIに「この公開で、この3点を満たす手順を提案して」と頼みます。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「絶対に失敗しない」前提ではなく、途中で止めたり、前の版へ戻したりできるかが、見守りながら公開できているかの目安です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="test.html"><span class="dir">前の単元</span>次の変更で壊したくない</a>
+    <a class="next" href="iterate.html"><span class="dir">次の単元</span>本当に役立ったか知りたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

@@ -318,10 +318,40 @@
     SKILLS.forEach(s=>{if(MISSIONS[s.id])s.mission=MISSIONS[s.id];if(DESIRES[s.id])s.desire=DESIRES[s.id];if(SAY[s.id])s.say=SAY[s.id];});
 
     const LESSON_URLS={
+      // 共通幹
       goal:"lessons/goal.html",
       collab:"lessons/collab.html",
       task:"lessons/task.html",
-      htmlcss:"lessons/htmlcss.html"
+      product:"lessons/product.html",
+      // Web 前面
+      htmlcss:"lessons/htmlcss.html",
+      jsdom:"lessons/jsdom.html",
+      localstorage:"lessons/localstorage.html",
+      "static-deploy":"lessons/static-deploy.html",
+      "ui-structure":"lessons/ui-structure.html",
+      // 自動化
+      files:"lessons/files.html",
+      python:"lessons/python.html",
+      dataflow:"lessons/dataflow.html",
+      scheduler:"lessons/scheduler.html",
+      // AI・サーバー
+      http:"lessons/http.html",
+      backend:"lessons/backend.html",
+      database:"lessons/database.html",
+      api:"lessons/api.html",
+      auth:"lessons/auth.html",
+      "ai-eval":"lessons/ai-eval.html",
+      "ai-cost":"lessons/ai-cost.html",
+      // 品質
+      read:"lessons/read.html",
+      devtools:"lessons/devtools.html",
+      git:"lessons/git.html",
+      debug:"lessons/debug.html",
+      test:"lessons/test.html",
+      release:"lessons/release.html",
+      iterate:"lessons/iterate.html",
+      // 最終
+      vibe:"lessons/vibe.html"
     };
 
     const MAP=Object.fromEntries(SKILLS.map(s=>[s.id,s]));

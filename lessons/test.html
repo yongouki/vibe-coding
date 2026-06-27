@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>次の変更で壊したくない ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">TESTING</span>
+    <h1>「一回動いた」を「いつも動く」に変える</h1>
+    <p class="lead">動くものができて、不具合も直せるようになった。次の心配は、機能を足すたびに前のものが壊れないかです。同じ条件なら同じように動くと確かめる。それがテストの役割です。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">一度の成功で満足せず、<strong>正常系・空入力・境界値・失敗時</strong>を確かめ、修正で前の機能が壊れていないか見られるようになる。</p>
+  </div>
+
+  <h2>一回うまくいくのは、まだ運の範囲</h2>
+  <p>「牛乳」と入れて追加できたら、つい完成と思います。でも空欄で追加したら、長すぎる文字を入れたら、保存に失敗したら。確かめていない条件はすべて「たまたま動いているだけ」かもしれません。</p>
+  <p>テストとは、難しい道具のことではありません。まずは「この条件なら、こうなるはず」を声に出し、一つずつ手で確かめることから始まります。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">代表値だけ</span>
+      普通の入力で1回動いたので、できたことにする。</div>
+    <div class="ex good"><span class="tagline">条件を分けて</span>
+      正常な入力・空欄・最大文字数・通信失敗の4つで、それぞれの結果を確かめる。</div>
+  </div>
+
+  <h2>確かめる条件は「端っこ」に集まる</h2>
+  <p>不具合は、ちょうどいい真ん中の値より、端っこで出ます。とくに条件式（◯以上、△未満など）の記号ミスは、境界の前後で正体を現します。</p>
+  <ul>
+    <li><strong>正常系</strong>：ふつうに使ったとき</li>
+    <li><strong>空入力</strong>：何も入れずに実行したとき</li>
+    <li><strong>境界値</strong>：上限・下限のちょうど直前・一致・直後</li>
+    <li><strong>失敗時</strong>：通信が落ちた・保存できなかったとき</li>
+  </ul>
+  <p>「10文字まで」なら、9・10・11文字を試します。真ん中の5文字だけでは、記号ミスは見つかりません。</p>
+
+  <h2>修正のたびに、前の機能も確かめる</h2>
+  <p>新しい機能を足したり不具合を直したりすると、関係ないはずの場所が巻き添えで壊れることがあります。だから直した後は、今回の変更だけでなく、前から動いていた機能も一通り試します。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">正常系だけでなく、空入力・境界値・失敗時もテストしてください。境界は直前・一致・直後の値を選んでください。今回の修正で、前から動いていた機能が壊れていないかも確認手順を添えて教えてください。</p>
+  </div>
+
+  <p>AIにテスト項目を出させると、自分では思いつかない条件が混ざります。それを実際に手で試すだけでも、見落としは大きく減ります。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>一回の成功で終わらせず、空入力・境界値・失敗時も確かめる。</li>
+      <li>不具合は端っこに出る。境界は直前・一致・直後を試す。</li>
+      <li>修正後は、前から動いていた機能が壊れていないかも見る。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>手元の機能を一つ選び、正常系・空入力・境界値・失敗時の4条件で「こうなるはず」を書き出してください。実際に試して、予想とずれたものがあれば、それが次に直す候補です。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>代表値だけでなく、条件式の記号ミスが出る値、つまり境界の直前・一致・直後を選べるかが鍵です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="debug.html"><span class="dir">前の単元</span>なぜ動かないか突き止めたい</a>
+    <a class="next" href="release.html"><span class="dir">次の単元</span>ちゃんと公開して見守りたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

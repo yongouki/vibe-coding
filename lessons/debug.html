@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>なぜ動かないか突き止める ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DEBUGGING</span>
+    <h1>直感で直さず、原因を一つずつ確かめる</h1>
+    <p class="lead">動くものができた後の不具合は、焦ると何か所も同時に変えたくなります。でもそれは、直ったのか・別の何かを壊したのかが分からなくなる近道です。再現してから、仮説を一つずつ確かめます。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">あてずっぽうの修正をやめ、<strong>再現手順を固定</strong>してから、最小の変更で原因の仮説を一つずつ検証できるようになる。</p>
+  </div>
+
+  <h2>まず「いつでも同じ壊れ方」を作る</h2>
+  <p>原因を探す前に、不具合を狙って再現できるようにします。「どんな操作をすると、何が起きるか」を固定するのです。再現できない不具合は、直しても直ったか分かりません。</p>
+  <p>前の単元で集めた材料が、ここで効きます。再現手順・Consoleのエラー・Networkの記録がそろっていれば、再現条件はほぼ書けています。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">あちこち変える</span>
+      たぶんここだろうと、3か所まとめて書き換えて、動いたかどうかを見る。</div>
+    <div class="ex good"><span class="tagline">一つずつ確かめる</span>
+      再現手順を固定し、仮説を一つ立て、一か所だけ変えて結果を見る。</div>
+  </div>
+
+  <p>左側で直っても、どれが効いたか分かりません。次に似た不具合が出たとき、また全部を疑うことになります。</p>
+
+  <h2>仮説は一つ、変更は最小に</h2>
+  <p>「ここが原因では」と思ったら、それを確かめる最小の変更だけを試します。一度に一つなら、結果は「効いた／効かなかった」のどちらかにはっきり分かれます。</p>
+  <ol>
+    <li>再現手順を固定する</li>
+    <li>原因の仮説を一つ立てる</li>
+    <li>その仮説を確かめる、最小の変更をする</li>
+    <li>結果を見て、仮説を残すか捨てるか決める</li>
+  </ol>
+
+  <h2>再現しにくいときは、観測できる手掛かりを結ぶ</h2>
+  <p>たまにしか起きない不具合ほど、推測を増やしたくなります。けれど効くのは推測ではなく、観測できる事実です。エラーが出た時刻・対象のID・入力した値・ログを並べ、共通点を探します。</p>
+  <p>AIに頼むときも、この姿勢をそのまま伝えます。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">あちこち変えず、まず再現手順を固定してください。原因の仮説を一つずつ、最小の変更で確かめたいです。再現しにくい場合は、時刻・ID・入力・ログなど観測できる手掛かりから候補を絞ってください。一度に複数を変えないでください。</p>
+  </div>
+
+  <p>「一度に複数を変えないで」と添えるのが効きます。AIは親切に何か所も直そうとするので、変更を一つに保つのは頼む側の役目です。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>原因探しの前に、いつでも同じ壊れ方を再現できるようにする。</li>
+      <li>仮説は一つずつ、変更は最小にして「効いた／効かない」を切り分ける。</li>
+      <li>再現しにくいときは、時刻・ID・入力・ログという観測事実を結ぶ。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>手元の不具合を一つ選び、「どの操作で・何が起きるか」を一文で書いて再現手順を固定してください。次に原因の仮説を一つだけ立て、AIに「この仮説を、最小の変更で確かめて。他は変えないで」と頼みます。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>再現しにくい問題ほど、推測を増やすのではなく、観測できる手掛かり（時刻・ID・入力・ログ）を結びつけられるかが分かれ目です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="read.html"><span class="dir">前の単元</span>AIが何を変えたか読む</a>
+    <a class="next" href="test.html"><span class="dir">次の単元</span>次の変更で壊したくない</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

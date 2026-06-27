@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使いすぎと料金を抑えたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-ai">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Rate Limit / Usage / Cost</span>
+    <h1>使いすぎと料金を、抑える</h1>
+    <p class="lead">AI機能を公開すると、品質だけでは終わりません。呼ばれた回数、かかる料金、そして悪用への備えが要ります。「測って、止められる」状態をサーバー側に作ります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">利用者ごとに回数と使用量を記録し、<strong>上限・予算・失敗時の扱いを決めて</strong>、超えたらサーバー側で止められるようになる。</p>
+  </div>
+
+  <h2>公開した瞬間、回数と料金が現実になる</h2>
+  <p>AIのAPIは、呼ぶたびにお金がかかります。自分だけで試すうちは気になりませんが、公開して誰でも使えるようになると、話が変わります。</p>
+  <ul>
+    <li>一人が大量に連打して、料金がふくらむ</li>
+    <li>悪意のある利用で、想定外の請求が来る</li>
+    <li>気づいたときには、予算をはるかに超えていた</li>
+  </ul>
+  <p>だから公開前に、3つを決めておきます。<strong>Rate Limit（回数制限）</strong>、<strong>Usage Tracking（使用量の記録）</strong>、<strong>Budget（予算上限）</strong>。そして上限に達したとき、どう表示するか。</p>
+
+  <h2>止めるのは「画面」ではなく「サーバー」</h2>
+  <p>ここが肝心です。ボタンを押せなくする、回数を画面に出す、といったUIの工夫だけでは止められません。前の単元でも見たとおり、ブラウザ側はいくらでも書き換えられるからです。本当に止めるなら、<strong>サーバー側で利用量を測り、サーバー側で断る</strong>必要があります。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">見た目で止める</span>
+      上限に達したらボタンを灰色にするだけ。直接APIを叩かれると、何の歯止めにもならない。</div>
+    <div class="ex good"><span class="tagline">サーバーで止める</span>
+      利用者ごとの回数と使用量をサーバー側で数え、上限を超えたらサーバーが処理を断る。</div>
+  </div>
+
+  <p>その上で、断ったときに利用者へどう伝えるかも決めます。「今日の上限に達しました。明日また使えます」のように、失敗時の表示まで設計して、はじめて公開できる形になります。</p>
+
+  <h2>AIへは「数えて止める仕組みをサーバー側に」と言う</h2>
+  <div class="box">
+    <p style="margin:0">利用者ごとの回数制限・使用量の記録・予算上限と、上限到達時の表示をサーバー側に入れてください。ブラウザ側の見た目だけでなく、サーバー側で利用量を測って止められる形にしてください。変更点も説明してください。</p>
+  </div>
+  <p>規模がまだ分からないなら、無理に数字を決め込まず、AIに前提を質問させるのも有効です。想定利用者数と1回あたりのコストが分かれば、上限の置き方も具体的になります。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>公開すると回数・料金・悪用が現実になる。先に上限と予算を決める。</li>
+      <li>UIの見た目では止まらない。サーバー側で測って止める。</li>
+      <li>上限到達時にどう表示するか（失敗時の扱い）まで設計する。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>公開予定（または公開中）のAI機能について、「1日あたり何回まで」「月いくらまで」を仮に決め、超えたときの表示を1文で書いてください。決めにくければ、下の文をAIへ渡して、先に前提を質問してもらいましょう。</p>
+    <p style="margin:0">公開予定のAI機能について、利用者ごとのRate Limit、Usage Tracking、月額Budget、上限到達時の表示を含む最小設計を提案してください。想定利用者数と1回あたりのAPIコストが不明なら、先に質問してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>UIの見た目ではなく、サーバー側で利用量を測って止められるか、を言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="ai-eval.html"><span class="dir">前の単元</span>AIのハズレを減らしたい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

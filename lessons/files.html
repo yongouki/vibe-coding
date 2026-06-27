@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大量のファイルを扱いたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-auto">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Files / CLI</span>
+    <h1>ターミナルで、ファイルの場所を確かめてから動かす</h1>
+    <p class="lead">ファイルがたくさんあると、どこに何があるか分からなくなります。まず「今どこにいるか」を確認する。それだけで、移動も実行も迷わなくなります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">この単元でできるようになること</span>
+    <ul>
+      <li>今いる場所と、対象ファイルがそこに実在するかを確認できる。</li>
+      <li>コマンドの結果を読んで、次に何をすればいいか自分で決められる。</li>
+    </ul>
+  </div>
+
+  <h2>「動かない」の半分は、場所のズレ</h2>
+  <p>ターミナルでファイルを実行しようとして「そんなファイルは無い」と言われる。多くの場合、ファイルが壊れているのではなく、自分が思っている場所と、ターミナルが今いる場所がズレているだけです。</p>
+  <p>だから最初にやることは、いつも同じです。今いる場所を確認し、そこに対象ファイルが見えるかを確かめる。この2つだけで、つまずきの多くは消えます。</p>
+  <ol>
+    <li>今いる場所を表示する（Windowsなら <span class="mono">cd</span>、Mac/Linuxなら <span class="mono">pwd</span>）</li>
+    <li>その場所のファイル一覧を表示する（<span class="mono">dir</span> または <span class="mono">ls</span>）</li>
+    <li>対象が一覧に見えたら、初めて実行する</li>
+  </ol>
+  <p>一覧に目的のファイルが無ければ、まだ実行する段階ではありません。先に正しいフォルダへ移動します。</p>
+
+  <h2>AIには「今の場所の確認から」と頼む</h2>
+  <p>コマンドを丸暗記する必要はありません。やりたいことと、初めてである点を伝えれば、順番に教えてくれます。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">ターミナルでこのフォルダのファイルを一覧・移動・実行したいです。まず今いる場所を確認するコマンドから、順番に教えてください。WindowsのPowerShellを使っていて、ターミナルは初めてです。</p>
+  </div>
+
+  <p>「初めてです」「PowerShellです」のように環境を一言添えると、自分の画面で動くコマンドが返ってきます。MacとWindowsで書き方が違うので、ここを省くと噛み合わないことがあります。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">いきなり実行</span>
+      コマンドをコピペして実行 → 「ファイルが無い」と言われ、原因が分からないまま手が止まる。</div>
+    <div class="ex good"><span class="tagline">場所を確かめてから</span>
+      今いる場所と一覧を表示 → 対象が見えるのを確認してから実行する。</div>
+  </div>
+
+  <h2>エラーは、次の一手のヒント</h2>
+  <p>赤い文字が出ても、慌てて閉じないでください。メッセージには、次に何をすればいいかが書かれています。そのまま読めなければ、AIに貼って聞けば十分です。</p>
+  <ul>
+    <li>「No such file（ファイルが無い）」 → 場所か名前のズレ。まず一覧で実在を確認する。</li>
+    <li>「Permission denied（権限がない）」 → 場所は合っている。これは別の問題なので混ぜない。</li>
+  </ul>
+  <p>大事なのは、この2つを切り分けることです。「無い」問題と「権限」問題を一緒に直そうとすると、原因が見えなくなります。</p>
+
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li>実行の前に、今いる場所と対象ファイルの実在を必ず確認する。</li>
+      <li>「ファイルが無い」と「権限がない」は別の問題。混ぜて直さない。</li>
+      <li>AIには環境（OSやシェル）を一言添えて、今の場所の確認から頼む。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>フォルダ内のファイル名を一覧で書き出す短いスクリプトを作りましょう。次の文をそのままAIに渡してみてください。</p>
+    <p style="margin:0">指定したフォルダの中のファイル名を一覧で表示する短いスクリプトを書いてください。実行方法と、対象フォルダの指定の仕方も、初めての人向けに説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「ファイルが無い」と言われたとき、権限を疑う前に、まず現在地と対象の実在を確認できれば十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="task.html"><span class="dir">前の単元</span>小さなタスクに分ける</a>
+    <a class="next" href="python.html"><span class="dir">次の単元</span>繰り返しを任せたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

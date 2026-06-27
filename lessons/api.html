@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIを安全につなぎたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-ai">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">API / Secrets</span>
+    <h1>外部サービスを、安全につなぐ</h1>
+    <p class="lead">外部サービス（AIなど）へリクエストするとき、APIキーのような秘密をコードから切り離す必要があります。鍵はブラウザに置けません。どこに置き、どう経由させるかを覚えます。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">APIの入力・出力・エラーの約束を読み、<strong>秘密の鍵はサーバー側・環境変数に置いて</strong>、ブラウザから直接漏らさない構成にできるようになる。</p>
+  </div>
+
+  <h2>APIは「約束ごと」でできている</h2>
+  <p>外部サービスを呼ぶとは、相手が決めた約束に従って頼むことです。約束には、だいたい3つの面があります。これを読めれば、つなぐ準備は半分できています。</p>
+  <ul>
+    <li><strong>入力</strong>：何を、どんな形で送るか（質問の文、画像、など）</li>
+    <li><strong>出力</strong>：何が、どんな形で返るか（多くはJSON）</li>
+    <li><strong>エラー</strong>：断られたとき、どんな番号や理由で返るか</li>
+  </ul>
+  <p>http の単元で見た「リクエストとレスポンス」と同じ往復です。違いは、多くのAPIが<strong>鍵（APIキー）</strong>を要求すること。この鍵の扱いが、安全につなぐかどうかの分かれ目になります。</p>
+
+  <h2>鍵はブラウザに届いた時点で「見られる」</h2>
+  <p>ここが一番のつまずきどころです。ブラウザに送られたものは、変数名をどう工夫しても、利用者が中身を見られます。だから鍵をブラウザ側のコードに書くと、公開した瞬間に誰でも使えてしまいます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">ブラウザから直接呼ぶ</span>
+      画面側のコードに鍵を書いて、ブラウザからAIのAPIを直接呼ぶ。鍵が丸見えになり、勝手に使われる。</div>
+    <div class="ex good"><span class="tagline">バックエンド経由で中継</span>
+      鍵はサーバー側に隠し、ブラウザは自分のバックエンドにお願いするだけ。鍵はブラウザに渡さない。</div>
+  </div>
+
+  <p>正しい流れはこうです。<strong>ブラウザ → 自分のバックエンド → 外部API</strong>。鍵を使う処理はバックエンドの中だけで起こり、利用者の手元には届きません。そして鍵そのものはコードに直接書かず、<strong>環境変数</strong>（コードの外に置く設定値）に入れます。</p>
+
+  <h2>AIへは「鍵はサーバー側・環境変数」と言う</h2>
+  <p>頼み方に一言入れるだけで、危ない構成を避けられます。</p>
+  <div class="box">
+    <p style="margin:0">APIキーはブラウザに置かず、自分のバックエンド経由で外部APIを呼ぶ形にしてください。鍵は環境変数に入れ、コードに直接書かないでください。ブラウザからはバックエンドにお願いするだけにし、入力・出力・エラーの扱いも説明してください。</p>
+  </div>
+  <p>「ブラウザに置かず」「バックエンド経由」「環境変数」。この3語が、鍵を守るための合言葉です。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>APIは入力・出力・エラーの約束。まずそれを読む。</li>
+      <li>ブラウザに届いたものは誰でも見られる。鍵は絶対に置かない。</li>
+      <li>流れは「ブラウザ→自分のバックエンド→外部API」。鍵は環境変数へ。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>いま使ってみたい外部API（AIのAPIなど）を1つ思い浮かべ、下の文をAIへ渡して、鍵を中継する最小構成を設計してもらいましょう。</p>
+    <p style="margin:0">この外部APIを呼びたいです。APIキーはブラウザに置かず、自分のバックエンド経由で中継する最小構成にしてください。鍵は環境変数に入れ、ブラウザからはバックエンドにお願いするだけにしてください。失敗時の表示も含め、変更点を説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>ブラウザに届くものは変数名を変えても誰でも見られること、だから鍵はサーバー側で中継すること、を言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="backend.html"><span class="dir">前の単元</span>ブラウザの外で動かしたい</a>
+    <a class="next" href="ai-eval.html"><span class="dir">次の単元</span>AIのハズレを減らしたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

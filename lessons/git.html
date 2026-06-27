@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>壊れても戻れるようにする ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">GIT</span>
+    <h1>変更を「戻れる保存点」として残す</h1>
+    <p class="lead">一つ動くものができたら、次はそれを安心して触れる状態にします。Gitは、変更を小さな保存点として積んでいく仕組みです。失敗しても前の点と比べて戻せるので、思い切って試せます。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">変更を<strong>目的ごとの保存点（コミット）</strong>に区切り、後から「この変更だけ戻したい」ができるようになる。</p>
+  </div>
+
+  <h2>保存点があると、思い切って試せる</h2>
+  <p>「ここまでは動いた」という状態を保存点として残しておくと、その後どれだけ壊しても、その点へ戻れます。Gitではこの保存点をコミットと呼びます。動くものができた直後は、最初のコミットを作る絶好のタイミングです。</p>
+  <p>保存点があれば、AIに大胆な変更を頼んでも怖くありません。気に入らなければ前の点へ戻すだけです。</p>
+
+  <h2>分け方は「ファイル数」でなく「変更の理由」</h2>
+  <p>コミットは、いくつのファイルを触ったかではなく、<strong>何のための変更か</strong>でまとめます。後で一つだけ取り消したくなったとき、これが効いてきます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">まとめてしまう</span>
+      バグ修正と色の変更とメモの追記を、1つのコミットに全部入れる。</div>
+    <div class="ex good"><span class="tagline">理由で分ける</span>
+      「追加ボタンの不具合を修正」「ボタンの色を変更」を、別々のコミットにする。</div>
+  </div>
+
+  <p>右側なら、「色の変更だけやっぱり戻したい」というとき、その保存点だけを取り消せます。左側だと、戻すとバグ修正まで一緒に消えてしまいます。</p>
+
+  <h2>コミットの言葉は「何を変えたか」が分かるように</h2>
+  <p>各保存点には短い説明（コミットメッセージ）を付けます。未来の自分が読んで分かる言葉にします。</p>
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">後で読めない</span>
+      update / fix / いろいろ修正</div>
+    <div class="ex good"><span class="tagline">変更が分かる</span>
+      空欄のとき追加されない不具合を修正</div>
+  </div>
+
+  <h2>AIに保存点づくりを手伝ってもらう</h2>
+  <p>Gitの操作に慣れていなくても、AIへ目的ごとに分けるよう頼めます。</p>
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">この変更をGitで保存点として残したいです。目的ごとにコミットを分けて、それぞれ何を変えたか分かるメッセージを付けてください。後で一つだけ戻せるようにしたいので、混ざっていれば分け方も提案してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>「動いた」状態は保存点（コミット）として残す。戻れるから試せる。</li>
+      <li>コミットはファイル数でなく、変更の理由ごとに区切る。</li>
+      <li>メッセージは、後で読んで何を変えたか分かる言葉にする。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま動いている状態を、最初のコミットとして保存してください。次に小さな変更を一つ加えたら、それを別のコミットに分けます。AIに「この2つの変更を、理由ごとに分けてコミットして」と頼んで進めても構いません。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>後から一つだけ取り消したいとき、役立つのはどんな分け方でしょう。ファイル数ではなく、変更の理由で分けてあるかが鍵です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <span class="soon"><span class="dir">前の単元</span>一つの形にする（準備中）</span>
+    <a class="next" href="release.html"><span class="dir">次の単元</span>ちゃんと公開して見守りたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

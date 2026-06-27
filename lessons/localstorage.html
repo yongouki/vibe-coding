@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>次に開いても残したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-web">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">localStorage</span>
+    <h1>閉じても、次に開いたとき残っていてほしい</h1>
+    <p class="lead">入力や進捗を、同じ端末・同じブラウザの中に残します。サーバーを用意しなくても「次に開いても残っている」が作れます。まずはこの一番手前の保存から始めます。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">値をJSONに変換して保存・読み出しできるようになり、<strong>これは“その端末だけ”に残る保存だ</strong>と理解する。</p>
+  </div>
+
+  <h2>「保存」と聞くと身構えるが、最初は要らない</h2>
+  <p>前の単元で動くようになった画面は、ページを閉じると入力が消えます。これを残したい、と思ったとき、いきなりデータベースやログインを考える必要はありません。ブラウザには <strong>localStorage</strong> という、手元に値を残しておける置き場所があります。</p>
+  <p>使い方の感覚はシンプルです。保存したいタイミングで書き込み、開いたタイミングで読み出して画面に戻す。それだけで「次も残る」が成立します。</p>
+
+  <h2>保存できるのは「文字」だけ、だからJSONに変換する</h2>
+  <p>localStorageに入れられるのは文字列です。リストや複数項目をまとめて残したいときは、いったん <strong>JSON</strong> という文字の形に変換して保存し、読み出すときに元へ戻します。難しい操作ではなく、「しまうときに文字へ、出すとき元へ」と覚えておけば十分です。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">いきなり重い</span>
+      入力を残したいだけなのに、最初からサーバーとデータベースを用意しようとする。</div>
+    <div class="ex good"><span class="tagline">まずここで足りる</span>
+      入力をJSONにしてlocalStorageへ保存し、開いたとき読み出して復元する。</div>
+  </div>
+
+  <h2>これは「その端末だけ」の保存だと知っておく</h2>
+  <p>localStorageは便利ですが、残るのは保存したそのブラウザの中だけです。別のパソコンやスマホで開いても、その内容は出てきません。シークレットウィンドウや履歴の削除でも消えます。</p>
+  <p>つまり「自分が後でまた開く」「下書きを一時的に残す」には十分ですが、「他の端末でも同じ内容を見たい」「他の人と共有したい」が出てきたら、その時はサーバー側の保存へ進む合図です。線引きを知っておくと、過剰に作らずに済みます。</p>
+
+  <h2>AIへ頼むときは「まだサーバーは使わない」と添える</h2>
+  <div class="box">
+    <p style="margin:0">この内容をlocalStorageに保存して、次に開いたとき復元してください。サーバーはまだ使いません。1ファイルのHTMLで動かし、変更点も説明してください。</p>
+  </div>
+  <p>「まだサーバーは使わない」と添えると、AIが先回りして認証やデータベースを足すのを防げます。必要になったら次の段階で足す、という順番を保てます。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>localStorageは、サーバーなしで「次も残る」を作れる手元の置き場所。</li>
+      <li>残せるのは文字。複数項目はJSONに変換してから保存・読み出しする。</li>
+      <li>残るのは“その端末・そのブラウザだけ”。共有が要るならサーバーへ進む。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>15分だけ作る</h3>
+    <p>入力欄と保存ボタンを作り、ページを閉じても文字が残るようにしてみましょう。下の文をそのままAIへ渡せます。</p>
+    <p style="margin:0">1ファイルのHTMLで、入力欄、保存ボタン、削除ボタンを作ってください。入力内容はlocalStorageへ保存し、ページを再度開いたときに復元してください。既存のHTML構造は大きく変更せず、変更点も説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「他の端末でも」という要求がまだ無いうちは、ブラウザ内の保存で足ります。その線引きを言えたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="jsdom.html"><span class="dir">前の単元</span>押したら動いてほしい</a>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

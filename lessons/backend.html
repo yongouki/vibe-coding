@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ブラウザの外で動かしたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-server">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">Server / Runtime</span>
+    <h1>ブラウザの外で、コードを動かす</h1>
+    <p class="lead">ブラウザの中だけでは足りなくなる瞬間があります。データを皆で共有したい、秘密の情報を隠したい。そのとき必要になるのが、ブラウザの外でコードを動かす場所＝サーバーです。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0"><strong>「どこでコードが動くか」を意識し</strong>、ブラウザに置けない処理をサーバー側へ移す判断ができるようになる。</p>
+  </div>
+
+  <h2>コードが動く場所は1つではない</h2>
+  <p>これまで書いてきたコードは、利用者のブラウザの中で動いていました。それで足りるうちは、それが一番簡単です。けれど、次のような願いが出てきた瞬間に、ブラウザの中だけでは無理が出ます。</p>
+  <ul>
+    <li>みんなで同じデータを見たい（自分の端末の中だけでは共有できない）</li>
+    <li>APIキーのような秘密を隠したい（ブラウザに置くと誰でも見られる）</li>
+    <li>誰が来ても同じ処理を、確実に走らせたい</li>
+  </ul>
+  <p>こうした処理は、利用者の端末ではなく、自分が管理する「外の場所」で動かします。それがサーバーです。コードを書くこと自体より、<strong>その処理がどこで動くべきか</strong>を考えられることが、ここでの肝心な点です。</p>
+
+  <h2>ブラウザに置けないものを、外へ移す</h2>
+  <p>判断はシンプルです。利用者に見られて困るもの、利用者ごとにバラバラだと困るものは、ブラウザに置かない。サーバー側へ移します。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">ブラウザに置いてしまう</span>
+      APIキーを画面側のコードに直接書く。公開すると、誰でもその鍵を読み取れてしまう。</div>
+    <div class="ex good"><span class="tagline">外へ移す</span>
+      鍵を使う処理はサーバー側に置き、ブラウザからはサーバーにお願いするだけにする。</div>
+  </div>
+
+  <p>「秘密を隠す」「データを共有する」が出てきたら、それはサーバーを足すサインです。逆に、まだ自分の端末の中で完結しているなら、無理に外へ出す必要はありません。</p>
+
+  <h2>AIへは「何のために外へ出すか」を言う</h2>
+  <p>サーバーの作り方は1つではありません。だから「外で動かす目的」を伝えると、AIが目的に合った最小構成を選んでくれます。</p>
+  <div class="box">
+    <p style="margin:0">APIキーを隠したい（または、データを共有したい）ので、ブラウザの外（サーバー側）で動かす最小構成にしてください。まずは一番小さく動く形で作り、起動方法も説明してください。</p>
+  </div>
+  <p>ここで覚えておきたいのは、<strong>Node.jsは選択肢の一例にすぎない</strong>ということです。PythonやBaaS（バックエンドを借りる仕組み）、Serverless（必要なときだけ動く仕組み）も、要求次第で候補になります。「これしかない」と決めつけず、目的を伝えて選んでもらいましょう。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>コードが「どこで動くか」を意識する。ブラウザの中か、外か。</li>
+      <li>秘密を隠す・データを共有する、が出たらサーバーを足すサイン。</li>
+      <li>Node.jsは一例。Python・BaaS・Serverlessも目的次第で候補になる。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>15分だけ作る</h3>
+    <p>実習として、最小のサーバーを1つ立ててみましょう。下の文をそのままAIへ渡せます。</p>
+    <p style="margin:0">Server / Runtimeの学習例としてNode.jsを使い、/hello にアクセスすると {"message":"Hello"} を返す最小のサーバーを作ってください。Node.jsが唯一の選択肢ではなく、PythonやBaaS、Serverlessも要求次第で候補になると明記してください。ローカルでの起動方法と、ブラウザや fetch から呼ぶ方法も説明してください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「自分の端末だけ」を超えた瞬間に何が足りなくなるかを言えたら次へ進めます（Node.jsは一例で、唯一の答えではありません）。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="jsdom.html"><span class="dir">前の単元</span>押したら動いてほしい</a>
+    <a class="next" href="database.html"><span class="dir">次の単元</span>端末を越えて残したい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>
