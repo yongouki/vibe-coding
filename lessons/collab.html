@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIとの対話・文脈 ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">COLLABORATE</span>
+    <h1>AIに「いまの状況」を渡す</h1>
+    <p class="lead">うまい呪文を探すより、いま何があり、どこだけ変えたいかを共有する。AIへの依頼は、その方が安定します。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">依頼の前に、<strong>現状・変更・触らない場所・確認方法</strong>を短くそろえられるようになる。</p>
+  </div>
+
+  <h2>一言だけだと、AIは空白を埋める</h2>
+  <p>支出記録ページに「保存機能を追加して」とだけ頼んだとします。AIには、いまのファイル構成も、一覧表示の作り方も、サーバーを使いたくない事情も見えていません。</p>
+  <p>足りない部分は推測で埋まります。推測が当たれば速い。外れると、頼んでいないリファクタやライブラリ追加が始まります。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">推測が多い</span>
+      保存機能を追加して。使いやすくしておいて。</div>
+    <div class="ex good"><span class="tagline">判断材料がある</span>
+      現在は1ファイルのHTMLで、追加した支出を配列から一覧表示しています。同じブラウザで再度開いたときも残るよう、localStorageへ保存してください。見た目とHTML構造は変えません。</div>
+  </div>
+
+  <h2>依頼に入れる4つ</h2>
+  <ol>
+    <li><strong>現状</strong>：いま何が動いているか</li>
+    <li><strong>今回の変更</strong>：一つだけ何を足すか</li>
+    <li><strong>触らない場所</strong>：維持したい挙動や構成</li>
+    <li><strong>確認方法</strong>：何をすれば成功と分かるか</li>
+  </ol>
+
+  <div class="box">
+    <h3>短くても十分な依頼</h3>
+    <p style="margin:0">現在、支出を追加すると画面の一覧に表示されます。今回は、追加のたびにlocalStorageへ保存し、再読み込み時に復元してください。CSSと入力フォームは変更しません。ブラウザを再読み込みして同じ一覧が出れば完了です。変更前に、対象箇所と実装方針を短く説明してください。</p>
+  </div>
+
+  <p>最後の一文も大事です。いきなり変更させず、先に「どこを、どう変えるつもりか」を言わせると、認識違いをコードになる前に止められます。</p>
+
+  <h2>情報は多ければよいわけではない</h2>
+  <p>リポジトリ全体や長い会話を毎回渡すと、本当に守ってほしい条件が埋もれます。今回の変更に関係する情報から渡し、足りなければAIに質問させます。</p>
+  <ul>
+    <li>エラー相談なら、再現手順・エラー全文・関係するコード</li>
+    <li>機能追加なら、現在の挙動・追加したい挙動・変えない範囲</li>
+    <li>技術選定なら、利用人数・データ・秘密情報・予算・運用できる範囲</li>
+  </ul>
+
+  <h2>返答が怪しいときは、実装を止める</h2>
+  <p>AIが急に別のフレームワークを勧めたり、関係のないファイルまで変えようとしたら、まず理由を聞きます。</p>
+  <div class="box">
+    <p style="margin:0">その変更は今回の完成条件に必要ですか。必要なら理由と、変更しない場合の問題を説明してください。必要でなければ、現在の構成を維持した最小変更に戻してください。</p>
+  </div>
+
+  <p>AIの提案を断るためではありません。いま必要な変更と、将来検討する変更を分けるための確認です。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>依頼には、現状・今回の変更・触らない場所・確認方法を入れる。</li>
+      <li>関係する情報から渡し、足りない点はAIに質問させる。</li>
+      <li>大きな提案が出たら、実装前に必要性と最小案を確認する。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>直近でAIへ頼んだ一文を選び、「現状」「変えること」「変えないこと」「確認方法」の4行に書き直してください。長くする必要はありません。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>AIが勝手に埋めそうな空白を、実装前に一つ減らせたら合格です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="goal.html"><span class="dir">前の単元</span>目的・完成条件</a>
+    <a class="next" href="task.html"><span class="dir">次の単元</span>小さなタスクに分ける</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

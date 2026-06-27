@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE CODING ─ スキルツリー</title>
+<style>
+  @keyframes flow{to{stroke-dashoffset:-22}}
+  @keyframes pulseGlow{0%,100%{filter:drop-shadow(0 8px 15px rgba(0,0,0,.24))}50%{filter:drop-shadow(0 0 18px var(--glow,rgba(130,155,255,.55)))}}
+  @keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985)}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(46px)}}
+  @keyframes ping{from{transform:scale(.4);opacity:.6}to{transform:scale(2.7);opacity:0}}
+  *{box-sizing:border-box}
+  html{color-scheme:dark}
+  body{margin:0;background:#070b12}
+  button{font:inherit}
+  :focus-visible{outline:2px solid var(--entry,#5b9dff);outline-offset:2px;border-radius:4px}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  @media(max-width:640px){
+    #mobileNav{display:block!important}
+    #viewport{display:none!important}
+    #primaryNext,#themeSwitch{display:none!important}
+    #legend,#treeHint{display:none!important}
+    body.map-open #mobileNav{display:none!important}
+    body.map-open #viewport{display:block!important}
+    body.map-open #mapBack{display:inline-flex!important}
+    body.map-open #legend{display:flex!important}
+    body.map-open #treeHint{display:block!important}
+  }
+</style>
+</head>
+<body>
+<div id="root" style="color-scheme:dark;min-height:100vh;color:var(--ink);font-family:'Hiragino Sans','Yu Gothic UI','Noto Sans JP',system-ui,sans-serif;--ink:#dff0f6;--muted:#7fa0b2;--dim:#4d6675;--entry:#5b9dff;--common:#7aa0ff;--web:#45d5e7;--auto:#56c7d8;--ai:#62b6ff;--quality:#52e2aa;--final:#7fe0c8;--server:#5b9dff;--danger:#ff7d6c;--grid1:rgba(52,152,182,.22);--grid2:rgba(52,152,182,.15);--glow:rgba(91,157,255,.5);background:radial-gradient(1000px 620px at 50% -8%,rgba(40,150,180,.13),transparent 68%),#061019">
+
+  <header style="padding:30px 18px 18px;text-align:center">
+    <p style="margin:0 0 9px;color:#657790;font-size:10px;letter-spacing:.42em;text-transform:uppercase;font-family:'SFMono-Regular',Consolas,monospace">Vibe coding · convergence skill tree</p>
+    <h1 style="margin:0;font-size:clamp(27px,4vw,42px);letter-spacing:.01em;font-weight:800;background:linear-gradient(100deg,#dce8ff 0%,#a894ff 45%,#59e6c1 100%);-webkit-background-clip:text;background-clip:text;color:transparent">バイブコーディング スキルツリー</h1>
+    <p style="max-width:660px;margin:12px auto 0;color:var(--muted);font-size:13px;line-height:1.8">「作りたいもの」が膨らむたびに、次に何の技術が要るのかを地図でたどる。<br>ブラウザだけの一歩から、最後の「バイブコーディング」まで。</p>
+  </header>
+
+  <div style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:11px 16px;background:rgba(7,11,18,.9);border-top:1px solid rgba(42,57,76,.7);border-bottom:1px solid rgba(42,57,76,.7);backdrop-filter:blur(12px)">
+    <div style="width:min(360px,64vw)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;color:var(--muted);font-size:11px"><span>今できること</span><span id="stageLabel" style="color:var(--quality)">まず目的から</span></div>
+      <div id="progbar" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" aria-label="今できること（到達した段階）" style="height:7px;border-radius:99px;background:#182331;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.02) inset"><div id="fill" style="width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--entry),var(--common),var(--quality),var(--final));transition:width .5s cubic-bezier(.4,0,.2,1)"></div></div>
+    </div>
+    <button id="primaryNext" style="border:0;background:linear-gradient(100deg,color-mix(in srgb,var(--quality) 80%,white),var(--quality));color:#08131a;border-radius:9px;padding:9px 16px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 6px 18px color-mix(in srgb,var(--quality) 28%,transparent)">次の一歩</button>
+    <button id="examples" style="border:1px solid color-mix(in srgb,var(--web) 45%,#2c3c50);background:color-mix(in srgb,var(--web) 9%,#101926);color:color-mix(in srgb,var(--web) 72%,white);border-radius:9px;padding:8px 12px;cursor:pointer;font-size:11px;font-weight:700">作れるものから選ぶ</button>
+    <button id="stackGuide" style="border:1px solid color-mix(in srgb,var(--common) 45%,#2c3c50);background:color-mix(in srgb,var(--common) 9%,#101926);color:color-mix(in srgb,var(--common) 68%,white);border-radius:9px;padding:8px 12px;cursor:pointer;font-size:11px;font-weight:700">技術構成を相談</button>
+    <div id="themeSwitch" style="display:inline-flex;border:1px solid #2c3c50;border-radius:10px;overflow:hidden;background:#0e1722"></div>
+    <button id="reset" style="border:1px solid #2c3c50;background:#101926;color:#8fa1b6;border-radius:9px;padding:8px 12px;cursor:pointer;font-size:11px">進捗をリセット</button>
+  </div>
+
+  <div id="legend" style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding:15px 12px 4px;color:#768aa1;font-size:10.5px">
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--common);display:inline-block"></i>土台</span>
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--web);display:inline-block"></i>ブラウザ</span>
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--server);display:inline-block"></i>サーバー・データ</span>
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--ai);display:inline-block"></i>外部・AI</span>
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--auto);display:inline-block"></i>自動化</span>
+    <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--quality);display:inline-block"></i>品質・運用</span>
+  </div>
+  <p id="treeHint" style="text-align:center;margin:7px 12px 12px;color:#61758c;font-size:11px">光っている <b style="color:#9fb0c3;font-weight:600">NEXT</b> のスキルから習得。ドラッグで移動／ホイール・ピンチで拡大縮小。</p>
+
+  <section id="mobileNav" aria-label="次の一歩" style="--accent:var(--quality);display:none;width:min(100% - 24px,560px);margin:4px auto 26px;padding:18px;border:1px solid #1e2b3b;border-radius:18px;background:linear-gradient(170deg,#101b27,#0a1019)"></section>
+  <main id="viewport" style="position:relative;width:min(100% - 16px,1240px);height:min(76vh,860px);min-height:520px;margin:0 auto 30px;overflow:hidden;border:1px solid #1e2b3b;border-radius:18px;background:linear-gradient(var(--grid1) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),radial-gradient(650px 380px at 50% 7%,rgba(246,214,111,.05),transparent 70%),rgba(7,12,19,.62);background-size:40px 40px,40px 40px,auto,auto;box-shadow:0 24px 80px rgba(0,0,0,.25) inset;touch-action:none;cursor:grab;user-select:none">
+    <button id="mapBack" aria-label="ナビに戻る" style="display:none;position:absolute;right:12px;top:12px;z-index:7;align-items:center;gap:5px;border:1px solid #34475c;border-radius:10px;background:rgba(14,23,34,.96);color:#cdd9e7;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer">← ナビに戻る</button>
+    <div style="position:absolute;left:14px;top:14px;z-index:3;padding:5px 9px;border:1px solid #3b3927;border-radius:6px;color:#9a8f5c;background:rgba(13,17,22,.82);font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none">▲ GOAL</div>
+    <div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;color:#7587a0;font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none;text-align:center">まず目的から · START ▼</div>
+    <div id="tree" style="position:absolute;left:0;top:0;width:1160px;height:2080px;transform-origin:0 0">
+      <svg id="edges" viewBox="0 0 1160 2080" style="position:absolute;left:0;top:0;width:1160px;height:2080px;overflow:visible;pointer-events:none" aria-hidden="true">
+        <defs>
+          <marker id="arrow-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#334358"></path></marker>
+          <marker id="arrow-ready" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#9a8442"></path></marker>
+          <marker id="arrow-live" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3bd3a6"></path></marker>
+        </defs>
+      </svg>
+    </div>
+    <div style="position:absolute;right:14px;bottom:14px;z-index:5;display:flex;flex-direction:column;gap:6px;align-items:stretch">
+      <button id="zoomIn" title="拡大" style="width:44px;height:44px;border:1px solid #2c3c50;border-radius:9px;background:rgba(14,23,34,.92);color:#aab8c8;cursor:pointer;font-size:18px;line-height:1">+</button>
+      <div id="zoomLabel" style="text-align:center;color:#7d90a6;font-size:10px;font-family:'SFMono-Regular',Consolas,monospace">100%</div>
+      <button id="zoomOut" title="縮小" style="width:44px;height:44px;border:1px solid #2c3c50;border-radius:9px;background:rgba(14,23,34,.92);color:#aab8c8;cursor:pointer;font-size:18px;line-height:1">−</button>
+      <button id="zoomFit" title="全体表示" style="width:44px;height:44px;margin-top:4px;border:1px solid #2c3c50;border-radius:9px;background:rgba(14,23,34,.92);color:#aab8c8;cursor:pointer;font-size:15px">⤢</button>
+      <button id="recenter" title="現在地へ" style="width:44px;height:44px;border:1px solid #2c3c50;border-radius:9px;background:rgba(14,23,34,.92);color:#aab8c8;cursor:pointer;font-size:15px">◎</button>
+    </div>
+  </main>
+
+  <div id="overlay" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,6,10,.78);backdrop-filter:blur(5px)"><section id="modal" role="dialog" aria-modal="true"></section></div>
+  <div id="toast" role="status" aria-live="polite" style="position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,18px);opacity:0;padding:11px 17px;border:1px solid #34475c;border-radius:11px;background:#14202d;color:#d8e2ec;font-size:12px;pointer-events:none;transition:.25s;box-shadow:0 12px 38px rgba(0,0,0,.4)"></div>
+  <footer style="text-align:center;padding:0 18px 34px;color:#52657b;font-size:10px;line-height:1.7">このツリーの「習得」はゴールではなく、次の実践を始めるための通過点です。進捗はこのブラウザ内に保存されます。</footer>
+</div>
+
+<script>
+(function(){
+  const props={theme:'blueprint',reducedMotion:false,initialView:'start',lockTheme:false,storageNs:''};
+  const root=document.getElementById('root');
+  function init(){
+    if(root.__inited) return; root.__inited=true;
+    const MONO="'SFMono-Regular',Consolas,monospace";
+    const q=s=>root.querySelector(s), qa=s=>[...root.querySelectorAll(s)];
+
+    const SKILLS=[
+      {id:"vibe",x:580,y:0,name:"バイブコーディング",tag:"FINAL MASTERY",kind:"final",final:true,allOf:["iterate"],
+       desc:"AIに丸投げするのではなく、作りたいものが膨らむたびに『次に何が必要か』を自分で見極め、作り、確かめ、公開し、改善まで回せる状態。",
+       points:["目的から逆算してAIと協働できる","必要な技術を過不足なく選べる","小さく公開し、反応から次へ進める"]},
+      {id:"iterate",x:580,y:130,name:"本当に役立ったか知りたい",tag:"Feedback / Analytics",kind:"quality",allOf:["release"],
+       desc:"公開は完成ではなく観察の始まり。利用者の反応やエラーから、次に直す一点を決める。",
+       points:["事実と感想を分けて受け取る","変更前後で結果を比べる"]},
+      {id:"release",x:580,y:260,name:"ちゃんと公開して見守りたい",tag:"Deploy & Watch",kind:"quality",allOf:["test","git"],
+       desc:"動くものを他の人が使える場所へ出し、落ちても気づける状態にする。",
+       points:["秘密情報を分離して公開する","ログやエラーを確認できるようにする"]},
+      {id:"test",x:470,y:390,name:"次の変更で壊したくない",tag:"Testing",kind:"quality",allOf:["debug"],
+       desc:"動いた一回ではなく、同じ条件なら同じように動くことを確かめる。",
+       points:["正常系・空入力・失敗時を確認する","修正で前の機能が壊れていないか見る"]},
+      {id:"debug",x:470,y:520,name:"なぜ動かないか突き止めたい",tag:"Debugging",kind:"quality",allOf:["read","devtools"],
+       desc:"直感で何か所も変えず、症状を再現し、原因の仮説を一つずつ確かめる。",
+       points:["再現手順を固定する","最小の変更で仮説を検証する"]},
+      {id:"read",x:470,y:650,name:"AIが何を変えたか知りたい",tag:"Diff / Review",kind:"quality",allOf:["product"],
+       desc:"AIが何を変更したかを確認する。入口・データ・副作用・出口を追う。",
+       points:["変更されたファイルと範囲を見る","想定外の変更を見逃さない"]},
+      {id:"devtools",x:250,y:650,name:"何が起きたか伝えたい",tag:"DevTools / Console / Network",kind:"quality",allOf:["product"],
+       desc:"画面の症状だけでなく、ブラウザが持つエラーと通信の記録を見て、AIへ渡せる材料にする。",
+       points:["Consoleのエラーと再現手順をそろえる","NetworkでRequest・Response・Statusを確認する"]},
+      {id:"git",x:690,y:650,name:"壊れても戻れるようにしたい",tag:"Git",kind:"quality",allOf:["product"],
+       desc:"変更を小さな保存点として残し、失敗しても比較・復元できるようにする。",
+       points:["一つの目的ごとに変更を区切る","何を変えたか分かる言葉を残す"]},
+      {id:"product",x:580,y:780,name:"まず一つ動かす",tag:"ONE WORKING THING",kind:"common",anyOf:["static-deploy","auth","ai-eval","dataflow"],
+       desc:"選んだ範囲で、実際に一つ動くものを形にした証。完成範囲を小さく絞るほど、改善のサイクルを回しやすい。",
+       points:["最小の完成条件を満たしている","自分または他の人が同じ結果を再現できる"]},
+      {id:"ai-eval",x:620,y:910,name:"AIのハズレを減らしたい",tag:"Evaluation",kind:"ai",allOf:["api"],
+       desc:"AIの出力は揺れる。もっともらしさではなく、具体例と合格条件で確かめ、断言させすぎない。",
+       points:["良い例と失敗例で検証する","失敗・遅延・出力の揺れを想定する"]},
+      {id:"ai-cost",x:850,y:780,name:"使いすぎと料金を抑えたい",tag:"Rate Limit / Usage / Cost",kind:"ai",allOf:["ai-eval"],
+       desc:"AI機能を公開すると、品質だけでなく回数・料金・悪用への備えが必要になる。",
+       points:["利用者ごとに回数と使用量を記録する","上限・予算・失敗時の扱いを決める"]},
+      {id:"api",x:620,y:1040,name:"AIを安全につなぎたい",tag:"API / Secrets",kind:"ai",allOf:["http","backend"],
+       desc:"外部サービスへリクエストし、APIキーなどの秘密をコードから分離する。鍵はブラウザに置けない。",
+       points:["入力・出力・エラーの約束を読む","秘密はサーバー側・環境変数へ置く"]},
+      {id:"http",x:620,y:1300,name:"外のデータを呼びたい",tag:"HTTP / JSON",kind:"ai",allOf:["jsdom"],
+       desc:"画面やプログラムが外部サービスとやり取りする共通語。リクエストとレスポンス、JSONの読み方。",
+       points:["リクエストとレスポンスを区別する","JSONのキーと値を読み取る"]},
+      {id:"auth",x:410,y:910,name:"人ごとに分けて守りたい",tag:"Authentication / Authorization",kind:"server",allOf:["database"],
+       desc:"『誰なのか』を確かめ、本人が見たり変更したりしてよい範囲だけを許可する。複数人で使うときに必要。",
+       points:["Authenticationで利用者を識別する","Authorizationで操作できる範囲を制御する"]},
+      {id:"database",x:410,y:1040,name:"端末を越えて残したい",tag:"Database",kind:"server",allOf:["backend"],
+       desc:"多くのデータを、端末をまたいで保存・検索する場所。共有や履歴が欲しくなったら使う。",
+       points:["保存したい項目と関係を決める","localStorageとの違い（共有・検索）を知る"]},
+      {id:"backend",x:500,y:1170,name:"ブラウザの外で動かしたい",tag:"Server / Runtime",kind:"server",anyOf:["localstorage","http"],
+       desc:"ブラウザの外でコードを動かす場所。データを皆で共有したり、秘密情報を隠したくなった瞬間に必要になる。",
+       points:["『どこでコードが動くか』を意識する","ブラウザに置けない処理をここへ移す"]},
+      {id:"ui-structure",x:170,y:1170,name:"画面が増えても整理したい",tag:"Components / State / Routing",kind:"web",allOf:["jsdom"],
+       desc:"画面や状態が増えて一枚のコードでは追いにくくなったら、部品・状態・ページ遷移に分けて整理する。",
+       points:["UIを役割ごとのComponentに分ける","状態の置き場所とRoutingを決める"]},
+      {id:"static-deploy",x:200,y:1300,name:"URLで見せたい",tag:"Static Hosting",kind:"web",allOf:["jsdom"],
+       desc:"ブラウザだけで動くものを、無料で誰でも見られる場所に置く。サーバーは要らない。",
+       points:["HTML/CSS/JSをそのまま公開できる","URLを共有すれば誰でも開ける"]},
+      {id:"localstorage",x:410,y:1300,name:"次に開いても残したい",tag:"localStorage",kind:"web",allOf:["jsdom"],
+       desc:"入力や進捗を、同じ端末・同じブラウザの中に残す。サーバーなしで『次も残る』を実現する。",
+       points:["JSONに変換して保存・読み出す","“その端末だけ”に残ると理解する"]},
+      {id:"jsdom",x:410,y:1430,name:"押したら動いてほしい",tag:"JavaScript / DOM",kind:"web",allOf:["htmlcss"],
+       desc:"ボタンや入力に反応して、画面の表示を書き換える。ブラウザの中だけで動く部分。",
+       points:["イベントを受けて処理する","状態から画面を更新する"]},
+      {id:"htmlcss",x:410,y:1560,name:"まず画面を出したい",tag:"HTML / CSS",kind:"web",allOf:["task"],
+       desc:"画面の意味と構造をHTMLで、見た目と配置をCSSで表す。",
+       points:["意味に合ったHTML要素を選ぶ","余白・揃え・読みやすさを整える"]},
+      {id:"dataflow",x:900,y:1300,name:"まとめて変換・集計したい",tag:"Data processing",kind:"auto",allOf:["python"],
+       desc:"入力を読み、変換し、結果を保存する流れを組み立てる。画面が要らないなら最短で組める。",
+       points:["入力と出力を分けて考える","途中経過と失敗理由を記録する"]},
+      {id:"scheduler",x:900,y:1170,name:"開かなくても勝手に動いてほしい",tag:"Scheduler / Cron / Webhook",kind:"auto",allOf:["dataflow"],
+       desc:"手で実行していた処理を、決まった時間や外部イベントをきっかけに自動で動かす。",
+       points:["同じ処理が重なっても壊れないようにする","実行結果と失敗を通知・記録する"]},
+      {id:"python",x:900,y:1430,name:"繰り返しを任せたい",tag:"Python",kind:"auto",allOf:["files"],
+       desc:"小さなプログラムを書いて実行し、必要なライブラリを環境ごとに管理する。",
+       points:["変数・条件分岐・関数を使う","依存を再現できる形で残す"]},
+      {id:"files",x:900,y:1560,name:"大量のファイルを扱いたい",tag:"Files / CLI",kind:"auto",allOf:["task"],
+       desc:"ファイルの場所を把握し、ターミナルから移動・実行・確認する。",
+       points:["現在地と対象ファイルを確認する","コマンドの結果を読んで次を決める"]},
+      {id:"task",x:580,y:1690,name:"小さなタスクに分ける",tag:"DECOMPOSE",kind:"common",allOf:["collab"],
+       desc:"大きな依頼を、結果を一つずつ確認できる変更へ分ける。",
+       points:["一回の依頼で変える目的を一つにする","各タスクに確認方法を付ける"]},
+      {id:"collab",x:580,y:1820,name:"AIとの対話・文脈",tag:"COLLABORATE",kind:"common",allOf:["goal"],
+       desc:"目的・対象・制約・出力形式をAIへ渡し、対話しながら認識をそろえる。",
+       points:["変更してよい範囲を伝える","分からない点を先に確認させる"]},
+      {id:"goal",x:580,y:1950,name:"目的・完成条件",tag:"DEFINE DONE",kind:"common",entry:true,
+       desc:"作り始める前に、誰の何を変え、どこまでできたら完成かを言葉にする。これがどの道でも最初の一歩。",
+       points:["利用者と解決したいことを決める","目で確認できる完成条件を置く"]}
+    ];
+    const HARD_QUIZZES={
+      "goal":{q:"営業部から『CSVの日報を楽に集計したい』と相談された。実装前の完成条件として最も検証しやすいものは？",opts:["担当者が使いやすいと感じる集計ツールにする","CSVを読み込むと10秒以内に担当者別の週次件数が表示され、不正な行は元データを変えずに一覧化される","AIが最適だと判断した構成で、将来の機能追加にも対応する"],a:1,why:"時間、入力、期待する出力、失敗時の扱いが観察可能な形で定義されています。→ AIには『これができたら完成、という確認できる画面』を最初に渡す。",hint:"第三者が実行して、達成・未達を同じ結論で判定できるか考えてみよう。"},
+      "collab":{q:"既存アプリへCSV出力だけを追加したい。DB構造と既存画面は変えてはいけない。AIへの最初の依頼として最も安全なのは？",opts:["CSV出力を追加して。必要なら全体をきれいにリファクタリングしてよい","対象ファイル、変えてよい範囲、維持すべき挙動、出力例を示し、不明点と実装案を先に回答させる","CSV出力のベストプラクティスを使い、完成するまで自律的に修正させる"],a:1,why:"対象・制約・不変条件・期待値を渡し、変更前に認識を確認できます。→ AIには『変えていい範囲』と『壊さない挙動』を必ず添える。",hint:"AIが善意で余計な変更を加えても防げる依頼かを見よう。"},
+      "task":{q:"ログイン後だけ画面が真っ白になる。調査と修正をAIへ渡す順番として最も適切なのは？",opts:["認証処理を新方式で書き直す → UIも整理する → 最後に動作確認する","再現条件を固定する → ブラウザとサーバーのログを確認する → 原因候補を一つ修正する → 回帰テストする","真っ白な画面を直す → 関連しそうな警告を全部消す → テストを追加する"],a:1,why:"観察、仮説、最小修正、再発防止が一つずつ確認できる順序です。→ AIには『〜まででいったん止めて』と、一度の変更を小さく区切らせる。",hint:"原因がまだ分からない段階で、大きな変更から始めていないかを確認しよう。"},
+      "htmlcss":{q:"商品カード全体をクリックで詳細へ移動させたい。AIへの頼み方として最も良いのは？",opts:["「とにかくクリックで動くようにして」と頼む","「カード全体で遷移したい。見た目用の div ではなく意味の合う a 要素にして、キーボード操作とフォーカス表示も効くように」と頼む","「div に onclick と cursor:pointer を付けて」と頼む"],a:1,why:"『何のための要素か（遷移）』を伝えると、AIは適切なHTMLを選び、キーボード操作も自然に付いてきます。→ AIには『見た目を似せて』ではなく『意味の合う要素にして』と頼む。",hint:"見た目をボタンらしくする依頼と、要素の意味を正す依頼は別物です。"},
+      "files":{q:"AIの指示どおりコマンドを実行したら『対象ファイルが見つからない』と出た。次に行う確認として最も適切なのは？",opts:["同名の空ファイルを作ってから再実行する","現在のフォルダ、一覧、指定した相対パスと大文字小文字を確認する","管理者権限で同じコマンドを実行する"],a:1,why:"まず現在地と対象の実在を確認すれば、権限や処理内容を変えずに原因を切り分けられます。→ AIには『まず今いる場所と対象ファイルの有無を確認して』と頼む。",hint:"ファイルがない問題と権限の問題を混ぜないようにしよう。"},
+      "http":{q:"POST /tasks が 422 を返し、レスポンス本文にはフィールドエラーが入っている。最初に比較すべきものは？",opts:["同じURLへGETを送り、成功するか確認する","送信したJSONとAPIの入力スキーマ、Content-Type、エラー詳細を比較する","タイムアウト時間を延ばして同じPOSTを再送する"],a:1,why:"422は多くの場合、届いた入力をサーバーが検証できなかったことを示します。→ AIには『送ったJSONとAPIの入力スキーマ、Content-Type、エラー詳細を比べて』と頼む。",hint:"通信できていないのか、通信後に入力を拒否されたのかを区別しよう。"},
+      "jsdom":{q:"ボタンを押すと数字が1増える画面を作りたい。サーバーは使いたくない。AIへの頼み方は？",opts:["「押すたびにページをサーバーから読み直して数字を更新して」と頼む","「サーバーは使わず、クリックを受けて状態を1増やし、その値で表示を書き換えて（JavaScriptとDOM操作で）」と頼む","「1〜100の数字画像を順番に切り替えて」と頼む"],a:1,why:"『イベント→状態→表示更新』はブラウザ内のJavaScriptだけで完結します。→ AIには『サーバーを使わずDOMを書き換えて』と範囲を指定する。",hint:"画面の変化は、サーバーへ行かなくても起こせます。"},
+      "static-deploy":{q:"ブラウザだけで完結するアプリを友達に見せたい。AIへの頼み方は？",opts:["「サーバーとデータベースを借りて公開する手順を教えて」と頼む","「これはブラウザだけで動くので、GitHub Pages などの静的ホスティングで公開する手順を教えて」と頼む","「公開はせず自分のPCでだけ開く方法を教えて」と頼む"],a:1,why:"サーバー側の処理が無いなら、静的ホスティングで十分に公開できます。→ AIには『ブラウザだけで動くので静的ホスティングで』と前提を添えると、過剰な構成を避けられます。",hint:"バックエンドの処理が無いアプリに、サーバー契約は要るでしょうか。"},
+      "localstorage":{q:"ToDoの内容を『次に開いても残したい』。自分のPCだけで使う。AIへの頼み方として過不足ないのは？",opts:["「データベースとサーバーを用意して保存して」と頼む","「サーバーは使わず、内容を localStorage に保存して、次に開いたとき復元して」と頼む","「毎回入力し直す前提で作って」と頼む"],a:1,why:"同じ端末・自分だけで良いなら、localStorage で十分に永続化できます。→ AIには保存先の名前を出して『localStorageに保存して復元して』と頼むのが最短です。",hint:"『他の端末でも』という要求が無いうちは、ブラウザ内保存で足ります。"},
+      "backend":{q:"自分のPCで動いた気分記録アプリを、スマホでも続きを入力したくなった。AIへの相談として最も的確なのは？",opts:["「画面のデザインをもっと良くして」と頼む","「端末をまたいでデータを使いたい。ブラウザの外（サーバー側）に置き場所を作る最小構成を、選択肢ごとの違いも添えて提案して」と頼む","「JavaScriptをPythonに書き換えて」と頼む"],a:1,why:"端末をまたいでデータを使うには、ブラウザの外（サーバー側）に置き場所が要ります。ここからバックエンド・DBへ自然につながります。→ AIには『端末をまたいで共有したいので、サーバー側に置き場所を』と目的から伝える。",hint:"『自分の端末だけ』を超えた瞬間に、何が足りなくなるでしょう。"},
+      "database":{q:"『他の端末でも同じデータを見たい』。localStorage で足りる？AIへどう相談する？",opts:["「localStorage は全端末で共有されるはずなので、その前提で進めて」と頼む","「localStorage は同じ端末だけなので足りない。端末をまたいで共有できる保存先（データベース）に保存する形にして」と頼む","「再読み込みすれば自動で同期されるようにして」と頼む"],a:1,why:"localStorage はその端末のブラウザ内だけ。端末をまたぐ共有には共有DBが必要です。→ AIには『端末間で共有したいのでDBに』と、保存先の種類を指定して頼む。",hint:"localStorage が“どこに”保存されるかを思い出そう。"},
+      "auth":{q:"友達にも使ってもらったら、全員の記録が同じ一覧に表示されてしまった。必要な対策の組み合わせは？",opts:["ログインだけを付ければ、データの表示範囲は自動的に安全になる","本人を識別し、各データの所有者を記録して、読み書きできる範囲も検査する","一覧の色を利用者ごとに変える"],a:1,why:"Authenticationで本人を識別し、Authorizationでその人が扱えるデータの範囲を制御します。→ AIには『本人確認(認証)と、持ち主だけが扱える制御(権限)の両方を』と頼む。",hint:"『誰か分かること』と『何をしてよいか』は別の判断です。"},
+      "ui-structure":{q:"1ファイルのJavaScriptに、一覧・編集・設定の画面と十数個の状態が増えた。次の整理として最も妥当なのは？",opts:["行数が増えても一つの関数へ集め続ける","画面を役割ごとの部品に分け、共有する状態の置き場所とページ遷移を明示する","すべての状態をlocalStorageへ移す"],a:1,why:"複雑さが増えた時点でComponents・State・Routingを検討すると、変更範囲を説明しやすくなります。→ AIには『役割ごとの部品に分けて、状態の置き場所とRoutingを整理して』と頼む。",hint:"保存場所ではなく、画面の責任と状態の所有者を整理する問題です。"},
+      "python":{q:"自分のPCでは動くPythonツールが、同僚のPCでは ModuleNotFoundError になった。再現性を高める対応は？",opts:["自分のsite-packagesフォルダをそのまま渡す","依存関係と必要バージョンを記録し、新しい仮想環境でセットアップ手順を検証する","エラーになったライブラリだけを都度最新版で入れてもらう"],a:1,why:"宣言された依存関係を空の環境から再現できることが、環境差の対策になります。→ AIには『別のPCでも再現できる形で依存と手順を残して』と頼む。",hint:"今回だけ動かす方法ではなく、別のPCでも同じ状態を作れるかを考えよう。"},
+      "api":{q:"日記にAIから一言コメントを付けたい。ただしAPIキーをブラウザへ置くと誰でも見られてしまう。どんな構成にする？",opts:["ブラウザから直接AI APIを呼び、キーを短い変数名にする","ブラウザから自分のバックエンドを呼び、バックエンドがAI APIを呼ぶ","キーをCSSファイルに置く"],a:1,why:"秘密の鍵はブラウザに配らず、サーバー側に置いて中継します。API・秘密情報・バックエンドが一本につながります。→ AIには『鍵はブラウザに置かず、バックエンド経由で。環境変数に』と頼む。",hint:"ブラウザに届くものは、変数名を変えても誰でも見られます。"},
+      "dataflow":{q:"1万行のCSV変換が途中で失敗し、出力には新旧データが混在した。次回の設計として最も堅牢なのは？",opts:["入力ファイルを1行ずつ直接上書きし、失敗した行だけ後で直す","先に検証し、一時ファイルへ出力し、行ごとのエラーを記録して、全体成功時だけ完成ファイルへ置き換える","例外を無視して、処理できた行だけ同じ出力へ追記する"],a:1,why:"元データを保護し、不完全な結果を完成品として扱わない設計です。→ AIには『元データは壊さず、一時ファイルに出して全部成功したら置き換えて』と頼む。",hint:"途中で止まっても、開始前の状態へ戻れるかを考えよう。"},
+      "ai-eval":{q:"AIが気分記録を要約してくれたが、書いていない予定を勝手に追加することがある。次に何を作る？",opts:["プロンプトへ「絶対に間違えないで」と書き足す","代表的な入力と合格条件を用意し、変更前後を比べる","回答をもっと長くしてもらう"],a:1,why:"AIは“それっぽく”間違えます。代表例と合格条件で変更前後を比べる仕組みを持つと、品質を確かめられます。→ AIには『言葉を強める前に、良い例と失敗例で検証する仕組みを』と頼む。",hint:"お願いの言葉を強めることと、出力を検証できることは別です。"},
+      "ai-cost":{q:"AIコメント機能を公開したら、一人が短時間に1,000回実行し、API料金が急増した。次に必要なのは？",opts:["ボタンを目立たなくする","利用者ごとの回数制限、使用量の記録、予算上限を設ける","APIキーを毎日変更する"],a:1,why:"Rate Limit・Usage Tracking・Budgetを組み合わせ、悪用と想定外の請求を制御します。→ AIには『利用者ごとの回数制限・使用量記録・予算上限をサーバー側に』と頼む。",hint:"UIの見た目ではなく、サーバー側で利用量を測って止められる必要があります。"},
+      "product":{q:"自分のスマホだけで使う、1週間分の気分記録を週末に作りたい。最初の構成として最も過不足がないのは？",opts:["HTML・CSS・JavaScript と localStorage","バックエンド、DB、認証、管理画面","Python、AI API、ベクトルDB"],a:0,why:"今の欲望（自分・1端末・記録を残すだけ）に必要なものだけ。技術が多いほど偉いわけではありません。→ AIには『今の欲しいものに対して過剰にせず、最小構成で』と頼む。",hint:"『他の人』『他の端末』が要らないうちは、ブラウザの中で足ります。"},
+      "read":{q:"AIにボタンの色だけを変えてもらったら、ログインできなくなった。次から安心して試すには何が欲しい？",opts:["変更前後の差分を確認する","動いていた状態をGitへ保存する","ログインのテストを残す","すべて必要"],a:3,why:"差分を読む・Gitで戻れる・テストで気づける。この3つが揃うと、もっと気軽にAIへ頼める“安全装置”になります。→ AIには『どのファイルの何を変えたか差分で説明して』と頼む。",hint:"どれか一つでは、AIの予想外の変更を全部は受け止めきれません。"},
+      "devtools":{q:"ボタンを押しても画面が変わらない。AIへ相談する前に、最も原因を絞りやすい情報は？",opts:["『動きません』という説明だけ","再現手順、Consoleのエラー、NetworkのRequest・Response・Status","使っているブラウザのアイコン画像"],a:1,why:"症状・再現手順・Console・Networkをそろえると、AIが推測ではなく観測結果から原因を追えます。→ AIには『推測で直さず、再現手順・Consoleエラー・Networkの記録から原因を絞って』と頼む。",hint:"画面に見える結果だけでなく、ブラウザ内部の記録を渡せるかを考えよう。"},
+      "git":{q:"作業中にバグ修正、全体フォーマット、依存ライブラリ更新が一つの差分に混ざった。履歴を扱いやすくする方法は？",opts:["すべて『各種修正』という一つのコミットにする","差分を目的別に分け、それぞれ動作確認できる単位でコミットする","ファイルごとに一コミットへ分ける"],a:1,why:"ファイル数ではなく変更理由で分けると、レビューや切り戻しがしやすくなります。→ AIには『目的ごとにコミットを分けて』と頼む。",hint:"後で一つだけ取り消したいとき、どの分け方が役立つかを考えよう。"},
+      "debug":{q:"本番でだけ時々500エラーが起きるが、手元では再現しない。次の調査として最も情報量が多いものは？",opts:["原因候補のコードをいくつか同時に修正して再デプロイする","発生時刻・要求ID・入力条件を集め、対応するログと環境差を突き合わせる","本番サーバーを定期的に再起動して発生頻度を見る"],a:1,why:"再現しにくい問題でも、同じ一回の事象を複数の記録から追跡できます。→ AIには『あちこち変えず、再現手順を固定して仮説を一つずつ』と頼む。",hint:"再現できないときは、推測を増やすより観測可能な手掛かりを結びつけよう。"},
+      "test":{q:"購入額が10,000円以上なら10%割引になる関数をテストする。境界の不具合を見つけやすい組み合わせは？",opts:["1,000円、5,000円、20,000円","9,999円、10,000円、10,001円に加え、0円や不正値","10,000円だけを複数回"],a:1,why:"条件が切り替わる直前・一致・直後と、入力範囲外を確認しています。→ AIには『境界値・空入力・失敗時もテストして』と頼む。",hint:"代表値だけでなく、条件式の記号が間違っていたら差が出る値を選ぼう。"},
+      "release":{q:"DB項目の変更を伴う新バージョンを無停止で公開したい。最も安全な進め方は？",opts:["新コードを先に全台へ出し、その後DBを一気に変更する","バックアップとロールバック手順を用意し、旧新コードが共存できる互換的な変更を先に出し、段階公開して監視する","メンテナンス表示を出さず、アクセスの少ない時間に一度で切り替える"],a:1,why:"旧版と新版の共存期間を作り、観測しながら戻せる小さな段階に分けています。→ AIには『旧版と共存できる変更を段階公開し、戻せる手順も用意して』と頼む。",hint:"失敗しない前提ではなく、途中で止めたり戻したりできるかを考えよう。"},
+      "iterate":{q:"10人にURLを送った。8人は最初の入力画面で離脱し、2人は最後まで使った。次にすることは？",opts:["機能を10個追加する","離脱した場所とエラーを確認し、入力を一つ減らして比べる","アプリ名とロゴを変更する"],a:1,why:"初めて誰かに使ってもらえた興奮の続き。どこで離れたかを見て、一つ減らして比べるのが次の一歩です。→ AIには『一度に増やさず、離脱した一点だけ直して比べたい』と頼む。",hint:"思いつきで足す前に、まず“どこで離れたか”を見ましょう。"},
+      "scheduler":{q:"毎朝7時のCSV集計が、通信再試行で同じ日に2回動くことがある。安全な設計は？",opts:["毎回同じ出力へ無条件で追記する","実行日やジョブIDで重複を判定し、同じ処理が再実行されても結果が壊れないようにする","失敗しても記録せず、翌日まで待つ"],a:1,why:"SchedulerやWebhookは重複実行を前提に、冪等性と実行履歴を持たせます。→ AIには『二度動いても結果が壊れないように（冪等に）して』と頼む。",hint:"『一度しか呼ばれない』ことに依存せず、二度動いても同じ結果になるかを考えよう。"}
+    };
+    SKILLS.forEach(s=>{if(HARD_QUIZZES[s.id])s.quiz=HARD_QUIZZES[s.id];});
+
+    /* 15分ミッション：習得直後に「今すぐ作れる小さなもの」＋AIへ渡すコピペ依頼文を出す。 */
+    const MISSIONS={
+      "htmlcss":{do:"好きなテーマで、見出し・画像・短い文・ボタンが縦に並ぶ自己紹介ページを作ろう。",
+        prompt:"1ファイルのHTMLで、見出し・短い自己紹介文・画像1枚・ボタン1つが縦に並ぶページを作ってください。CSSは同じファイル内に書き、余白と中央寄せで読みやすく整えてください。各部分が何かをコメントで説明してください。"},
+      "jsdom":{do:"ボタンを押すと「今日の運勢」がランダムで表示される画面を作ろう。",
+        prompt:"1ファイルのHTMLで、ボタンを押すと用意した5つの運勢からランダムに1つを画面に表示してください。表示はJavaScriptでテキストを書き換える方法にし、既存の構造は大きく変えず、変更点も説明してください。"},
+      "static-deploy":{do:"実習例としてGitHub Pagesを使い、作ったHTMLをURLで開けるようにしよう。",
+        prompt:"静的ホスティングの学習例として、手元の index.html を GitHub Pages で公開する手順を初めての人向けに教えてください。GitHub Pagesだけが唯一の選択肢ではないことを明記し、他の静的ホスティング候補との違いを短く説明してから、リポジトリ作成からURLで開けるまでを案内してください。"},
+      "localstorage":{do:"入力欄と保存ボタンを作り、ページを閉じても文字が残るようにしよう。",
+        prompt:"1ファイルのHTMLで、入力欄、保存ボタン、削除ボタンを作ってください。\n入力内容はlocalStorageへ保存し、ページを再度開いたときに復元してください。\n既存のHTML構造は大きく変更せず、変更点も説明してください。"},
+      "http":{do:"無料の公開API（猫の画像など）を呼んで、結果を画面に表示しよう。",
+        prompt:"1ファイルのHTMLで、ボタンを押すと無料で使える公開APIを fetch で呼び、返ってきたJSONの中身を画面に表示してください。読み込み中と失敗時の表示も入れて、変更点を説明してください。"},
+      "backend":{do:"実習例としてNode.jsを使い、「Hello」とだけ返す最小のサーバーを立てよう。",
+        prompt:"Server / Runtimeの学習例としてNode.jsを使い、/hello にアクセスすると {\"message\":\"Hello\"} を返す最小のサーバーを作ってください。Node.jsが唯一の選択肢ではなく、PythonやBaaS、Serverlessも要求次第で候補になると明記してください。ローカルでの起動方法と、ブラウザや fetch から呼ぶ方法も説明してください。"},
+      "ui-structure":{do:"運勢アプリを、結果表示・履歴・設定の3つの部品に分ける設計図を作ろう。",
+        prompt:"現在は1ファイルのHTMLとJavaScriptで運勢アプリを作っています。結果表示、履歴、設定の責任を分けるComponent構成と、どこにStateを置くかを提案してください。まだフレームワークへ移行すべきかも、Vanilla JSを続ける案と比較してください。"},
+      "devtools":{do:"ブラウザのConsoleとNetworkを開き、エラー1件をAIへ渡せる形に整理しよう。",
+        prompt:"これからブラウザで起きた不具合を相談します。推測で修正せず、まず必要な再現手順、Consoleエラー、NetworkのRequest・Response・Status、関連コードを順番に質問してください。集めた情報から原因候補を一つずつ絞ってください。"},
+      "ai-cost":{do:"AI機能の1日あたり利用回数と予算上限を決め、超えた場合の表示を設計しよう。",
+        prompt:"公開予定のAI機能について、利用者ごとのRate Limit、Usage Tracking、月額Budget、上限到達時の表示を含む最小設計を提案してください。想定利用者数と1回あたりのAPIコストが不明なら、先に質問してください。"},
+      "scheduler":{do:"毎日1回の集計を、安全に再実行できるジョブとして設計しよう。",
+        prompt:"毎日決まった時間にCSVを集計するジョブを設計してください。CronまたはSchedulerを使い、重複実行への冪等性、実行履歴、失敗時の再試行と通知を含めてください。初心者向けの最小構成と確認方法も説明してください。"},
+      "files":{do:"フォルダ内のファイル名を一覧で書き出すスクリプトを作ろう。",
+        prompt:"指定したフォルダの中のファイル名を一覧で表示する短いスクリプトを書いてください。実行方法と、対象フォルダの指定の仕方も初めての人向けに説明してください。"},
+      "python":{do:"数字を入れると合計と平均を返す、小さなPythonスクリプトを作ろう。",
+        prompt:"Python で、数値のリストを受け取って合計と平均を表示する短いスクリプトを書いてください。実行方法と、自分の数字に差し替える箇所も説明してください。"}
+    };
+    /* 欲望を選ぶ問題：正解なし。分岐点で「次に何を足したい？」を選ぶと、その技術がツリーで光る。 */
+    const DESIRES={
+      "jsdom":{q:"ボタンを押すと今日の運勢が表示されるアプリができた。次はどうしたい？",opts:[
+        {label:"友達にもURLを送って遊んでもらいたい",to:"static-deploy"},
+        {label:"明日開いたときも、過去の結果を残したい",to:"localstorage"},
+        {label:"今日の天気を読み込んで運勢に反映したい",to:"http"},
+        {label:"画面が増え、1ファイルでは整理しにくくなった",to:"ui-structure"},
+        {label:"フォルダ内の100個のCSVを毎朝まとめたい",to:"dataflow"}
+      ]}
+      ,"localstorage":{q:"同じ端末には保存できた。次はどうしたい？",opts:[
+        {label:"PCとスマホで同じ続きを使いたい",to:"database"},
+        {label:"自分だけでなく、友達ごとにデータを分けたい",to:"auth"}
+      ]}
+      ,"http":{q:"外のデータを呼べた。次はどうしたい？",opts:[
+        {label:"APIキーを隠してAI機能をつなぎたい",to:"backend"},
+        {label:"通信が失敗した理由を自分で確認したい",to:"devtools"}
+      ]}
+      ,"ai-eval":{q:"AI出力を評価できた。公開前に何を備えたい？",opts:[
+        {label:"使いすぎや想定外のAPI料金を抑えたい",to:"ai-cost"},
+        {label:"まず小さなAI機能として完成させたい",to:"product"}
+      ]}
+      ,"dataflow":{q:"一括処理が動いた。次はどうしたい？",opts:[
+        {label:"毎朝、自分が開かなくても自動で動いてほしい",to:"scheduler"},
+        {label:"まず手作業を置き換えた成果として完成させたい",to:"product"}
+      ]}
+      ,"product":{q:"一つ動くものができた。次に安心して育てるなら？",opts:[
+        {label:"AIが何を変えたか確認できるようにしたい",to:"read"},
+        {label:"壊れても前の状態へ戻れるようにしたい",to:"git"},
+        {label:"画面や通信のエラーをAIへ正確に伝えたい",to:"devtools"}
+      ]}
+    };
+    /* AIへの言い方：各スキルで「どんな言葉でAIに頼むか」の語彙。専門用語を“使える文”の形で覚える。 */
+    const SAY={
+      goal:"『誰の何を解決するか』と『これができたら完成、という確認できる画面』を先に伝える。例：『金額を入力して追加すると一覧に1件出る、ここまでで完成。保存やログインは今回作らない』",
+      collab:"『対象ファイルはこれ。変えていいのはここだけ。この挙動は壊さないで。不明点は先に質問して』と、範囲と前提を渡す。",
+      task:"『まとめてやらず、〜まででいったん止めて。確認してから次に進めたい』と、一度の変更を小さく区切らせる。",
+      htmlcss:"『クリックで移動するならdivではなく意味の合うa要素にして。見た目はCSSで整えて』と、要素の意味を指定する。",
+      jsdom:"『サーバーは使わず、クリックを受けて状態を更新し、その値で画面の表示を書き換えて（JavaScriptとDOM操作で）』",
+      "static-deploy":"『これはブラウザだけで動くので、GitHub Pagesなどの静的ホスティングで公開する手順を教えて』",
+      localstorage:"『この内容をlocalStorageに保存して、次に開いたとき復元して。サーバーはまだ使わない』",
+      http:"『この公開APIをfetchで呼んで、返ってきたJSONのこのキーを画面に出して。読み込み中と失敗時の表示も入れて』",
+      backend:"『APIキーを隠したい／データを共有したいので、ブラウザの外（サーバー側）で動かす最小構成にして』",
+      database:"『端末をまたいで残したいので、localStorageではなくデータベースに保存する形にして。保存する項目はこれ』",
+      auth:"『ログイン（本人確認＝認証）と、各データの持ち主だけが読み書きできる制御（権限＝認可）の両方を入れて』",
+      api:"『APIキーはブラウザに置かず、自分のバックエンド経由で外部APIを呼ぶ形にして。鍵は環境変数に』",
+      "ai-eval":"『プロンプトを強める前に、良い例と失敗例で出力を検証する仕組みを作って。変更前後で比べたい』",
+      "ai-cost":"『利用者ごとの回数制限・使用量の記録・予算上限と、上限到達時の表示をサーバー側に入れて』",
+      "ui-structure":"『1ファイルが大きくなった。役割ごとの部品(Component)に分けて、状態の置き場所とページ遷移(Routing)を整理して』",
+      dataflow:"『入力を読んで変換して保存する流れにして。途中で失敗しても元データは壊さず、行ごとのエラーを記録して』",
+      scheduler:"『毎朝決まった時間に動かして。二度実行されても結果が壊れないように（冪等に）して、失敗時は通知して』",
+      python:"『これはPythonの短いスクリプトで。必要なライブラリと実行手順も、別のPCで再現できる形で書いて』",
+      files:"『ターミナルでこのフォルダのファイルを一覧／移動／実行したい。まず今いる場所を確認するコマンドから教えて』",
+      git:"『この変更をGitで保存点として残したい。目的ごとにコミットを分けて、あとで戻せるようにして』",
+      read:"『どのファイルの何を変えたか、差分(diff)で要点を説明して。想定外の変更がないか一緒に確認したい』",
+      devtools:"『推測で直す前に、再現手順・Consoleのエラー・NetworkのRequest/Response/Statusを見て原因を絞って』",
+      debug:"『あちこち変えず、まず再現手順を固定して。原因の仮説を一つずつ、最小の変更で確かめて』",
+      test:"『正常系だけでなく、空入力・境界値・失敗時もテストして。前の機能が壊れてないかも確認して』",
+      release:"『バックアップとロールバック手順を用意して、旧版と共存できる形で段階的に公開して、監視しながら進めて』",
+      iterate:"『どこで離脱したか・どんなエラーが出たかを基に、次に直す一点だけ提案して。一度に増やさないで』",
+      product:"『今の欲しいものに対して過剰にせず、最小構成で。要らない技術は今は足さないで』"
+    };
+    /* 作れるもの実例カタログ：欲望から入り、必要な技術の道のりをツリーで光らせる。 */
+    const EXAMPLES=[
+      {title:"自己紹介ページ",blurb:"画像と文章を並べた、自分の名刺がわりのページ。",to:"htmlcss"},
+      {title:"今日の運勢アプリ",blurb:"ボタンを押すとランダムで結果が出る、動きのある画面。",to:"jsdom"},
+      {title:"閉じても残るToDoリスト",blurb:"入力した内容が、次に開いたときも残る。",to:"localstorage"},
+      {title:"友達に送れる公開ページ",blurb:"URLを送れば誰でも開ける場所に置く。",to:"static-deploy"},
+      {title:"天気を読み込んで表示",blurb:"外の公開データを呼んで画面に出す。",to:"http"},
+      {title:"AIが一言コメントする日記",blurb:"APIキーを安全に隠してAIにつなぐ。",to:"api"},
+      {title:"PCもスマホも同じ記録",blurb:"端末をまたいでデータを保存・共有する。",to:"database"},
+      {title:"みんなで使う・人ごとに分ける",blurb:"ログインして、各自のデータだけを見せる。",to:"auth"},
+      {title:"毎朝CSVを自動で集計",blurb:"大量ファイルをまとめ、決まった時間に自動実行。",to:"scheduler"},
+      {title:"繰り返し作業をPythonで",blurb:"手作業を短いスクリプトに置き換える。",to:"python"}
+    ];
+    SKILLS.forEach(s=>{if(MISSIONS[s.id])s.mission=MISSIONS[s.id];if(DESIRES[s.id])s.desire=DESIRES[s.id];if(SAY[s.id])s.say=SAY[s.id];});
+
+    const LESSON_URLS={
+      goal:"lessons/goal.html",
+      collab:"lessons/collab.html",
+      task:"lessons/task.html",
+      htmlcss:"lessons/htmlcss.html"
+    };
+
+    const MAP=Object.fromEntries(SKILLS.map(s=>[s.id,s]));
+    const STACK_GROUPS={
+      common:"設計・AI協働",web:"Frontend",server:"Server & Data",ai:"External & AI",auto:"Automation",quality:"Quality & Operations"
+    };
+    const STACK_EXCLUDE=new Set(["vibe","product"]);
+    /* 進捗は「集めた数」ではなく「どこまで自分で回せるようになったか」の段階で示す。 */
+    const MILESTONES=[
+      {label:"目的を決めた",test:a=>a.has("goal")},
+      {label:"AIと組めた",test:a=>a.has("collab")&&a.has("task")},
+      {label:"一つ動かせた",test:a=>a.has("product")},
+      {label:"安全に育てられる",test:a=>a.has("git")&&(a.has("test")||a.has("debug"))},
+      {label:"公開して見守れる",test:a=>a.has("release")},
+      {label:"改善を回せる",test:a=>a.has("iterate")||a.has("vibe")}
+    ];
+    const ns=props.storageNs||"", lockTheme=!!props.lockTheme;
+    const KEY="vibeSkillTree.v2"+ns, TKEY="vibeSkillTree.theme"+ns;
+    let acquired=new Set();
+    try{const saved=JSON.parse(localStorage.getItem(KEY)||"[]");acquired=new Set(saved.filter(id=>MAP[id]));}catch(e){}
+    const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...acquired]));}catch(e){}};
+
+    const reduced = !!props.reducedMotion || !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const tree=q('#tree'), svg=q('#edges'), overlay=q('#overlay'), modal=q('#modal'), viewport=q('#viewport');
+    const els={}, edgeEls=[];
+    let recommendedPath=new Set();
+    let previousFocus=null;
+
+    /* ── themes ── */
+    const THEMES={
+      neon:{label:'ネオン',bg:"radial-gradient(900px 550px at 50% -5%,rgba(95,100,255,.14),transparent 65%),radial-gradient(700px 500px at 5% 70%,rgba(69,213,231,.07),transparent 60%),radial-gradient(700px 500px at 95% 72%,rgba(255,127,180,.07),transparent 60%),#070b12",
+        vars:{'--ink':'#eef5ff','--muted':'#8294aa','--dim':'#4d5d70','--entry':'#829bff','--common':'#b397ff','--web':'#45d5e7','--auto':'#ffbd62','--ai':'#ff7fb4','--quality':'#52e2aa','--final':'#f6d66f','--server':'#5b9dff','--danger':'#ff746c','--grid1':'rgba(26,39,55,.35)','--grid2':'rgba(26,39,55,.28)'}},
+      minimal:{label:'ミニマル',bg:"radial-gradient(1100px 620px at 50% -10%,rgba(150,160,190,.05),transparent 70%),#0b0d11",
+        vars:{'--ink':'#e8ecf2','--muted':'#828c9c','--dim':'#525c6a','--entry':'#9aa6c8','--common':'#b3aacf','--web':'#86c2cd','--auto':'#d4b483','--ai':'#cf9bb2','--quality':'#88cbb0','--final':'#d8c684','--server':'#92a6c6','--danger':'#d6928c','--grid1':'rgba(72,82,98,.15)','--grid2':'rgba(72,82,98,.11)'}},
+      blueprint:{label:'ブループリント',bg:"radial-gradient(1000px 620px at 50% -8%,rgba(40,150,180,.13),transparent 68%),#061019",
+        vars:{'--ink':'#dff0f6','--muted':'#7fa0b2','--dim':'#4d6675','--entry':'#5b9dff','--common':'#7aa0ff','--web':'#45d5e7','--auto':'#56c7d8','--ai':'#62b6ff','--quality':'#52e2aa','--final':'#7fe0c8','--server':'#5b9dff','--danger':'#ff7d6c','--grid1':'rgba(52,152,182,.22)','--grid2':'rgba(52,152,182,.15)'}}
+    };
+    let savedTheme='';
+    try{savedTheme=localStorage.getItem(TKEY)||'';}catch(e){}
+    let theme = lockTheme ? (props.theme||'blueprint') : (savedTheme || props.theme || 'blueprint');
+    if(!THEMES[theme]) theme='blueprint';
+    function applyTheme(name){
+      theme=name; const t=THEMES[name]; if(!t)return;
+      root.style.background=t.bg;
+      Object.entries(t.vars).forEach(([k,v])=>root.style.setProperty(k,v));
+      if(!lockTheme){try{localStorage.setItem(TKEY,name);}catch(e){}}
+      qa('#themeSwitch button').forEach(b=>{const on=b.dataset.theme===name;b.style.background=on?'rgba(130,155,255,.16)':'transparent';b.style.color=on?'var(--ink)':'#8fa1b6';b.style.fontWeight=on?'700':'400';b.setAttribute('aria-pressed',String(on));});
+    }
+    const tw=q('#themeSwitch');
+    if(lockTheme) tw.style.display='none';
+    Object.entries(THEMES).forEach(([k,t])=>{const b=document.createElement('button');b.dataset.theme=k;b.textContent=t.label;b.style.cssText="padding:8px 12px;font-size:11px;border:0;background:transparent;color:#8fa1b6;cursor:pointer;font-family:inherit";b.style.borderRight=(k==='blueprint')?'0':'1px solid #1c2a3a';b.setAttribute('aria-pressed',String(k===theme));b.onclick=()=>applyTheme(k);tw.appendChild(b);});
+
+    /* ── graph helpers ── */
+    const dependencies=s=>[...(s.allOf||[]),...(s.anyOf||[])];
+    function available(s){ if(acquired.has(s.id))return false; if(s.entry)return true;
+      const all=(s.allOf||[]).every(id=>acquired.has(id));
+      const any=!s.anyOf||(s.anyOf||[]).some(id=>acquired.has(id));
+      return all&&any; }
+    const hasDependent=id=>SKILLS.some(s=>dependencies(s).includes(id));
+    function unmetPath(id,seen=new Set()){
+      if(acquired.has(id)||seen.has(id)||!MAP[id])return [];
+      const nextSeen=new Set(seen);nextSeen.add(id);
+      const s=MAP[id],path=[];
+      (s.allOf||[]).forEach(dep=>path.push(...unmetPath(dep,nextSeen)));
+      if(s.anyOf&&!(s.anyOf||[]).some(dep=>acquired.has(dep))){
+        const choices=s.anyOf.map(dep=>unmetPath(dep,nextSeen)).filter(p=>p.length).sort((a,b)=>a.length-b.length);
+        if(choices[0])path.push(...choices[0]);
+      }
+      path.push(id);
+      return [...new Set(path)];
+    }
+
+    /* ── edges ── */
+    function makeEdge(fromId,toId){
+      const from=MAP[fromId],to=MAP[toId],p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      const toH=to.final?104:88, sx=from.x,sy=from.y,tx=to.x,ty=to.y+toH, mid=sy-(sy-ty)*.52;
+      p.setAttribute("d",`M ${sx} ${sy} C ${sx} ${mid}, ${tx} ${mid}, ${tx} ${ty}`);
+      p.style.cssText="fill:none;stroke:#263445;stroke-width:2;opacity:.46;transition:.35s";
+      p.dataset.from=fromId;p.dataset.to=toId;p.setAttribute("marker-end","url(#arrow-dim)");
+      svg.appendChild(p);edgeEls.push(p);
+    }
+    SKILLS.forEach(s=>dependencies(s).forEach(id=>makeEdge(id,s.id)));
+
+    /* ── nodes ── */
+    const shellCSS="position:absolute;inset:0;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%);transition:.3s";
+    const faceCSS="position:absolute;inset:1.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%);padding:10px 18px;transition:.3s";
+    [...SKILLS].reverse().forEach(s=>{
+      const b=document.createElement('button');
+      const w=s.final?244:190,h=s.final?104:88;
+      b.style.cssText=`position:absolute;left:${s.x-w/2}px;top:${s.y}px;width:${w}px;height:${h}px;border:0;padding:0;background:transparent;color:inherit;cursor:pointer;z-index:4;transition:transform .17s ease,filter .25s ease`;
+      b.style.setProperty('--accent',`var(--${s.kind})`);
+      b.dataset.id=s.id;
+      b.innerHTML=`<span data-shell style="${shellCSS}"></span><span data-face style="${faceCSS}"><span data-name style="font-size:${s.final?17:13}px;font-weight:750;line-height:1.27;text-align:center;transition:.3s"></span><span data-tag style="margin-top:5px;font-size:${s.final?9:8}px;letter-spacing:.16em;text-transform:uppercase;transition:.3s;font-family:${MONO}">${s.tag}</span><span data-mark style="position:absolute;right:18px;top:9px;font-size:11px;color:transparent;transition:.3s">✓</span></span><span data-pub style="position:absolute;left:16px;top:8px;width:7px;height:7px;border-radius:50%;background:transparent;z-index:5;transition:.3s"></span><span data-badge style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.14em;padding:2px 8px;border-radius:99px;background:var(--accent);color:#08111a;font-weight:800;white-space:nowrap;opacity:0;transition:.3s;z-index:6;pointer-events:none">NEXT</span>`;
+      b.querySelector('[data-name]').textContent=s.name;
+      b.addEventListener('mouseenter',()=>{if(!gesture.moved)b.style.transform='translateY(-3px)';});
+      b.addEventListener('mouseleave',()=>{b.style.transform='translateY(0)';});
+      b.addEventListener('focus',()=>{ if(b.matches(':focus-visible'))focusNode(s.id); });
+      b.addEventListener('click',()=>{ if(gesture.moved)return; openSkill(s); });
+      tree.appendChild(b);els[s.id]=b;
+    });
+
+    function styleNode(s){
+      const e=els[s.id], shell=e.querySelector('[data-shell]'),face=e.querySelector('[data-face]'),name=e.querySelector('[data-name]'),tag=e.querySelector('[data-tag]'),mark=e.querySelector('[data-mark]'),pub=e.querySelector('[data-pub]'),badge=e.querySelector('[data-badge]');
+      const got=acquired.has(s.id), avail=available(s), recommended=recommendedPath.has(s.id)&&!got;
+      e.style.animation='none'; badge.style.opacity='0';badge.textContent='NEXT';badge.style.background='var(--accent)';
+      if(got){
+        shell.style.background='var(--accent)';
+        face.style.background='linear-gradient(150deg,color-mix(in srgb,var(--accent) 22%,#13202a),#0b181b)';
+        name.style.color='color-mix(in srgb,var(--accent) 58%,white)';
+        tag.style.color='color-mix(in srgb,var(--accent) 62%,#62768c)';
+        mark.style.color='var(--accent)';
+        e.style.filter=s.final?'drop-shadow(0 0 22px color-mix(in srgb,var(--final) 40%,transparent))':'drop-shadow(0 8px 15px rgba(0,0,0,.24))';
+      } else if(avail){
+        shell.style.background='color-mix(in srgb,var(--accent) 72%,#243346)';
+        face.style.background='linear-gradient(155deg,color-mix(in srgb,var(--accent) 13%,#192432),#0e1722)';
+        name.style.color='color-mix(in srgb,var(--accent) 55%,white)';
+        tag.style.color='var(--dim)'; mark.style.color='transparent';
+        e.style.setProperty('--glow','color-mix(in srgb,var(--accent) 52%,transparent)');
+        e.style.filter='drop-shadow(0 8px 15px rgba(0,0,0,.24))';
+        if(!reduced) e.style.animation='pulseGlow 2.8s ease-in-out infinite';
+        badge.textContent=hasDependent(s.id)?'NEXT':'OPTIONAL';badge.style.opacity='1';
+      } else {
+        shell.style.background='#263446';
+        face.style.background='linear-gradient(160deg,#151f2c,#0d151f)';
+        name.style.color='#94a4b8'; tag.style.color='#6a7c90'; mark.style.color='transparent';
+        e.style.filter='saturate(.34) brightness(.86) drop-shadow(0 8px 15px rgba(0,0,0,.24))';
+      }
+      if(recommended){
+        badge.textContent=avail?'NEXT':'ROUTE';badge.style.opacity='1';badge.style.background='var(--common)';
+        e.style.filter='drop-shadow(0 0 16px color-mix(in srgb,var(--common) 55%,transparent))';
+        if(!avail){
+          shell.style.background='color-mix(in srgb,var(--common) 48%,#263446)';
+          face.style.background='linear-gradient(155deg,color-mix(in srgb,var(--common) 10%,#192432),#0e1722)';
+          name.style.color='color-mix(in srgb,var(--common) 48%,#c5d3e0)';tag.style.color='#71869e';
+        }
+      }
+      const lit=!!LESSON_URLS[s.id];
+      pub.style.background=lit?'var(--web)':'transparent';
+      pub.style.boxShadow=lit?'0 0 9px color-mix(in srgb,var(--web) 75%,transparent)':'none';
+      const state=got?'習得済み':avail?(hasDependent(s.id)?'次に進めます':'いつでも選べます'):'ロック中、前提スキルが必要';
+      e.setAttribute('aria-label',`${s.name}、${s.tag}。${state}`);
+    }
+
+    /* 次の一歩：状態から「いま押すべき1アクション」を決める。固定バー主ボタンとモバイルカードで共用。 */
+    function nextStep(){
+      if(!acquired.size) return {label:'作りたいものを選ぶ',hint:'まず目的・完成条件から',run:()=>renderExamples()};
+      let avail=SKILLS.filter(s=>available(s));
+      const onPath=avail.filter(s=>recommendedPath.has(s.id));
+      if(onPath.length)avail=onPath;
+      const core=avail.filter(s=>hasDependent(s.id));
+      const pool=(core.length?core:avail).slice().sort((a,b)=>b.y-a.y); // 開始地点に近い順
+      if(!pool.length){
+        const vibe=MAP['vibe'];
+        if(vibe&&available(vibe))return{label:'バイブコーディングを達成する',skill:vibe,run:()=>openSkill(vibe)};
+        return {label:'次にやりたいことを選ぶ',hint:'作れるものから',run:()=>renderExamples()};
+      }
+      const s=pool[0];
+      const lead=recommendedPath.has(s.id)?'ルートを進める':'次の一歩';
+      return {label:`${lead}：${s.name}`,hint:s.tag,skill:s,run:()=>{focusNode(s.id);openSkill(s);}};
+    }
+    function renderMobileNav(){
+      const ns=nextStep();
+      const pb=q('#primaryNext');
+      if(pb){pb.textContent=ns.label;pb.onclick=ns.run;}
+      const ex=q('#examples');
+      if(ex){ if(acquired.size){ex.style.display='';ex.textContent='別の作例を選ぶ';} else {ex.style.display='none';} }
+      const rs=q('#reset');
+      if(rs)rs.style.display=acquired.size?'':'none';
+      const el=q('#mobileNav');
+      if(el){
+        const passed=MILESTONES.filter(m=>m.test(acquired));
+        const stageLabel=passed.length?passed[passed.length-1].label:'まず目的から';
+        const est=ns.skill?(ns.skill.mission?'約5分で要点 ＋ 15分ミッション':'約5分で要点をつかむ'):'';
+        el.innerHTML=`
+          <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">現在地</div>
+          <div style="margin:4px 0 16px;color:var(--quality);font-size:17px;font-weight:800">${stageLabel}（${passed.length}/${MILESTONES.length}段階）</div>
+          <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">次にやること</div>
+          <div style="margin:4px 0 2px;color:#e3ebf5;font-size:18px;font-weight:800;line-height:1.4">${ns.label}</div>
+          ${ns.hint?`<div style="color:#8294aa;font-size:12px">${ns.hint}</div>`:''}
+          ${est?`<div style="margin-top:4px;color:#667c94;font-size:12px">${est}</div>`:''}
+          <button data-mnext style="${css.primary};margin-top:18px">${acquired.size?'続きから始める':'作りたいものを選ぶ'}</button>
+          <button data-mmap style="${css.secondary}">全体マップを見る</button>`;
+        el.querySelector('[data-mnext]').onclick=ns.run;
+        el.querySelector('[data-mmap]').onclick=()=>{document.body.classList.add('map-open');requestAnimationFrame(()=>recenter());};
+      }
+    }
+    function refresh(){
+      SKILLS.forEach(styleNode);
+      edgeEls.forEach(e=>{
+        const fromGot=acquired.has(e.dataset.from),toGot=acquired.has(e.dataset.to),toReady=available(MAP[e.dataset.to]);
+        const onRoute=recommendedPath.has(e.dataset.to)&&(recommendedPath.has(e.dataset.from)||fromGot);
+        if(fromGot&&toGot){e.style.stroke='#33c99e';e.style.opacity='.92';e.style.strokeWidth='2.4';e.style.strokeDasharray='';e.style.animation='';e.setAttribute('marker-end','url(#arrow-live)');}
+        else if(fromGot&&toReady){e.style.stroke='#7f6e37';e.style.opacity='.78';e.style.strokeWidth='2';e.style.strokeDasharray='5 6';e.style.animation=reduced?'':'flow 1.4s linear infinite';e.setAttribute('marker-end','url(#arrow-ready)');}
+        else if(onRoute){e.style.stroke='var(--common)';e.style.opacity='.82';e.style.strokeWidth='2.3';e.style.strokeDasharray='4 5';e.style.animation=reduced?'':'flow 1.4s linear infinite';e.setAttribute('marker-end','url(#arrow-ready)');}
+        else {e.style.stroke='#263445';e.style.opacity='.46';e.style.strokeWidth='2';e.style.strokeDasharray='';e.style.animation='';e.setAttribute('marker-end','url(#arrow-dim)');}
+      });
+      const passed=MILESTONES.filter(m=>m.test(acquired));
+      const stage=passed.length;
+      q('#stageLabel').textContent=stage?`${passed[passed.length-1].label}（${stage}/${MILESTONES.length}段階）`:'まず目的から';
+      q('#fill').style.width=Math.round(stage/MILESTONES.length*100)+'%';
+      const pb=q('#progbar');if(pb){pb.setAttribute('aria-valuenow',String(stage));pb.setAttribute('aria-valuetext',stage?`${passed[passed.length-1].label}（${stage}/${MILESTONES.length}段階）`:'まだ始まり');}
+      renderMobileNav();
+    }
+
+    /* ── modal ── */
+    const css={
+      close:"position:absolute;right:16px;top:16px;width:31px;height:31px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#8193a9;cursor:pointer;font-size:13px;font-family:inherit;transition:.2s",
+      primary:"width:100%;padding:13px 15px;border-radius:11px;cursor:pointer;font-weight:750;border:0;background:linear-gradient(100deg,color-mix(in srgb,var(--accent) 76%,white),var(--accent));color:#091119;font-family:inherit;font-size:14px;transition:.2s",
+      secondary:"width:100%;padding:13px 15px;border-radius:11px;cursor:pointer;font-weight:650;border:1px solid #304156;background:transparent;color:#91a3b8;font-family:inherit;font-size:14px;transition:.2s;margin-top:9px",
+      option:"width:100%;padding:11px 13px;border:1px solid #29394c;border-radius:10px;background:#111c29;color:#bac8d8;text-align:left;cursor:pointer;line-height:1.6;font-family:inherit;font-size:13.5px;transition:.18s",
+      learn:"display:block;width:100%;box-sizing:border-box;margin:2px 0 16px;padding:13px 15px;border-radius:11px;text-align:center;font-weight:750;text-decoration:none;border:0;background:linear-gradient(100deg,color-mix(in srgb,var(--accent) 78%,white),var(--accent));color:#091119;transition:.2s",
+      learnSoon:"display:block;width:100%;box-sizing:border-box;margin:2px 0 16px;padding:13px 15px;border-radius:11px;text-align:center;font-weight:600;border:1px dashed #2c3c50;background:#0e1722;color:#6a7e95"
+    };
+    const head=(s,state)=>`<div style="position:relative;padding:22px 24px 18px;border-bottom:1px solid #1d2a3a"><span style="color:var(--accent);font-size:9px;letter-spacing:.19em;text-transform:uppercase;font-family:${MONO}">${state} · ${s.tag}</span><h2 style="margin:7px 42px 0 0;font-size:23px;line-height:1.3;font-weight:760">${s.name}</h2><button data-close aria-label="閉じる" style="${css.close}">✕</button></div>`;
+    const bodyIntro=s=>`<p style="margin:0 0 16px;color:#cbd6e3;font-size:14px;line-height:1.85">${s.desc}</p><ul style="display:grid;gap:8px;margin:0 0 20px;padding:0;list-style:none">${s.points.map(p=>`<li style="display:flex;gap:10px;color:#9fb0c3;font-size:13px;line-height:1.6"><span style="color:var(--accent);font-size:9px;line-height:1.9">◆</span><span>${p}</span></li>`).join('')}</ul>`;
+    function reqRows(s){
+      if(s.entry)return "";
+      const rows=[];
+      (s.allOf||[]).forEach(id=>{const ok=acquired.has(id);rows.push(`<div style="display:flex;gap:8px;align-items:center;margin-top:6px;color:${ok?'#70dcb7':'#7e91a7'};font-size:12px"><i style="font-style:normal;width:14px;text-align:center">${ok?'✓':'○'}</i><span>${MAP[id].name}</span></div>`);});
+      if(s.anyOf){const ok=(s.anyOf||[]).some(id=>acquired.has(id));rows.push(`<div style="display:flex;gap:8px;align-items:center;margin-top:6px;color:${ok?'#70dcb7':'#7e91a7'};font-size:12px"><i style="font-style:normal;width:14px;text-align:center">${ok?'✓':'○'}</i><span>次のどれか：${s.anyOf.map(id=>MAP[id].name).join('／')}</span></div>`);}
+      return `<div style="margin:2px 0 18px;padding:13px 14px;border:1px solid #26364a;border-radius:11px;background:#0b131e"><h3 style="margin:0 0 8px;color:#71869e;font-size:10px;letter-spacing:.12em">解放条件</h3>${rows.join('')}</div>`;
+    }
+    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" target="_blank" rel="noopener" style="${css.learn}">もっと詳しく学ぶ →</a>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">📖 まずはこの画面で、3分で要点をつかもう</div>`;};
+    const note=t=>`<p style="margin:12px 0 0;color:#667c94;font-size:11px;line-height:1.6;text-align:center">${t}</p>`;
+    const missionBlock=s=>{ if(!s.mission)return ""; return `<div style="margin:12px 0 0;padding:13px 14px;border-radius:11px;border:1px solid color-mix(in srgb,var(--accent) 38%,#2a394c);background:#0c1622"><span style="display:block;margin-bottom:7px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:10px;letter-spacing:.14em;font-family:${MONO}">⏱ 15分ミッション</span><p style="margin:0 0 11px;color:#cdd8e6;font-size:13px;line-height:1.7">${s.mission.do}</p>${s.mission.prompt?`<button data-copy style="width:100%;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--accent) 50%,#34475c);border-radius:9px;background:#0e1722;color:color-mix(in srgb,var(--accent) 72%,white);cursor:pointer;font-weight:650;font-size:12px;font-family:inherit">AIに渡す依頼文をコピー 📋</button>`:""}</div>`; };
+    const desireBlock=s=>{ if(!s.desire)return ""; return `<div style="margin:14px 0 0;padding:14px 15px;border-radius:12px;border:1px solid #26364a;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 9%,#0c1420),#0b121b)"><span style="display:block;margin-bottom:8px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:10px;letter-spacing:.14em;font-family:${MONO}">次はどうしたい？</span><p style="margin:0 0 12px;color:#e3ebf5;font-size:14px;font-weight:600;line-height:1.7">${s.desire.q}</p><div style="display:grid;gap:8px">${s.desire.opts.map(o=>`<button data-desire data-to="${o.to}" style="display:flex;flex-direction:column;gap:3px;width:100%;padding:11px 13px;border:1px solid #2c3c50;border-radius:10px;background:#111c29;color:#cdd9e7;text-align:left;cursor:pointer;line-height:1.5;font-family:inherit"><b style="font-size:13.5px;font-weight:700">${o.label}</b><span style="color:color-mix(in srgb,var(--accent) 65%,#7d90a6);font-size:11px">→ ${MAP[o.to]?MAP[o.to].name:o.to}</span></button>`).join('')}</div><p style="margin:11px 0 0;color:#667c94;font-size:11px;text-align:center">どれも正解。選ぶと、その技術がツリーで光ります。</p></div>`; };
+    const sayBlock=s=>{ if(!s.say)return ""; return `<div style="margin:12px 0 0;padding:12px 14px;border-radius:11px;border:1px solid #26364a;background:#0b131e"><span style="display:block;margin-bottom:7px;color:#8da4bc;font-size:10px;letter-spacing:.13em;font-family:${MONO}">🗣 AIへの言い方</span><p style="margin:0;color:#cdd8e6;font-size:13px;line-height:1.8">${s.say}</p></div>`; };
+    const consultBlock=s=>`<button data-consult style="width:100%;margin:10px 0 0;padding:11px 13px;border:1px solid color-mix(in srgb,var(--common) 42%,#304156);border-radius:10px;background:color-mix(in srgb,var(--common) 8%,#0e1722);color:color-mix(in srgb,var(--common) 70%,white);cursor:pointer;font-weight:700;font-size:12px;font-family:inherit">「${s.tag}」を使うべきかAIに相談する</button>`;
+
+    function currentStackSkills(){
+      return SKILLS.filter(s=>acquired.has(s.id)&&!STACK_EXCLUDE.has(s.id));
+    }
+    function stackPattern(){
+      const patterns=[];
+      if(acquired.has('api'))patterns.push('AI連携Webアプリ');
+      if(acquired.has('auth')||acquired.has('database'))patterns.push('複数端末・複数ユーザー向けWebアプリ');
+      if(acquired.has('dataflow'))patterns.push('ファイル・データ自動化');
+      if(!patterns.length&&acquired.has('jsdom'))patterns.push('ブラウザだけで動くWebアプリ');
+      return patterns.length?patterns.join(' ＋ '):'構想・要件整理';
+    }
+    function stackLimits(){
+      const rows=[];
+      if(acquired.has('localstorage')&&!acquired.has('database'))rows.push('データは同じブラウザ内だけ。端末間同期はまだできない');
+      if(acquired.has('http')&&!acquired.has('backend'))rows.push('公開APIは呼べるが、秘密のAPIキーはブラウザへ置けない');
+      if(acquired.has('backend')&&!acquired.has('auth'))rows.push('サーバー処理はあるが、利用者ごとの識別・権限制御はまだない');
+      if(acquired.has('api')&&!acquired.has('ai-eval'))rows.push('AIは接続済みだが、出力品質を比較する評価基準がまだない');
+      if(acquired.has('ai-eval')&&!acquired.has('ai-cost'))rows.push('AI品質は確認できるが、回数制限・利用量・予算上限がまだない');
+      if(acquired.has('dataflow')&&!acquired.has('scheduler'))rows.push('一括処理はできるが、定刻実行・再試行・通知はまだ手動');
+      if(acquired.has('jsdom')&&!acquired.has('ui-structure'))rows.push('画面や状態が増えた場合のComponent・State・Routingは未導入');
+      if(acquired.has('product')&&!acquired.has('git'))rows.push('動くものはあるが、安全な保存点と切り戻し手段がまだない');
+      return rows.length?rows:['現時点で目立つ制約は未判定。作りたいものと利用条件をAIへ伝えて確認する'];
+    }
+    function stackPrompt(project,next,constraints,seed){
+      const skills=currentStackSkills();
+      const terms=skills.length?skills.map(s=>s.tag).join(', '):'まだ未選定';
+      const target=next||(seed?`${seed.name}（${seed.tag}）を追加候補として検討中`:'未記入');
+      return `あなたは、初心者の技術選定を支援するソフトウェア設計者です。\n不明点があれば、結論を出す前に質問してください。過剰な構成を避け、今必要な最小構成と、後で足すものを分けてください。\n\n【作りたいもの】\n${project||'未記入'}\n\n【次に実現したいこと】\n${target}\n\n【現在の構成タイプ】\n${stackPattern()}\n\n【現在使っている／理解している技術】\n${terms}\n\n【現在見えている制約】\n${stackLimits().map(x=>'- '+x).join('\n')}\n\n【条件】\n${constraints||'初心者、低コスト、管理対象を増やしすぎない'}\n\n次を回答してください。\n1. 現在の構成のままで実現できるか\n2. 今すぐ追加すべき最小限の技術\n3. 今は追加しなくてよい技術\n4. 候補ごとの利点・欠点・運用負荷\n5. セキュリティ、データ保存、公開、料金面の注意\n6. 最初に作る最小構成と確認手順\n7. どの条件になったら次の構成へ移るべきか`;
+    }
+    function copyText(text,success){
+      const fallback=()=>{const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';root.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();if(ok)toast(success);else toast('コピーできませんでした');};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(()=>toast(success)).catch(fallback);else fallback();
+    }
+
+    function renderStackGuide(seed){
+      const shell={kind:'common',tag:'STACK CHECK',name:'技術構成を相談'};
+      showOverlay();setModalShell(shell);
+      const grouped=Object.entries(STACK_GROUPS).map(([kind,label])=>{
+        const list=currentStackSkills().filter(s=>s.kind===kind);
+        if(!list.length)return '';
+        return `<div style="padding:11px 12px;border:1px solid #26364a;border-radius:10px;background:#0d1622"><b style="display:block;margin-bottom:6px;color:#8da4bc;font-size:10px;letter-spacing:.12em">${label}</b><div style="display:flex;flex-wrap:wrap;gap:6px">${list.map(s=>`<span style="padding:4px 7px;border-radius:6px;background:#172333;color:#c4d2e2;font-size:11px">${s.tag}</span>`).join('')}</div></div>`;
+      }).join('');
+      const nexts=SKILLS.filter(s=>available(s)&&!s.entry).slice(0,6);
+      modal.innerHTML=head(shell,'STACK GUIDE')+`<div style="padding:21px 24px 24px">
+        <div style="margin-bottom:14px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--common) 35%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--common) 7%,#0b131e)"><span style="display:block;color:#71869e;font-size:9px;letter-spacing:.14em;font-family:${MONO}">現在の構成 · CURRENT PATTERN</span><strong style="display:block;margin-top:5px;color:#d8e3f0;font-size:16px">${stackPattern()}</strong><span style="display:block;margin-top:6px;color:#667c94;font-size:10.5px;line-height:1.6">いま使っている技術の組み合わせを「技術スタック」と呼びます。</span></div>
+        <div style="display:grid;gap:8px;margin-bottom:14px">${grouped||'<p style="margin:0;color:#71869e;font-size:12px">まず「目的・完成条件」から始めてください。</p>'}</div>
+        <div style="margin-bottom:14px;padding:12px 14px;border:1px solid #26364a;border-radius:10px;background:#0b131e"><b style="display:block;margin-bottom:7px;color:#71869e;font-size:10px;letter-spacing:.12em">現在の限界・未決定</b>${stackLimits().map(x=>`<div style="display:flex;gap:8px;margin-top:6px;color:#9fb0c3;font-size:12px;line-height:1.55"><span style="color:var(--common)">◆</span><span>${x}</span></div>`).join('')}</div>
+        ${nexts.length?`<div style="margin-bottom:16px;color:#8294aa;font-size:11px;line-height:1.7">次に選べる候補：${nexts.map(s=>`${s.name}（${s.tag}）`).join('／')}</div>`:''}
+        <label style="display:block;margin:0 0 5px;color:#8da4bc;font-size:10px;letter-spacing:.1em">作りたいもの</label>
+        <textarea data-project rows="3" placeholder="例：自分と友達がスマホで使える気分記録アプリ" style="width:100%;resize:vertical;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.6 inherit"></textarea>
+        <label style="display:block;margin:12px 0 5px;color:#8da4bc;font-size:10px;letter-spacing:.1em">次に実現したいこと</label>
+        <textarea data-next rows="2" placeholder="例：PCとスマホで同じ記録を見たい" style="width:100%;resize:vertical;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.6 inherit">${seed?seed.name:''}</textarea>
+        <label style="display:block;margin:12px 0 5px;color:#8da4bc;font-size:10px;letter-spacing:.1em">条件・制約</label>
+        <input data-constraints value="初心者、低コスト、管理対象を増やしすぎない" style="width:100%;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.5 inherit">
+        <button data-copy-stack style="${css.primary};margin-top:15px">AIへの技術選定相談文をコピー</button>
+        ${note('「おすすめを教えて」ではなく、現在地・要求・制約・移行条件までAIへ渡します。')}
+      </div>`;
+      bindClose();addHovers();
+      q('#modal [data-copy-stack]').onclick=()=>{
+        const text=stackPrompt(q('#modal [data-project]').value.trim(),q('#modal [data-next]').value.trim(),q('#modal [data-constraints]').value.trim(),seed);
+        copyText(text,'技術選定の相談文をコピーしました');
+      };
+    }
+    function renderExamples(){
+      const shell={kind:'web',tag:'WHAT CAN I MAKE',name:'作れるものから選ぶ'};
+      showOverlay();setModalShell(shell);
+      const cards=EXAMPLES.map(ex=>{const t=MAP[ex.to];return `<button data-example data-to="${ex.to}" style="display:block;width:100%;text-align:left;padding:13px 14px;border:1px solid #2a394c;border-radius:11px;background:#101a27;color:#cdd9e7;cursor:pointer;font-family:inherit;line-height:1.6"><b style="display:block;font-size:14px;color:#e3ebf5">${ex.title}</b><span style="display:block;margin-top:3px;font-size:12px;color:#9fb0c3">${ex.blurb}</span><span style="display:inline-block;margin-top:8px;font-size:10.5px;color:color-mix(in srgb,var(--accent) 72%,#7d90a6);font-family:${MONO}">→ ${t?t.name:ex.to}（${t?t.tag:''}）への道のりが光ります</span></button>`;}).join('');
+      modal.innerHTML=head(shell,'EXAMPLES')+`<div style="padding:21px 24px 24px"><p style="margin:0 0 14px;color:#cbd6e3;font-size:13px;line-height:1.85">「何を作るか」から選ぶと、そこに必要な技術の道のりがツリーで光ります。小さいものから選んでOK。迷ったら一番上から。</p><div style="display:grid;gap:9px">${cards}</div></div>`;
+      bindClose();addHovers();
+      qa('#modal [data-example]').forEach(b=>{
+        b.onmouseenter=()=>b.style.borderColor='#526981';
+        b.onmouseleave=()=>b.style.borderColor='#2a394c';
+        b.onclick=()=>{const t=MAP[b.dataset.to];if(t)renderPathGuide(t);};
+      });
+    }
+    function renderPathGuide(target){
+      const path=unmetPath(target.id);
+      recommendedPath=new Set(path);refresh();
+      const shell={kind:target.kind||'common',tag:'RECOMMENDED PATH',name:'この要求に必要な追加候補'};
+      showOverlay();setModalShell(shell);
+      const rows=path.length?path.map((id,i)=>{const s=MAP[id];return `<div style="display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:center;padding:10px 11px;border:1px solid ${i===0?'color-mix(in srgb,var(--accent) 55%,#304156)':'#26364a'};border-radius:10px;background:${i===0?'color-mix(in srgb,var(--accent) 8%,#101a27)':'#101a27'}"><span style="display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:${i===0?'var(--accent)':'#1b2a3a'};color:${i===0?'#08111a':'#8da4bc'};font:bold 11px ${MONO}">${i+1}</span><span><b style="display:block;color:#d8e3ef;font-size:13px">${s.name}</b><small style="color:#71869e;font:10px/1.5 ${MONO}">${s.tag}</small></span></div>`;}).join(''):`<p style="margin:0;color:#9fb0c3;font-size:13px">必要なスキルはすでに習得済みです。</p>`;
+      modal.innerHTML=head(shell,'ROUTE')+`<div style="padding:21px 24px 24px"><p style="margin:0 0 14px;color:#cbd6e3;font-size:13px;line-height:1.75">「${target.name}」へ進むため、未習得の前提を近い順に並べました。ツリー上でも経路を継続表示します。</p><div style="display:grid;gap:8px;margin-bottom:15px">${rows}</div>${path.length?`<button data-start-path style="${css.primary}">最初の「${MAP[path[0]].name}」から始める</button>`:''}<button data-route-consult style="${css.secondary}">この構成をAIに相談する</button><button data-close-route style="${css.secondary}">ツリーへ戻る</button></div>`;
+      bindClose();addHovers();
+      const start=q('#modal [data-start-path]');if(start)start.onclick=()=>{closeModal();focusNode(path[0]);openSkill(MAP[path[0]]);};
+      q('#modal [data-route-consult]').onclick=()=>renderStackGuide(target);
+      q('#modal [data-close-route]').onclick=closeModal;
+    }
+
+    function addHovers(){
+      qa('[data-close]').forEach(b=>{b.onmouseenter=()=>{b.style.borderColor='#53677e';b.style.color='var(--ink)';};b.onmouseleave=()=>{b.style.borderColor='#304156';b.style.color='#8193a9';};});
+      qa('[data-opt]').forEach(o=>{o.onmouseenter=()=>{if(!o.disabled&&!o.dataset.answered)o.style.borderColor='#526981';};o.onmouseleave=()=>{if(!o.disabled&&!o.dataset.answered)o.style.borderColor='#29394c';};});
+      qa('.learn').forEach(a=>{a.onmouseenter=()=>a.style.filter='brightness(1.08)';a.onmouseleave=()=>a.style.filter='none';});
+    }
+    function wireExtras(s){
+      const cp=q('#modal [data-copy]'); if(cp)cp.onclick=()=>copyText((s.mission&&s.mission.prompt)||"",'依頼文をコピーしました');
+      qa('#modal [data-desire]').forEach(b=>b.onclick=()=>{const target=MAP[b.dataset.to];if(target)renderPathGuide(target);});
+      const consult=q('#modal [data-consult]');if(consult)consult.onclick=()=>renderStackGuide(s);
+    }
+    const bindClose=()=>{const b=q('#modal [data-close]');if(b)b.onclick=closeModal;};
+    const modalObserver=new MutationObserver(()=>requestAnimationFrame(()=>q('#modal [data-close]')?.focus()));
+    modalObserver.observe(modal,{childList:true});
+
+    function showOverlay(){
+      if(overlay.style.display!=='flex')previousFocus=document.activeElement;
+      overlay.style.display='flex';
+      document.body.style.overflow='hidden';
+    }
+
+    function setModalShell(s){
+      const mob=window.innerWidth<=640;
+      overlay.style.alignItems=mob?'flex-end':'center';
+      overlay.style.padding=mob?'0':'18px';
+      modal.style.cssText=mob
+        ? "width:100%;max-height:90vh;overflow:auto;border:1px solid #29394d;border-top-left-radius:20px;border-top-right-radius:20px;background:linear-gradient(180deg,#131e2b,#0b121b);box-shadow:0 -22px 60px rgba(0,0,0,.55);animation:slideUp .26s cubic-bezier(.2,.8,.2,1)"
+        : "width:min(520px,100%);max-height:min(760px,86vh);overflow:auto;border:1px solid #29394d;border-radius:19px;background:linear-gradient(180deg,#131e2b,#0b121b);box-shadow:0 30px 90px rgba(0,0,0,.58);animation:rise .22s ease-out";
+      modal.style.setProperty('--accent',`var(--${s.kind})`);
+      modal.setAttribute('aria-label',s.name||'詳細');
+    }
+    function openSkill(s){
+      showOverlay();setModalShell(s);
+      if(acquired.has(s.id))renderDone(s); else if(!available(s))renderLocked(s); else if(s.final)renderFinal(s); else renderLearn(s);
+    }
+    function renderLocked(s){
+      const path=unmetPath(s.id),first=path.find(id=>id!==s.id&&available(MAP[id]));
+      const startBtn=first?`<button data-startfirst style="${css.primary}">最初の「${MAP[first].name}」から始める</button>`:"";
+      modal.innerHTML=head(s,"LOCKED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${reqRows(s)}${startBtn}${sayBlock(s)}${learnBlock(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`;
+      bindClose();addHovers();wireExtras(s);
+      const sf=q('#modal [data-startfirst]');if(sf)sf.onclick=()=>{closeModal();focusNode(first);openSkill(MAP[first]);};
+      q('#modal [data-back]').onclick=closeModal;
+    }
+    function renderDone(s){ modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s)}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);q('#modal [data-back]').onclick=closeModal; }
+    function renderLearn(s){
+      const progression=hasDependent(s.id)?"習得すると、上につながるスキルが解放されます。":"専門化スキルです。必要になったときに選択できます。";
+      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"CHALLENGE":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${s.quiz?`<button data-toquiz style="${css.primary}">理解度チェックへ</button>`:`<button data-acquire style="${css.primary}">このルートから始める</button>`}${consultBlock(s)}${note(progression)}</div>`;
+      bindClose();addHovers();wireExtras(s);
+      if(s.quiz)q('#modal [data-toquiz]').onclick=()=>renderQuiz(s); else q('#modal [data-acquire]').onclick=()=>acquire(s);
+    }
+    function renderQuiz(s){
+      const shown=s.quiz.opts.map((text,i)=>({text,correct:i===s.quiz.a}));
+      for(let i=shown.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shown[i],shown[j]]=[shown[j],shown[i]];}
+      modal.innerHTML=head(s,"CHECK")+`<div style="padding:21px 24px 24px"><p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">SCENARIO</span>${s.quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">習得する</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">解説に戻る</button></div></div>`;
+      bindClose();addHovers();
+      const pass=q('#modal [data-pass]'),retry=q('#modal [data-retry]'),fb=q('#modal [data-fb]');
+      qa('#modal [data-opt]').forEach(o=>o.onclick=()=>{
+        qa('#modal [data-opt]').forEach(x=>{x.disabled=true;x.dataset.answered="1";if(x.dataset.correct==="true"){x.style.borderColor='var(--quality)';x.style.background='#0d2a22';x.style.color='#a8f1d5';}});
+        if(o.dataset.correct==="true"){
+          pass.disabled=false;pass.style.opacity='1';pass.style.cursor='pointer';
+          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${s.quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+missionBlock(s);
+          wireExtras(s);
+        }else{
+          o.style.borderColor='var(--danger)';o.style.background='#2b1518';o.style.color='#ffc1bd';retry.hidden=false;
+          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#2b1518;color:#ffaaa4">おしい。緑が最適解です。${s.quiz.why||""}${s.quiz.hint?" ヒント："+s.quiz.hint:""}</div>`;
+        }
+      });
+      pass.onclick=()=>{if(!pass.disabled)acquire(s);};retry.onclick=()=>renderQuiz(s);q('#modal [data-backlearn]').onclick=()=>renderLearn(s);
+    }
+    function renderFinal(s){
+      const items=["作りたいものと完成条件を言葉にした","実装を確認できる小さなタスクに分けた","AIが生成したコードと差分を確認した","実際に動かし、失敗条件もテストした","変更を保存し、他の人が試せる状態にした","結果を見て、改善を一つ加えた"];
+      modal.innerHTML=head(s,"FINAL CHALLENGE")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7">卒業制作で実行した項目を確認してください。</p><div style="display:grid;gap:9px;margin:5px 0 15px">${items.map((x,i)=>`<label style="display:flex;gap:10px;align-items:flex-start;padding:11px;border:1px solid #2a394c;border-radius:10px;background:#101a27;color:#b8c5d4;font-size:13px;line-height:1.55;cursor:pointer"><input type="checkbox" data-chk style="margin-top:3px;accent-color:var(--final)"><span>${x}</span></label>`).join('')}</div><button data-master disabled style="${css.primary};opacity:.42;cursor:not-allowed">バイブコーディングを習得する</button>${note("チェックは自己申告。でも、実物を一つ作ってから押すと、この光はちゃんと自分のものになります。")}</div>`;
+      bindClose();addHovers();
+      const master=q('#modal [data-master]'),checks=qa('#modal [data-chk]');
+      checks.forEach(c=>c.onchange=()=>{const ok=checks.every(x=>x.checked);master.disabled=!ok;master.style.opacity=ok?'1':'.42';master.style.cursor=ok?'pointer':'not-allowed';});
+      master.onclick=()=>{if(!master.disabled)acquire(s);};
+    }
+    function renderDesire(s){
+      setModalShell(s);
+      modal.innerHTML=head(s,"NEXT")+`<div style="padding:21px 24px 24px"><p style="margin:0 0 4px;color:#cbd6e3;font-size:14px;line-height:1.85"><b style="color:#fff">${s.name}</b> を習得！ 次の一歩を選ぼう。</p>${desireBlock(s)}<button data-skip style="${css.secondary}">あとで決める（ツリーへ）</button></div>`;
+      bindClose();addHovers();wireExtras(s);q('#modal [data-skip]').onclick=closeModal;
+    }
+    function closeModal(){
+      overlay.style.display='none';
+      document.body.style.overflow='';
+      const restore=previousFocus;previousFocus=null;
+      requestAnimationFrame(()=>{if(restore&&typeof restore.focus==='function')restore.focus();});
+    }
+    overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+    document.addEventListener('keydown',e=>{
+      if(overlay.style.display!=='flex')return;
+      if(e.key==='Escape'){e.preventDefault();closeModal();return;}
+      if(e.key!=='Tab')return;
+      const focusable=[...modal.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),textarea:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el=>!el.hidden&&el.getClientRects().length);
+      if(!focusable.length){e.preventDefault();return;}
+      const first=focusable[0],last=focusable[focusable.length-1];
+      if(e.shiftKey&&(document.activeElement===first||!modal.contains(document.activeElement))){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&(document.activeElement===last||!modal.contains(document.activeElement))){e.preventDefault();first.focus();}
+    });
+
+    /* ── acquire / celebrate / toast ── */
+    function celebrate(s){
+      if(reduced)return;
+      const cx=s.x, cy=s.y+(s.final?52:44);
+      const ring=document.createElement('span');
+      ring.style.cssText=`position:absolute;left:${cx}px;top:${cy}px;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;border:2px solid var(--accent);pointer-events:none;z-index:7;animation:ping .72s ease-out forwards`;
+      tree.appendChild(ring);setTimeout(()=>ring.remove(),760);
+      els[s.id].animate([{transform:'scale(.92)',filter:'brightness(1.8)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:650,easing:'ease-out'});
+    }
+    function focusNode(id){
+      const s=MAP[id]; if(!s)return;
+      const r=viewport.getBoundingClientRect();
+      scale=clampS(Math.max(scale,.7));
+      panX=r.width/2-s.x*scale; panY=r.height/2-(s.y+44)*scale; apply();
+      const e=els[id]; if(e&&!reduced)e.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.1)',filter:'brightness(1.85)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:1100,easing:'ease-out'});
+    }
+    function acquire(s){ acquired.add(s.id);recommendedPath.delete(s.id);save();refresh();celebrate(s);
+      toast(s.final?"到達！ バイブコーディングを習得しました":"習得！ 上のスキルに光が伝わりました");
+      if(s.desire){renderDesire(s);}else{closeModal();} }
+    let toastTimer; function toast(msg){const t=q('#toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translate(-50%,0)';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translate(-50%,18px)';},2200);}
+
+    q('#stackGuide').onclick=()=>renderStackGuide();
+    q('#examples').onclick=()=>renderExamples();
+    q('#mapBack').onclick=()=>document.body.classList.remove('map-open');
+    q('#reset').onclick=()=>{ if(confirm("習得した進捗をすべてリセットしますか？")){acquired.clear();recommendedPath.clear();save();refresh();fitStart();} };
+
+    /* ── pan / zoom ── */
+    let scale=1,panX=0,panY=0; const TW=1160,TH=2080;
+    const zl=q('#zoomLabel');
+    const clampS=v=>Math.max(.35,Math.min(1.7,v));
+    function apply(){ tree.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`; if(zl)zl.textContent=Math.round(scale*100)+'%'; }
+    function fitStart(){ const r=viewport.getBoundingClientRect(); scale=clampS(Math.min((r.width-40)/TW,.95)); panX=(r.width-TW*scale)/2; panY=r.height-TH*scale-20; if(panY>30)panY=30; apply(); }
+    function fitAll(){ const r=viewport.getBoundingClientRect(); scale=clampS(Math.min((r.width-40)/TW,(r.height-40)/TH)); panX=(r.width-TW*scale)/2; panY=(r.height-TH*scale)/2; apply(); }
+    function zoomAt(cx,cy,f){ const r=viewport.getBoundingClientRect(); const ox=cx-r.left,oy=cy-r.top; const ns=clampS(scale*f),k=ns/scale; panX=ox-(ox-panX)*k; panY=oy-(oy-panY)*k; scale=ns; apply(); }
+    function recenter(){ const pts=SKILLS.filter(available); const use=pts.length?pts:SKILLS.filter(s=>acquired.has(s.id)); if(!use.length){fitStart();return;} const ay=use.reduce((a,s)=>a+s.y,0)/use.length, ax=use.reduce((a,s)=>a+s.x,0)/use.length; const r=viewport.getBoundingClientRect(); scale=clampS(Math.max(scale,.72)); panX=r.width/2-ax*scale; panY=r.height/2-(ay+44)*scale; apply(); }
+    q('#zoomIn').onclick=()=>{const r=viewport.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1.18);};
+    q('#zoomOut').onclick=()=>{const r=viewport.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,.85);};
+    q('#zoomFit').onclick=fitAll; q('#recenter').onclick=recenter;
+
+    const gesture={moved:false}; const pointers=new Map(); let dragging=false,sx=0,sy=0,sPanX=0,sPanY=0,pinchDist=0,pinchScale=1;
+    viewport.addEventListener('pointerdown',e=>{ pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(pointers.size===1){dragging=true;gesture.moved=false;sx=e.clientX;sy=e.clientY;sPanX=panX;sPanY=panY;viewport.style.cursor='grabbing';}
+      else if(pointers.size===2){const p=[...pointers.values()];pinchDist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);pinchScale=scale;dragging=false;} });
+    window.addEventListener('pointermove',e=>{ if(!pointers.has(e.pointerId))return; pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(pointers.size>=2){const p=[...pointers.values()];const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);const mx=(p[0].x+p[1].x)/2,my=(p[0].y+p[1].y)/2;if(pinchDist){const target=clampS(pinchScale*d/pinchDist);zoomAt(mx,my,target/scale);}gesture.moved=true;return;}
+      if(dragging){const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4)gesture.moved=true;panX=sPanX+dx;panY=sPanY+dy;apply();} });
+    function endP(e){ pointers.delete(e.pointerId); if(pointers.size<2)pinchDist=0; if(pointers.size===0){dragging=false;viewport.style.cursor='grab';} }
+    window.addEventListener('pointerup',endP); window.addEventListener('pointercancel',endP);
+    viewport.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:.89);},{passive:false});
+
+    /* ── boot ── */
+    applyTheme(theme);
+    refresh();
+    requestAnimationFrame(()=>{ (props.initialView==='overview')?fitAll():fitStart(); });
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# 認証情報・秘密ファイルは公開しない
+.env
+.envrc
+.aws/
+.gcloud/
+.docker/
+.ssh/
+.netrc
+.npmrc
+.pypirc
+.git-credentials
+.htpasswd
+kubeconfig
+credentials.json
+credentials.yaml
+credentials.yml
+token.json
+chat.db
+README_NEW.md

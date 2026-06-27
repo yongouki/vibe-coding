@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まず画面を出したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-web">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">HTML / CSS</span>
+    <h1>まず、触れる画面を一枚出す</h1>
+    <p class="lead">HTMLは画面に何があるか、CSSはそれをどう見せるか。最初からきれいなサイトを目指さず、内容が読めて、押す場所が分かる一枚を作ります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">見出し、説明、入力欄、ボタンを置き、ブラウザで開いて<strong>構造と見た目を別々に直せる</strong>ようになる。</p>
+  </div>
+
+  <h2>HTMLは「何があるか」を決める</h2>
+  <p>支出記録の最初の画面なら、必要なのは多くありません。</p>
+  <ul>
+    <li>ページの見出し</li>
+    <li>金額を入れる入力欄</li>
+    <li>メモを入れる入力欄</li>
+    <li>追加ボタン</li>
+    <li>追加した内容を出す一覧</li>
+  </ul>
+
+  <p>この役割をHTMLで表します。見出しは見出し、入力は入力、操作はボタンとして書く。最初からタグを全部覚える必要はありません。AIが出したHTMLを見て、「これは何の役割か」が読めれば先へ進めます。</p>
+
+  <div class="box">
+    <pre style="margin:0;overflow:auto;color:#cfe5ef;font:12px/1.7 'SFMono-Regular',Consolas,monospace;white-space:pre"><code>&lt;main&gt;
+  &lt;h1&gt;支出メモ&lt;/h1&gt;
+  &lt;label&gt;
+    金額
+    &lt;input type="number"&gt;
+  &lt;/label&gt;
+  &lt;button type="button"&gt;追加する&lt;/button&gt;
+  &lt;ul&gt;&lt;/ul&gt;
+&lt;/main&gt;</code></pre>
+  </div>
+
+  <p>まだボタンは動きません。それで構いません。まず「どこに入力し、どこを押し、結果がどこへ出るか」が画面から分かるかを見ます。</p>
+
+  <h2>CSSは「どう見せるか」を決める</h2>
+  <p>HTMLを変えずに、余白、幅、色、並び方を調整します。最初に効くのは派手な装飾より、次の3つです。</p>
+  <ol>
+    <li>画面の端にくっつかない余白</li>
+    <li>入力欄とボタンの幅をそろえる</li>
+    <li>見出し、説明、操作の間を空ける</li>
+  </ol>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">先にやりすぎる</span>
+      動きが決まる前に、アニメーションや細かな配色を何度も調整する。</div>
+    <div class="ex good"><span class="tagline">最初はここまで</span>
+      スマホ幅で横にはみ出さず、入力欄と追加ボタンを迷わず見つけられる。</div>
+  </div>
+
+  <h2>意味のある要素を使うと、後で楽になる</h2>
+  <p>クリックできる見た目をすべて <code>div</code> で作ることもできます。ただ、操作なら <code>button</code>、移動なら <code>a</code> を使った方が、キーボード操作や読み上げなど、ブラウザが持つ仕組みをそのまま使えます。</p>
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">見た目だけボタン</span>
+      &lt;div onclick="add()"&gt;追加&lt;/div&gt;</div>
+    <div class="ex good"><span class="tagline">役割もボタン</span>
+      &lt;button type="button"&gt;追加&lt;/button&gt;</div>
+  </div>
+
+  <h2>AIへ頼むときは、画面の役割を言う</h2>
+  <div class="box">
+    <p style="margin:0">1ファイルのHTMLで、支出メモの画面を作ってください。見出し、金額入力、メモ入力、追加ボタン、空の一覧を置きます。今回はJavaScriptを書かず、画面構造だけ作ります。スマホ幅で横スクロールしないようCSSを同じファイルへ入れ、各要素の役割を説明してください。</p>
+  </div>
+
+  <p>「今回はJavaScriptを書かない」と区切ることで、画面構造だけを確認できます。次の段階で、ボタンを押したときの動きを足します。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>HTMLは画面の役割、CSSは見せ方を担当する。</li>
+      <li>最初は、余白・幅・順番が分かれば十分。</li>
+      <li>ボタンやリンクは、見た目だけでなく役割に合った要素を使う。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>15分だけ作る</h3>
+    <p>好きな題材で、見出し、短い説明、入力欄、ボタンを一枚に置いてください。ブラウザで開き、スマホくらいの幅にして横へはみ出さなければ完成です。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>画面の構造を直したいのか、見た目を直したいのかを言い分けられたら次へ進めます。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="task.html"><span class="dir">前の単元</span>小さなタスクに分ける</a>
+    <span class="next soon"><span class="dir">次の単元</span>押したら動いてほしい（準備中）</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

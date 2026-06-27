@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小さなタスクに分ける ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DECOMPOSE</span>
+    <h1>一回の依頼で、確認することを一つにする</h1>
+    <p class="lead">大きな機能を頼めないわけではありません。ただ、壊れたときに原因が分かる大きさで進めた方が、結局は早く終わります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">機能をファイル単位ではなく、<strong>画面で確認できる変化</strong>の順番に分けられるようになる。</p>
+  </div>
+
+  <h2>「ToDoアプリを作って」は、確認箇所が多い</h2>
+  <p>入力欄、追加、一覧、削除、保存、復元を一度に作ると、完成したときは速い一方、動かなかったときは広い範囲を調べることになります。</p>
+  <p>同じものを、画面で確かめられる順に並べます。</p>
+  <ol>
+    <li>固定のToDoを1件、画面に表示する</li>
+    <li>入力した文字を、追加ボタンで一覧へ出す</li>
+    <li>一覧の1件を削除できるようにする</li>
+    <li>一覧をlocalStorageへ保存する</li>
+    <li>再読み込み時に保存済みの一覧を復元する</li>
+  </ol>
+
+  <p>各段階で一度動かせます。2番で壊れたなら、保存処理を疑う必要はありません。</p>
+
+  <h2>ファイルではなく、利用者の動きで分ける</h2>
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">実装都合で分ける</span>
+      HTMLを作る。CSSを作る。JavaScriptを作る。</div>
+    <div class="ex good"><span class="tagline">確認できる変化で分ける</span>
+      入力して追加すると、一覧に1件表示される。</div>
+  </div>
+
+  <p>HTML、CSS、JavaScriptは、ひとつの変化を作るために同時に触ることがあります。ファイルごとに分けるより、利用者が何をして何を見るかで切った方が、AIにも完成条件が伝わります。</p>
+
+  <h2>一つのタスクには、一つの確認方法</h2>
+  <div class="box">
+    <h3>タスク</h3>
+    <p>入力した文字を、追加ボタンで一覧へ表示する。</p>
+    <h3>確認</h3>
+    <p style="margin:0">「牛乳」と入力して追加すると、画面の一覧に「牛乳」が1件だけ表示される。空欄では追加されない。</p>
+  </div>
+
+  <p>確認方法まで書くと、AIに「実装したつもり」で止まらず、どこを試すべきか聞けます。</p>
+
+  <h2>途中で別の修正を見つけたら</h2>
+  <p>いまのタスクに関係しないなら、別のメモへ移します。ついでの修正が増えるほど、差分を読んだときに変更理由が混ざります。</p>
+  <ul>
+    <li>追加ボタンが動かない → 今のタスクで直す</li>
+    <li>色を少し変えたい → 次のタスクへ置く</li>
+    <li>コード全体を整理したい → 動作確認後に別タスクとして行う</li>
+  </ul>
+
+  <div class="box">
+    <h3>AIへ渡すときの形</h3>
+    <p style="margin:0">今回は「入力した文字を一覧へ1件追加する」ところだけ実装してください。保存と削除はまだ作りません。空欄では追加しないでください。変更後に、確認手順と変更したファイルを示してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>タスクは、画面で一度確認できる変化まで小さくする。</li>
+      <li>ファイル単位ではなく、利用者の操作と結果で分ける。</li>
+      <li>一つのタスクに、一つ以上の確認方法を付ける。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま作ろうとしている機能を、動かして確認できる順に3つへ分けてください。それぞれに「何をすれば、何が見えるか」を一行付けます。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>どの段階でも一度動かせる順番になっていれば、十分に小さく分けられています。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="collab.html"><span class="dir">前の単元</span>AIとの対話・文脈</a>
+    <a class="next" href="htmlcss.html"><span class="dir">次の単元</span>まず画面を出したい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

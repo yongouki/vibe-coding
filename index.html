@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE CODING ─ ホーム</title>
+<meta name="description" content="バイブコーディングを遊びながら学ぶ。スキルツリーとスキル盤で、できることを少しずつ解放していこう。">
+<style>
+  :root{
+    --bg:#0a0f14;
+    --panel:#121b25;
+    --slate:#1b2632;
+    --slate-stroke:#2a3a4c;
+    --ink:#e7eef6;
+    --muted:#7e92a8;
+    --muted2:#5a6c80;
+    --amber:#f3b14a;
+    --teal:#2fe3c4;
+    --entry:#8aa0ff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #11202b 0%, transparent 60%),
+      radial-gradient(900px 600px at 90% 110%, #11181f 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+  }
+  .mono{font-family:"SF Mono",ui-monospace,"Roboto Mono",Menlo,Consolas,monospace}
+
+  header{text-align:center;padding:64px 20px 8px}
+  .eyebrow{
+    font-family:"SF Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.42em;
+    color:var(--muted2);text-transform:uppercase;
+    margin:0 0 14px;padding-left:.42em;
+  }
+  h1{
+    margin:0;font-size:clamp(30px,6vw,52px);font-weight:800;letter-spacing:.02em;
+    background:linear-gradient(100deg,#dce8ff 0%,#a894ff 45%,#59e6c1 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{margin:16px auto 0;max-width:540px;color:var(--muted);font-size:14px;line-height:1.8}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:36px 20px 24px}
+  .cards{
+    display:grid;gap:18px;width:100%;max-width:760px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  }
+  .card{
+    position:relative;display:block;text-decoration:none;color:inherit;
+    background:linear-gradient(160deg,var(--panel),#0d141b);
+    border:1px solid var(--slate-stroke);border-radius:16px;
+    padding:26px 24px 24px;overflow:hidden;
+    transition:transform .2s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0;border-radius:16px;
+    box-shadow:0 0 32px -8px rgba(47,227,196,.0) inset;transition:box-shadow .3s ease;
+  }
+  .card:hover{transform:translateY(-3px);border-color:#34536a}
+  .card.tree:hover{box-shadow:0 14px 34px -18px rgba(138,160,255,.7)}
+  .card.grid:hover{box-shadow:0 14px 34px -18px rgba(47,227,196,.7)}
+  .ctag{
+    font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--muted2);
+  }
+  .ctitle{margin:10px 0 8px;font-size:20px;font-weight:800}
+  .card.tree .ctitle{color:#c9d6ff}
+  .card.grid .ctitle{color:#a9f3e5}
+  .cdesc{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+  .cgo{
+    display:inline-flex;align-items:center;gap:6px;margin-top:18px;
+    font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.1em;
+  }
+  .card.tree .cgo{color:var(--entry)}
+  .card.grid .cgo{color:var(--teal)}
+  .cgo .arrow{transition:transform .2s ease}
+  .card:hover .cgo .arrow{transform:translateX(4px)}
+
+  footer{
+    text-align:center;padding:20px 16px 30px;
+    font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;
+    color:var(--muted2);
+  }
+  footer a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--muted2)}
+</style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Vibe Coding</p>
+    <h1>バイブコーディング</h1>
+    <p class="sub">遊びながらコーディングを学ぶ。スキルを一つずつ解放して、できることを増やしていこう。<br>下の2つの入口から始められます。</p>
+  </header>
+
+  <main>
+    <div class="cards">
+      <a class="card tree" href="vibe-skill-tree.html">
+        <span class="ctag">Skill Tree</span>
+        <h2 class="ctitle">スキルツリー</h2>
+        <p class="cdesc">前提から積み上がる学習マップ。順番に解放しながら、レッスンへ進んでいく王道ルート。</p>
+        <span class="cgo mono">はじめる <span class="arrow">→</span></span>
+      </a>
+      <a class="card grid" href="vibe-skill-grid.html">
+        <span class="ctag">Skill Board</span>
+        <h2 class="ctitle">スキル盤</h2>
+        <p class="cdesc">ヘックス状に並んだスキル盤。全体を俯瞰しながら、習得状況を一目で確認できるビュー。</p>
+        <span class="cgo mono">ひらく <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    BUILT WITH VIBE ─ <a href="vibe-skill-tree.html">tree</a> / <a href="vibe-skill-grid.html">board</a>
+  </footer>
+</body>
+</html>

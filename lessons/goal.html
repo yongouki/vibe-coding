@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>目的・完成条件 ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">DEFINE DONE</span>
+    <h1>まず「今日はどこまで作るか」を決める</h1>
+    <p class="lead">立派な企画書はいりません。作業を始める前に、終わったと判断できる一文を置いておく。それだけで、AIとのやり取りはかなり短くなります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">作りたいものを大きく語るのではなく、<strong>今日確かめられる大きさ</strong>で言い直せるようになる。</p>
+  </div>
+
+  <h2>作り始めると、目的はすぐ膨らむ</h2>
+  <p>たとえば「支出を記録するページが欲しい」とします。話しているうちに、月別集計、グラフ、ログイン、家族との共有まで思いつく。どれも悪くありません。ただ、全部を同時にAIへ渡すと、最初の一歩まで大きくなります。</p>
+  <p>最初に作るのは、こういう範囲で十分です。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">まだ広い</span>
+      家計を便利に管理できるアプリを作る。</div>
+    <div class="ex good"><span class="tagline">今日確かめられる</span>
+      金額とメモを入力して追加すると、その場で一覧に1件表示される。</div>
+  </div>
+
+  <p>右側なら、完成したかを画面で確認できます。月別集計やログインは「次に欲しくなったとき」に足せばよい。最初から捨てるのではなく、順番を後ろへ置くだけです。</p>
+
+  <h2>完成条件は、AIとの小さな約束</h2>
+  <p>AIへ渡す条件は、長い仕様書より次の3点が役に立ちます。</p>
+  <ol>
+    <li><strong>何をするか</strong>：金額とメモを入力して追加する</li>
+    <li><strong>何が見えれば成功か</strong>：一覧に1件表示される</li>
+    <li><strong>今回は何をしないか</strong>：保存、編集、ログインはまだ作らない</li>
+  </ol>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">金額とメモを入力し、追加ボタンを押すと一覧に1件表示されるページを作ってください。今回はブラウザを閉じた後の保存、編集、ログインは作りません。1ファイルのHTMLで動かし、確認手順も書いてください。</p>
+  </div>
+
+  <p>「今回は何をしないか」が入ると、AIが善意で構成を膨らませにくくなります。これは制約というより、短時間で一度完成させるための境界線です。</p>
+
+  <h2>数字にできない条件もある</h2>
+  <p>すべてを「10秒以内」のような数字にする必要はありません。見た目や使い心地は、数字だけでは決めにくいからです。その場合は、判断できる具体例を置きます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">判断が割れる</span>
+      いい感じで、使いやすくする。</div>
+    <div class="ex good"><span class="tagline">確認できる</span>
+      スマホ幅でも横スクロールせず、入力欄と追加ボタンが最初の画面に収まる。</div>
+  </div>
+
+  <p>大切なのは、条件を堅くすることではありません。作った後に、自分が「ここはできた」と判断できることです。</p>
+
+  <h2>途中で欲しいものが増えたら</h2>
+  <p>メモして、今の完成条件から外します。今すぐ足すのは、現在の確認を邪魔する問題だけです。</p>
+  <ul>
+    <li>一覧が表示されない → 今直す</li>
+    <li>来月はグラフも欲しい → 次の候補へ置く</li>
+    <li>友達も使いたい → 公開や認証が必要になったと記録する</li>
+  </ul>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>目的は、今日画面で確かめられる大きさまで小さくする。</li>
+      <li>「何をする・何が見える・今回は何をしない」の3点を書く。</li>
+      <li>増えたアイデアは捨てず、次の候補へ移す。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま作りたいものについて、次の3行を書いてください。</p>
+    <p style="margin:0"><strong>すること：</strong>＿＿＿＿＿＿＿＿<br>
+      <strong>成功したと分かる画面：</strong>＿＿＿＿＿＿＿＿<br>
+      <strong>今回はしないこと：</strong>＿＿＿＿＿＿＿＿</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「便利なアプリを作る」を、今日確認できる一文へ言い直せたら十分です。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="../vibe-skill-tree.html"><span class="dir">前</span>スキルツリーへ</a>
+    <a class="next" href="collab.html"><span class="dir">次の単元</span>AIとの対話・文脈</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE CODING ─ スキル盤</title>
+<style>
+  :root{
+    --bg:#0a0f14;
+    --bg2:#0d141b;
+    --panel:#121b25;
+    --slate:#1b2632;
+    --slate-stroke:#2a3a4c;
+    --ink:#e7eef6;
+    --muted:#7e92a8;
+    --muted2:#5a6c80;
+    /* states */
+    --amber:#f3b14a;          /* 挑戦可能 */
+    --amber-soft:#7a5a1f;
+    --teal:#2fe3c4;           /* 習得済 */
+    --teal-deep:#0f5f54;
+    --entry:#8aa0ff;          /* 入口マーカー */
+    --lock:#26323f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #11202b 0%, transparent 60%),
+      radial-gradient(900px 600px at 90% 110%, #11181f 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:"SF Mono",ui-monospace,"Roboto Mono",Menlo,Consolas,monospace}
+
+  header{
+    text-align:center;
+    padding:26px 16px 8px;
+  }
+  .eyebrow{
+    font-family:"SF Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.42em;
+    color:var(--muted2);text-transform:uppercase;
+    margin:0 0 8px;padding-left:.42em;
+  }
+  h1{
+    margin:0;font-size:30px;font-weight:800;letter-spacing:.02em;
+    background:linear-gradient(95deg,#cfe9ff 0%,#8aa0ff 45%,#2fe3c4 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{margin:10px auto 0;max-width:520px;color:var(--muted);font-size:13px;line-height:1.7}
+
+  .progwrap{max-width:420px;margin:18px auto 0;padding:0 18px}
+  .progmeta{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:"SF Mono",ui-monospace,monospace;font-size:12px;color:var(--muted)}
+  .progmeta b{color:var(--teal);font-size:13px}
+  .progbar{height:5px;border-radius:99px;background:#16212c;margin-top:7px;overflow:hidden}
+  .progfill{height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--entry),var(--teal));
+    transition:width .5s cubic-bezier(.2,.7,.2,1)}
+
+  /* board */
+  .stage{display:flex;justify-content:center;padding:14px 8px 26px;overflow:hidden}
+  #scaler{transform-origin:top center}
+  #board{position:relative}
+
+  .hex{
+    position:absolute;display:flex;align-items:center;justify-content:center;
+    text-align:center;cursor:default;
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    transform:scale(.93);
+    transition:transform .18s ease, filter .25s ease, background .35s ease;
+    background:var(--lock);
+    color:var(--muted2);
+    user-select:none;
+  }
+  .hex .inner{padding:6px 4px;line-height:1.15}
+  .hex .nm{font-size:12.5px;font-weight:700}
+  .hex .tg{display:block;font-family:"SF Mono",ui-monospace,monospace;
+    font-size:8.5px;letter-spacing:.12em;margin-top:3px;opacity:.7}
+
+  /* locked */
+  .hex.locked{background:var(--lock);color:#3c4a59}
+  .hex.locked .tg{opacity:.45}
+
+  /* available (incl. unacquired entries) */
+  .hex.avail{
+    background:linear-gradient(160deg,#23303d,#1a2531);
+    color:var(--ink);cursor:pointer;
+    box-shadow:0 0 0 1.5px var(--amber-soft) inset, 0 0 18px -4px rgba(243,177,74,.55);
+    animation:breathe 2.8s ease-in-out infinite;
+  }
+  .hex.avail .nm{color:#ffdca0}
+  .hex.avail:hover{transform:scale(.99);filter:brightness(1.12)}
+  @keyframes breathe{
+    0%,100%{box-shadow:0 0 0 1.5px var(--amber-soft) inset,0 0 14px -5px rgba(243,177,74,.45)}
+    50%{box-shadow:0 0 0 1.5px rgba(243,177,74,.6) inset,0 0 26px -2px rgba(243,177,74,.7)}
+  }
+
+  /* acquired */
+  .hex.got{
+    background:linear-gradient(160deg,#12463f,#0c2f2c);
+    color:#d8fff6;cursor:default;
+    box-shadow:0 0 0 1.5px var(--teal) inset, 0 0 22px -3px rgba(47,227,196,.55);
+  }
+  .hex.got .nm{color:#aef7e8}
+  .hex.got .tg{color:#5fcbb9}
+  .hex.got .chk{position:absolute;top:8px;right:50%;transform:translateX(50%);
+    font-size:10px;color:var(--teal)}
+
+  /* entry marker */
+  .hex.entry::before{
+    content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:5px;height:5px;border-radius:50%;background:var(--entry);
+    box-shadow:0 0 8px 1px rgba(138,160,255,.8);
+  }
+  .hex.got.entry::before{background:#bfe9ff}
+
+  /* just-acquired ripple */
+  .hex.flash{animation:flash .9s ease-out}
+  @keyframes flash{
+    0%{box-shadow:0 0 0 1.5px var(--teal) inset,0 0 0 0 rgba(47,227,196,.6)}
+    100%{box-shadow:0 0 0 1.5px var(--teal) inset,0 0 0 26px rgba(47,227,196,0)}
+  }
+
+  /* legend + reset */
+  .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+    color:var(--muted);font-size:11.5px;padding:0 16px 6px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .dot.a{background:var(--amber)} .dot.g{background:var(--teal)}
+  .dot.l{background:var(--lock);outline:1px solid var(--slate-stroke)}
+  .dot.e{background:var(--entry)}
+  .reset{display:block;margin:14px auto 36px;background:transparent;
+    border:1px solid var(--slate-stroke);color:var(--muted);
+    font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;
+    padding:8px 16px;border-radius:8px;cursor:pointer;transition:.2s}
+  .reset:hover{color:var(--ink);border-color:var(--muted)}
+
+  /* toast */
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:#1a2531;border:1px solid var(--slate-stroke);color:var(--ink);
+    padding:11px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;
+    transition:.3s;z-index:50;box-shadow:0 10px 30px -10px #000}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* modal */
+  #overlay{position:fixed;inset:0;background:rgba(5,9,13,.72);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:18px;z-index:40}
+  #overlay.open{display:flex}
+  .modal{width:100%;max-width:440px;background:linear-gradient(180deg,#131d27,#0e161e);
+    border:1px solid var(--slate-stroke);border-radius:18px;overflow:hidden;
+    box-shadow:0 30px 80px -20px #000;animation:rise .25s cubic-bezier(.2,.8,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .mhead{padding:20px 22px 16px;border-bottom:1px solid #1c2935;position:relative}
+  .mtier{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.22em;
+    color:var(--amber);text-transform:uppercase}
+  .mtier.got{color:var(--teal)}
+  .mtitle{font-size:21px;font-weight:800;margin:6px 0 0}
+  .mclose{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:8px;
+    border:1px solid var(--slate-stroke);background:transparent;color:var(--muted);
+    cursor:pointer;font-size:15px;line-height:1}
+  .mclose:hover{color:var(--ink)}
+  .mbody{padding:20px 22px 22px;max-height:60vh;overflow:auto}
+
+  .study p{margin:0 0 12px;font-size:14px;line-height:1.85;color:#cdd9e6}
+  .study .point{display:flex;gap:10px;font-size:13.5px;color:#bccadb;
+    margin:0 0 9px;line-height:1.6}
+  .study .point::before{content:"▰";color:var(--entry);font-size:10px;margin-top:4px}
+
+  .cta{display:block;width:100%;margin-top:8px;border:0;border-radius:11px;
+    padding:14px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.04em;
+    color:#0a1410;background:linear-gradient(95deg,#ffd27a,var(--amber));
+    transition:.18s;font-family:inherit}
+  .cta:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .cta.teal{background:linear-gradient(95deg,#6ff0d9,var(--teal));color:#06231f}
+  .cta.ghost{background:transparent;border:1px solid var(--slate-stroke);color:var(--muted)}
+  .cta.ghost:hover{color:var(--ink)}
+
+  /* quiz */
+  .q{margin:0 0 20px}
+  .q .qt{font-size:14.5px;font-weight:700;line-height:1.6;margin:0 0 11px}
+  .q .qt .qn{font-family:"SF Mono",ui-monospace,monospace;color:var(--amber);margin-right:8px;font-size:13px}
+  .opt{display:block;width:100%;text-align:left;background:#15202b;
+    border:1px solid #21303d;border-radius:10px;padding:12px 14px;margin:0 0 9px;
+    color:#cdd9e6;font-size:14px;cursor:pointer;transition:.14s;font-family:inherit;line-height:1.5}
+  .opt:hover{border-color:var(--muted2)}
+  .opt.sel{border-color:var(--amber);background:#221c10;color:#ffe1ad}
+  .opt.correct{border-color:var(--teal);background:#0f2e2a;color:#aef7e8}
+  .opt.wrong{border-color:#d8584f;background:#2c1513;color:#ffb9b3}
+  .opt.lock{pointer-events:none;opacity:.85}
+
+  .result{text-align:center;padding:8px 0 2px}
+  .result .big{font-size:22px;font-weight:800;margin:0 0 6px}
+  .result .big.ok{color:var(--teal)} .result .big.ng{color:#ff8a82}
+  .result p{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.7}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+  @media (max-width:420px){
+    h1{font-size:25px}.sub{font-size:12px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <p class="eyebrow">vibe coding · skill grid</p>
+  <h1>バイブコーディング スキル盤</h1>
+  <p class="sub">外周の6つの入口から出発。隣へ隣へ進むとルートが合流し、中心の「統合」で全部がひとつになる。<br>挑戦してテストに全問正解すれば習得。習得した光は隣へ伝わり、次の挑戦が開く。</p>
+</header>
+
+<div class="progwrap">
+  <div class="progmeta"><span>習得した光</span><span><b id="cnt">0</b> / 19</span></div>
+  <div class="progbar"><div class="progfill" id="fill"></div></div>
+</div>
+
+<div class="legend">
+  <span><i class="dot e"></i>入口（最初から挑戦可）</span>
+  <span><i class="dot a"></i>挑戦できる</span>
+  <span><i class="dot g"></i>習得済み</span>
+  <span><i class="dot l"></i>ロック中</span>
+</div>
+
+<div class="stage"><div id="scaler"><div id="board"></div></div></div>
+
+<button class="reset" id="reset">⟲ 進捗をリセット</button>
+
+<div id="overlay"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+
+<script>
+/* ---------- スキルデータ（軸座標 q,r でヘックス配置） ---------- */
+// 構造：外周角=入口(6) → 辺=橋渡し(隣の2ルートが合流) → 内側=応用 → 中心=統合
+const SKILLS = [
+  // ── 中心：すべてのルートの最終合流点 ──
+  {id:"vibe",q:0,r:0,name:"統合：バイブコーディング",tier:"統合",entry:false,
+   study:["ここまでの力を束ねる場所。AIに丸投げするのではなく、自分の意図を言葉にし、出てきたコードを読み、直し、繋ぐ。それがバイブコーディングの核。",
+          "「速く形にする」と「壊れない形にする」を行き来できると、AIは最高の相棒になる。"],
+   quiz:[{q:"バイブコーディングで一番大事な姿勢は？",opts:["AIの出力をそのまま採用する","意図を言語化し、出力を読んで判断・修正する","手書きでしか書かない"],a:1},
+         {q:"AIに任せても自分が持つべき責任は？",opts:["タイピング速度","最終的な設計と品質の判断","変数名の長さ"],a:1}]},
+
+  // ── 内側リング（各ルートの応用 / 中心に接する）──
+  {id:"front",q:1,r:-1,name:"フロントエンド",tier:"応用",entry:false,
+   study:["HTML・CSS・JSが合流した先。見やすく操作しやすい画面体験をまとめ上げる総合力。",
+          "「速い・分かりやすい・壊れない」を意識すると一段上に。"],
+   quiz:[{q:"フロントエンドの仕事に近いのは？",opts:["DBの物理設計","ユーザーが触れる画面体験","メール配送基盤"],a:1}]},
+  {id:"state",q:1,r:0,name:"状態管理",tier:"応用",entry:false,
+   study:["画面が今どうなっているか（ログイン中か、入力途中か等）を扱う。状態が散らかるとバグの温床になる。",
+          "「状態は一箇所にまとめ、表示はそこから導く」が基本の考え方。"],
+   quiz:[{q:"状態管理がうまくいかないと起きやすいのは？",opts:["表示と実データのズレ・バグ","CPUの物理破損","回線速度の低下"],a:0}]},
+  {id:"back",q:0,r:1,name:"バックエンド",tier:"応用",entry:false,
+   study:["Python・環境・DBが合流した先。画面の裏でデータの保存・取得・計算・認証を担う。",
+          "フロントからのリクエストを受け、答えを返すのが基本の流れ。"],
+   quiz:[{q:"バックエンドの典型的な役割は？",opts:["フォントの選定","データの保存・処理・応答","アイコンの描画"],a:1}]},
+  {id:"api",q:-1,r:1,name:"API設計",tier:"応用",entry:false,
+   study:["部品同士・外部サービスとやり取りする窓口。URL・メソッド（GET/POST等）・入力・出力の約束ごとで成り立つ。",
+          "REST的に「リソースを名詞で、操作を動詞（HTTPメソッド）で」表すと整理しやすい。"],
+   quiz:[{q:"データを新しく作成するときに使う代表的なHTTPメソッドは？",opts:["GET","POST","DELETE"],a:1}]},
+  {id:"deploy",q:-1,r:0,name:"デプロイとCI/CD",tier:"応用",entry:false,
+   study:["手元で動くものを世界に公開する。CI/CDは、変更のたびに自動でテスト・公開する仕組み。",
+          "「動いた→自動で検証→自動で反映」の流れができると、小さく速く出せる。"],
+   quiz:[{q:"CI/CDの主な狙いは？",opts:["変更の検証と反映を自動化する","コードを難読化する","回線を高速化する"],a:0}]},
+  {id:"prompt",q:0,r:-1,name:"プロンプト設計",tier:"応用",entry:false,
+   study:["AIに何をどう作らせるかを言葉で設計する力。中心の統合に直結する、バイブコーディングの背骨。",
+          "前提・制約・出力形式・例を具体的に渡すほど精度が上がる。曖昧な一言より、ゴールと条件を分けて書く。"],
+   quiz:[{q:"プロンプトの精度を上げるのに効果的なのは？",opts:["とにかく短く一言で","制約・出力形式・具体例を明示する","全部敬語にする"],a:1}]},
+
+  // ── 外周の角＝入口（最初から挑戦可 / 各ルートの起点）──
+  {id:"html",q:2,r:-2,name:"HTMLの理解",tier:"入口",entry:true,
+   study:["Webページの骨組み。見出し・段落・ボタン・入力欄などを<タグ>で表す。意味に合ったタグを選ぶのが大事。",
+          "構造（HTML）と見た目（CSS）と動き（JS）は役割が別、と覚えておく。"],
+   quiz:[{q:"HTMLが主に担うのは？",opts:["ページの構造・意味","色やレイアウト","サーバー処理"],a:0}]},
+  {id:"js",q:2,r:0,name:"JavaScript",tier:"入口",entry:true,
+   study:["Webに動きをつける言語。ボタンを押したら反応する、データを取りに行く、といった処理を担う。",
+          "変数・関数・配列・条件分岐がまず基礎。ここが効くと一気に作れる幅が広がる。"],
+   quiz:[{q:"JavaScriptが主に動かすのは？",opts:["ページ上の動き・対話","プリンタのインク","電源管理"],a:0}]},
+  {id:"py",q:0,r:2,name:"Python",tier:"入口",entry:true,
+   study:["読みやすく、Web・自動化・データ・AIまで幅広く使える言語。バックエンドやスクリプトの定番。",
+          "少ない記述で動かせるので、アイデアを試すのに向いている。"],
+   quiz:[{q:"Pythonが得意とする領域に近いのは？",opts:["自動化・データ・AI","回路設計のみ","表計算の代替のみ"],a:0}]},
+  {id:"cli",q:-2,r:2,name:"ターミナルとCLI",tier:"入口",entry:true,
+   study:["文字でコンピュータに指示する黒い画面。ファイル操作・実行・インストールを素早くこなせる。",
+          "クリックより速く、自動化とも相性が良い。Claude CodeなどのCLIツールもここが土台。"],
+   quiz:[{q:"CLI（コマンドライン）の利点は？",opts:["操作を文字で素早く・自動化しやすい","必ず画像が綺麗になる","電気代が下がる"],a:0}]},
+  {id:"saas",q:-2,r:0,name:"SaaSとPaaS",tier:"入口",entry:true,
+   study:["自前で全部持たず、出来合いのサービスに乗る考え方。SaaSは完成品の利用、PaaSは土台を借りて自作を載せる。",
+          "Render・Vercel等のPaaSに乗れば、サーバー管理を抱えずに公開できる。"],
+   quiz:[{q:"PaaSの説明として近いのは？",opts:["完成アプリをそのまま使う","アプリを載せる土台を借りる","物理サーバーを自作する"],a:1}]},
+  {id:"chat",q:0,r:-2,name:"AIチャット",tier:"入口",entry:true,
+   study:["すべての起点。作りたいものを言葉で相談し、コードや方針を引き出す。対話のキャッチボールが上達の近道。",
+          "「何を・なぜ・どんな形で欲しいか」を伝える癖をつけよう。"],
+   quiz:[{q:"AIチャットを使いこなす第一歩は？",opts:["黙って待つ","目的と条件を言葉にして伝える","必ず英語で書く"],a:1}]},
+
+  // ── 辺＝橋渡し（隣り合う2ルートが合流する地点）──
+  {id:"css",q:2,r:-1,name:"CSS設計",tier:"橋渡し",entry:false,
+   study:["HTMLとJavaScriptの間をつなぐ見た目の層。色・余白・並び・レスポンシブ対応など。",
+          "余白と揃えを整えるだけで、ぐっと「ちゃんとして」見える。Flexboxやgridで配置を組むのが今の主流。"],
+   quiz:[{q:"要素を横並びに整えるのによく使うのは？",opts:["Flexbox / grid","alert()","SELECT文"],a:0}]},
+  {id:"env",q:1,r:1,name:"環境構築とパッケージ管理",tier:"橋渡し",entry:false,
+   study:["JavaScriptとPythonの共通言語。npm・pip等で依存を入れて管理し、実行環境を整える。",
+          "環境を分けておくと衝突を防げる。どちらのルートでも最初に効いてくる土台。"],
+   quiz:[{q:"パッケージ管理の役割は？",opts:["必要なライブラリの導入・管理","モニタの色補正","通信の暗号化のみ"],a:0}]},
+  {id:"db",q:-1,r:2,name:"データベース",tier:"橋渡し",entry:false,
+   study:["PythonとCLIの間。データを溜めて、探して、取り出す。SQL系（PostgreSQL等）とNoSQL系がある。",
+          "「どう保存するか」より先に「どう取り出したいか」を考えると設計が決まりやすい。"],
+   quiz:[{q:"SQLの主な用途は？",opts:["データの検索・操作","画像のぼかし","フォントの埋め込み"],a:0}]},
+  {id:"git",q:-2,r:1,name:"Gitとバージョン管理",tier:"橋渡し",entry:false,
+   study:["CLIとSaaS/PaaSの間。変更の履歴を記録し、いつでも戻れるようにする。pushがそのまま公開につながる。",
+          "commitで保存点、branchで実験。「壊れても戻せる」安心感が思い切った試行を支える。"],
+   quiz:[{q:"Gitのcommitに近いのは？",opts:["変更の保存点を作る","サーバーを再起動する","画面を録画する"],a:0}]},
+  {id:"auth",q:-1,r:-1,name:"認証とセキュリティ",tier:"橋渡し",entry:false,
+   study:["SaaSとAIの間。APIキー・トークン・OAuthで「誰が・何をできるか」を守る。",
+          "APIキーやパスワードをコードに直書きしない、が鉄則。環境変数や秘密管理に逃がす。"],
+   quiz:[{q:"やってはいけないのはどれ？",opts:["APIキーを環境変数に置く","APIキーを公開リポジトリに直書きする","トークンの有効期限を設ける"],a:1}]},
+  {id:"comp",q:1,r:-2,name:"コンポーネント設計",tier:"橋渡し",entry:false,
+   study:["AIとHTMLの間。UIをボタン・カード・フォームなど再利用できる部品に分けて組む。AIに「部品単位で作らせる」と相性が良い。",
+          "「1つの部品は1つの役割」に保つと、組み替えやテストが楽になる。"],
+   quiz:[{q:"良いコンポーネント分割の指針は？",opts:["1部品に役割を詰め込む","1部品＝1つの責任","分割せず全部1ファイル"],a:1}]},
+];
+
+/* ---------- ヘックス幾何（pointy-top, 軸座標） ---------- */
+const R=48;
+const HW=Math.sqrt(3)*R, HH=2*R;
+function px(q,r){return {x:HW*(q+r/2), y:HH*0.75*r};}
+// 6方向の隣接
+const DIRS=[[1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,1]];
+function neighborsOf(s){
+  return SKILLS.filter(t=>DIRS.some(d=>t.q===s.q+d[0]&&t.r===s.r+d[1]));
+}
+
+/* ---------- 状態 ---------- */
+const KEY="vibeSkillGrid.v1";
+let acquired=new Set();
+try{const raw=localStorage.getItem(KEY); if(raw) acquired=new Set(JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify([...acquired]));}catch(e){}}
+
+function isAvailable(s){
+  if(acquired.has(s.id)) return false;
+  if(s.entry) return true;
+  return neighborsOf(s).some(n=>acquired.has(n.id));
+}
+
+/* ---------- 盤の描画 ---------- */
+const board=document.getElementById("board");
+let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+SKILLS.forEach(s=>{const p=px(s.q,s.r);minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);minY=Math.min(minY,p.y);maxY=Math.max(maxY,p.y);});
+const padX=HW/2+8, padY=HH/2+8;
+const Wpx=(maxX-minX)+padX*2, Hpx=(maxY-minY)+padY*2;
+board.style.width=Wpx+"px"; board.style.height=Hpx+"px";
+
+const nodeEls={};
+SKILLS.forEach(s=>{
+  const p=px(s.q,s.r);
+  const el=document.createElement("div");
+  el.className="hex";
+  el.style.width=HW+"px"; el.style.height=HH+"px";
+  el.style.left=(p.x-minX+padX-HW/2)+"px";
+  el.style.top =(p.y-minY+padY-HH/2)+"px";
+  el.innerHTML=`<div class="inner"><span class="nm">${s.name}</span><span class="tg">${s.tier}</span></div><span class="chk">✓</span>`;
+  el.addEventListener("click",()=>onHexClick(s));
+  board.appendChild(el);
+  nodeEls[s.id]=el;
+});
+
+function refresh(){
+  SKILLS.forEach(s=>{
+    const el=nodeEls[s.id];
+    el.classList.remove("got","avail","locked","entry");
+    if(s.entry) el.classList.add("entry");
+    if(acquired.has(s.id)) el.classList.add("got");
+    else if(isAvailable(s)) el.classList.add("avail");
+    else el.classList.add("locked");
+  });
+  const c=acquired.size;
+  document.getElementById("cnt").textContent=c;
+  document.getElementById("fill").style.width=(c/SKILLS.length*100)+"%";
+}
+
+/* ---------- スケール（スマホ対応） ---------- */
+const scaler=document.getElementById("scaler");
+function fit(){
+  const avail=Math.min(document.documentElement.clientWidth-16, 560);
+  const sc=Math.min(1, avail/Wpx);
+  scaler.style.transform=`scale(${sc})`;
+  scaler.parentElement.style.height=(Hpx*sc)+"px";
+}
+window.addEventListener("resize",fit);
+
+/* ---------- クリック処理 ---------- */
+function onHexClick(s){
+  if(acquired.has(s.id)){ openModal(s,"done"); return; }
+  if(!isAvailable(s)){
+    toast("先に隣のスキルを習得しよう");
+    const el=nodeEls[s.id];
+    el.animate([{transform:"scale(.93) translateX(0)"},{transform:"scale(.93) translateX(-4px)"},{transform:"scale(.93) translateX(4px)"},{transform:"scale(.93) translateX(0)"}],{duration:260});
+    return;
+  }
+  openModal(s,"study");
+}
+
+/* ---------- モーダル ---------- */
+const overlay=document.getElementById("overlay");
+const modal=document.getElementById("modal");
+overlay.addEventListener("click",e=>{if(e.target===overlay) closeModal();});
+function closeModal(){overlay.classList.remove("open");}
+
+function openModal(s,mode){
+  overlay.classList.add("open");
+  if(mode==="study") renderStudy(s);
+  else if(mode==="done") renderDone(s);
+}
+
+function renderStudy(s){
+  const got=acquired.has(s.id);
+  modal.innerHTML=`
+    <div class="mhead">
+      <span class="mtier">${s.tier}</span>
+      <h2 class="mtitle">${s.name}</h2>
+      <button class="mclose">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="study">${s.study.map(t=>`<p>${t}</p>`).join("")}</div>
+      <button class="cta" id="toQuiz">テストに挑戦する →</button>
+    </div>`;
+  modal.querySelector(".mclose").onclick=closeModal;
+  modal.querySelector("#toQuiz").onclick=()=>renderQuiz(s);
+}
+
+function renderQuiz(s){
+  const answers=new Array(s.quiz.length).fill(-1);
+  modal.innerHTML=`
+    <div class="mhead">
+      <span class="mtier">テスト · ${s.tier}</span>
+      <h2 class="mtitle">${s.name}</h2>
+      <button class="mclose">✕</button>
+    </div>
+    <div class="mbody">
+      <div id="quizArea">${s.quiz.map((q,qi)=>`
+        <div class="q" data-qi="${qi}">
+          <p class="qt"><span class="qn">Q${qi+1}</span>${q.q}</p>
+          ${q.opts.map((o,oi)=>`<button class="opt" data-qi="${qi}" data-oi="${oi}">${o}</button>`).join("")}
+        </div>`).join("")}
+      </div>
+      <button class="cta" id="grade">判定する</button>
+    </div>`;
+  modal.querySelector(".mclose").onclick=closeModal;
+  modal.querySelectorAll(".opt").forEach(b=>{
+    b.onclick=()=>{
+      const qi=+b.dataset.qi;
+      modal.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");
+      answers[qi]=+b.dataset.oi;
+    };
+  });
+  modal.querySelector("#grade").onclick=()=>{
+    if(answers.includes(-1)){ toast("すべての設問に答えてね"); return; }
+    let ok=true;
+    s.quiz.forEach((q,qi)=>{
+      const chosen=answers[qi];
+      modal.querySelectorAll(`.opt[data-qi="${qi}"]`).forEach(x=>{
+        x.classList.add("lock");
+        const oi=+x.dataset.oi;
+        if(oi===q.a) x.classList.add("correct");
+        else if(oi===chosen) x.classList.add("wrong");
+      });
+      if(chosen!==q.a) ok=false;
+    });
+    const grade=modal.querySelector("#grade");
+    if(ok){
+      grade.outerHTML=`<div class="result">
+        <p class="big ok">習得！</p>
+        <p>光が隣のマスへ伝わった。次の挑戦が開いている。</p>
+        <button class="cta teal" id="back">盤面に戻る</button></div>`;
+      acquired.add(s.id); save(); refresh();
+      const el=nodeEls[s.id]; el.classList.add("flash");
+      setTimeout(()=>el.classList.remove("flash"),900);
+      modal.querySelector("#back").onclick=closeModal;
+    }else{
+      grade.outerHTML=`<div class="result">
+        <p class="big ng">もう一歩</p>
+        <p>正解を確認して、もう一度挑戦しよう。</p>
+        <button class="cta" id="retry">もう一度</button>
+        <button class="cta ghost" id="backStudy" style="margin-top:9px">解説を読み返す</button></div>`;
+      modal.querySelector("#retry").onclick=()=>renderQuiz(s);
+      modal.querySelector("#backStudy").onclick=()=>renderStudy(s);
+    }
+  };
+}
+
+function renderDone(s){
+  modal.innerHTML=`
+    <div class="mhead">
+      <span class="mtier got">習得済み · ${s.tier}</span>
+      <h2 class="mtitle">${s.name}</h2>
+      <button class="mclose">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="study">${s.study.map(t=>`<p>${t}</p>`).join("")}</div>
+      <button class="cta teal" id="okBack">閉じる</button>
+    </div>`;
+  modal.querySelector(".mclose").onclick=closeModal;
+  modal.querySelector("#okBack").onclick=closeModal;
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+/* ---------- reset ---------- */
+document.getElementById("reset").onclick=()=>{
+  if(confirm("習得した進捗をすべてリセットする？")){
+    acquired.clear(); save(); refresh();
+  }
+};
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape") closeModal();});
+
+/* init */
+refresh(); fit();
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     使い方：このファイルを複製して lessons/＜ノードID＞.html にする。
+     1) <body class="lesson kind-XXX"> の XXX をノードの色に（entry/common/web/auto/ai/quality/final）
+     2) <!-- 差し替え --> の箇所を埋める
+     3) vibe-skill-tree.html の LESSON_URLS に
+          ＜ノードID＞:"lessons/＜ノードID＞.html"
+        を1行足す → ツリーの「学ぶ →」が自動でリンクになる
+     ============================================================ -->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- 差し替え:単元名 --> ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common"><!-- 差し替え:kind -->
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono"><!-- 差し替え:英語タグ 例 DEFINE DONE --></span>
+    <h1><!-- 差し替え:単元名 --></h1>
+    <p class="lead"><!-- 差し替え:1〜2文の要約 --></p>
+  </header>
+
+  <!-- この単元のゴール -->
+  <div class="box goalbox">
+    <span class="kicker mono">この単元でできるようになること</span>
+    <ul>
+      <li><!-- 差し替え --></li>
+      <li><!-- 差し替え --></li>
+      <li><!-- 差し替え --></li>
+    </ul>
+  </div>
+
+  <!-- ▼ 本文。<h2> 見出し＋<p> 段落で。必要なだけ増やす ▼ -->
+  <h2><!-- 差し替え:見出し --></h2>
+  <p><!-- 差し替え:本文 --></p>
+
+  <!-- 良い例・悪い例を並べたいとき（任意） -->
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">こうなりがち</span><!-- 差し替え --></div>
+    <div class="ex good"><span class="tagline">こう書く</span><!-- 差し替え --></div>
+  </div>
+
+  <h2>よくある失敗</h2>
+  <ul>
+    <li><!-- 差し替え --></li>
+  </ul>
+
+  <!-- 押さえるべきこと（この単元の核。必ず書く） -->
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li><!-- 差し替え --></li>
+      <li><!-- 差し替え --></li>
+      <li><!-- 差し替え --></li>
+    </ul>
+  </div>
+
+  <!-- 手を動かす課題（任意だが推奨） -->
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p><!-- 差し替え:小さな実践課題 --></p>
+  </div>
+
+  <!-- ツリーのチェックポイント（クイズ）への導線 -->
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p><!-- 差し替え:理解できたか確かめる一言 --></p>
+    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+  </div>
+
+  <!-- 前後の単元（無い側は <span class="soon"> のままでOK） -->
+  <nav class="lnav">
+    <span class="soon"><span class="dir">前の単元</span>—</span>
+    <span class="next soon"><span class="dir">次の単元</span>準備中</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+</body>
+</html>
