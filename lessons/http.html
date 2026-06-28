@@ -65,25 +65,38 @@
   </ul>
   <p>レスポンスには成否を表す番号（ステータス）が付いてきます。AIに「失敗時はどちらなのか分かるように表示して」と頼むと、原因の切り分けがぐっと楽になります。</p>
 
+  <h2>fetchは404や500でも、自動では失敗にならない</h2>
+  <p><code>fetch()</code> が例外になるのは、主に回線やURL形式などでレスポンスを受け取れなかったときです。サーバーから404や500が返った場合はレスポンス自体を受け取れているため、<code>response.ok</code> を自分で確認します。</p>
+  <div class="box">
+    <pre style="margin:0;overflow:auto;color:#cfe5ef;font:12px/1.7 'SFMono-Regular',Consolas,monospace;white-space:pre"><code>const response = await fetch(url);
+if (!response.ok) {
+  throw new Error(`HTTP ${response.status}`);
+}
+const data = await response.json();</code></pre>
+  </div>
+  <p>もう一つ、ブラウザにはCORSという制限があります。相手のサーバーがブラウザからの利用を許可していないと、サーバーが応答していてもJavaScriptから中身を読めません。「ネットワーク」「HTTPステータス」「CORS」を分けて確認します。</p>
+
   <div class="keypoints">
     <h2>ここだけ持ち帰る</h2>
     <ul>
       <li>外のデータは「リクエストを送り、レスポンスを受け取る」往復で扱う。</li>
       <li>JSONは欲しいキーの値だけを取り出せば十分。全部を扱おうとしない。</li>
       <li>「届かない」と「断られた」は別。失敗時の表示を最初から頼んでおく。</li>
+      <li>fetch後は response.ok を確認する。404や500は自動では例外にならない。</li>
     </ul>
   </div>
 
   <div class="box try">
     <h3>10分だけ作る</h3>
     <p>無料の公開API（猫の画像など）を呼んで、結果を画面に出してみましょう。下の文をそのままAIへ渡せます。</p>
-    <p style="margin:0">1ファイルのHTMLで、ボタンを押すと無料で使える公開APIを fetch で呼び、返ってきたJSONの中身を画面に表示してください。読み込み中と失敗時の表示も入れて、変更点を説明してください。</p>
+    <p style="margin:0">1ファイルのHTMLで、ボタンを押すと無料で使える公開APIを fetch で呼び、返ってきたJSONの必要なキーを画面に表示してください。fetch後はresponse.okを確認し、読み込み中・HTTPエラー・ネットワークエラーを画面に出してください。CORSで利用できないAPIなら、その理由を説明して別の公開APIを選んでください。</p>
   </div>
 
   <div class="checkpoint">
     <span class="kicker mono">チェックポイント</span>
-    <p>うまく出ないとき、通信できていないのか、通信後に入力を断られた（例: 422）のかを区別できたら次へ進めます。</p>
-    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+    <p>成功するURLと、404になるURLの両方を試し、成功時はデータ、失敗時はステータス番号を画面へ出せたら次へ進めます。Networkでも両方の記録を確認してください。</p>
+    <p class="returnhint">読み終えたら、開いていた<strong>スキルツリーのタブに戻って</strong>このスキルを「解放」しましょう（理解度チェックは任意です）。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">スキルツリーを開く →</a>
   </div>
 
   <nav class="lnav">

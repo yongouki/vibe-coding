@@ -47,27 +47,60 @@
   .topbar .label{font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.2em;color:#4f6577}
 
   /* hero */
-  .hero{flex:1;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(34px,5vw,68px);align-items:center;width:100%;max-width:1140px;margin:0 auto;padding:clamp(40px,7vh,86px) 30px}
+  .hero{flex:1;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(34px,5vw,68px);align-items:center;align-content:center;width:100%;max-width:1140px;margin:0 auto;padding:clamp(40px,7vh,86px) 30px}
   .lead{max-width:520px}
   .eyebrow{margin:0 0 18px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.26em;color:#5d7c92}
   h1{margin:0;font-size:clamp(31px,4.6vw,50px);line-height:1.18;font-weight:820;letter-spacing:.01em;color:var(--ink);text-wrap:balance}
   h1 .accent{color:var(--web)}
   .desc{margin:20px 0 0;color:var(--muted);font-size:14.5px;line-height:1.92;max-width:430px}
+  .desc strong{color:var(--ink);font-weight:760}
+  .prep{display:flex;gap:10px;align-items:flex-start;margin:18px 0 0;padding:12px 14px;max-width:440px;border:1px solid rgba(52,152,182,.28);border-radius:11px;background:rgba(8,18,26,.5);color:#9fb6c5;font-size:12.5px;line-height:1.72}
+  .prep .pi{flex:none;color:var(--final);font-size:13px;line-height:1.5}
+  .prep b{color:#cfe2ee;font-weight:720}
 
   .ctarow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:30px}
-  .cta{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:13px;text-decoration:none;font-weight:760;font-size:15px;color:#05151b;background:linear-gradient(100deg,var(--web),var(--entry));box-shadow:0 12px 34px -14px rgba(69,213,231,.5);transition:filter .2s ease,box-shadow .25s ease}
+  .cta{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:13px;text-decoration:none;font-weight:760;font-size:15px;color:#05151b;background:linear-gradient(100deg,var(--web),var(--entry));box-shadow:0 12px 34px -14px rgba(69,213,231,.5);transition:filter .2s ease,box-shadow .25s ease;border:0;cursor:pointer;font-family:inherit}
   .cta>*{position:relative;z-index:1}
   .cta .shine{position:absolute;top:0;left:-70%;width:42%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);transform:skewX(-18deg);pointer-events:none;z-index:0}
   .cta:hover{filter:brightness(1.07);box-shadow:0 16px 40px -12px rgba(69,213,231,.55)}
   .cta .ar{font-size:17px;transition:transform .2s ease}
   .cta:hover .ar{transform:translateX(5px)}
-  .ghost{font-size:13px;color:#7e96a8;text-decoration:none;border-bottom:1px solid #34495c;padding-bottom:2px;transition:.2s}
+  .ghost{font-size:13px;color:#7e96a8;text-decoration:none;background:none;border:0;border-bottom:1px solid #34495c;padding:0 0 2px;cursor:pointer;font-family:inherit;transition:.2s}
   .ghost:hover{color:#bcd4e2;border-bottom-color:#5d83a0}
 
   .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
   .chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#8aa0b3}
   .chip .di{color:var(--final)}
   .sep{color:#33485b}
+
+  /* entry states / picker (Phase 2) */
+  .cta.wide{width:100%;justify-content:center;margin-top:4px}
+  .welcome{margin-top:26px;padding:16px 18px;border:1px solid rgba(52,152,182,.3);border-radius:14px;background:rgba(8,18,26,.55);max-width:440px}
+  .welcome .wb{margin:0;font-size:18px;font-weight:800;color:var(--ink)}
+  .welcome .wt{margin:9px 0 0;font-size:13.5px;color:#bfe7d6}
+  .welcome .wt b{color:#d7f3e7}
+  .welcome .wn{margin:6px 0 0;font-size:12.5px;color:#8aa0b3}
+  .welcome .wn b{color:#cfe2ee}
+  .ghost.back{margin-top:14px;background:none;cursor:pointer}
+
+  .ovl{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(3,8,13,.74);backdrop-filter:blur(5px)}
+  .ovl[hidden]{display:none}
+  .sheet{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;border:1px solid #25384b;border-radius:18px;background:linear-gradient(180deg,#0f1a26,#0a121b);box-shadow:0 30px 90px rgba(0,0,0,.6);padding:24px}
+  .sheet .x{position:absolute;right:14px;top:14px;width:32px;height:32px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#8193a9;cursor:pointer;font-family:inherit;transition:.2s}
+  .sheet .x:hover{color:var(--ink);border-color:#53677e}
+  .ptitle{margin:0 36px 0 0;font-size:22px;font-weight:800;color:var(--ink);line-height:1.3}
+  .psub{margin:8px 0 16px;color:var(--muted);font-size:13px;line-height:1.8}
+  .kick{font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:9px;letter-spacing:.16em;color:#6f8aa0;text-transform:uppercase}
+  .exgrid{display:grid;gap:9px}
+  @media(min-width:520px){.exgrid{grid-template-columns:1fr 1fr}}
+  .excard{display:block;text-align:left;padding:13px 14px;border:1px solid #2a394c;border-radius:12px;background:#101a27;color:#cdd9e7;cursor:pointer;font-family:inherit;line-height:1.55;transition:border-color .15s}
+  .excard:hover{border-color:#52708a}
+  .excard b{display:block;font-size:14px;color:#e3ebf5}
+  .excard span{display:block;margin-top:3px;font-size:12px;color:#9fb0c3}
+  .step{margin:4px 0 16px;padding:14px 15px;border:1px solid rgba(52,152,182,.3);border-radius:12px;background:rgba(8,18,26,.5)}
+  .step .kick{margin-bottom:6px}
+  .step p{margin:0;color:#cbd6e3;font-size:13.5px;line-height:1.85}
+  .step b{color:#cfe2ee}
 
   /* portal */
   .portal{position:relative}
@@ -93,14 +126,17 @@
   .ntag{margin-top:3px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;letter-spacing:.14em}
 
   footer{text-align:center;padding:18px 16px 30px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#3f566a}
+  footer a{color:#5a7388;text-decoration:none;border-bottom:1px solid #2a3d4e;transition:.2s}
+  footer a:hover{color:#9fb6c5;border-bottom-color:#4d6675}
 
   .cta:focus-visible,.ghost:focus-visible{outline:2px solid var(--web);outline-offset:4px;border-radius:6px}
 
   @media(max-width:880px){
-    .hero{grid-template-columns:1fr;gap:30px;padding-top:38px}
-    .lead{order:2;max-width:560px;margin:0 auto;text-align:center}
+    .hero{grid-template-columns:1fr;gap:24px;padding-top:30px}
+    .lead{order:1;max-width:560px;margin:0 auto;text-align:center}
     .lead .chips,.lead .ctarow{justify-content:center}
-    .portal{order:1}
+    .portal{order:2}
+    .panel{max-width:360px}
   }
 </style>
 </head>
@@ -115,19 +151,13 @@
     <div class="lead">
       <p class="eyebrow">遊びながら、できることを増やす</p>
       <h1>目的から公開まで、<br>一つずつ<span class="accent">解放</span>して進む。</h1>
-      <p class="desc">AIと作りながら、次に必要な技術を見極める学習マップ。目的の決め方から実装・確認・公開、そして改善まで ── スキルツリーを一段ずつ登っていきます。</p>
+      <p class="desc"><strong>バイブコーディングとは、AIと会話しながら自分のアプリやツールを作ること。</strong>プログラミング未経験でも大丈夫。目的の決め方から実装・確認・公開・改善まで、次に必要な技術を一つずつ解放して学びます。</p>
+      <p class="prep"><span class="pi">◆</span><span>用意するもの：<b>AIチャットを1つ</b>（ChatGPT・Claude など）。各スキルにある<b>コピペ用の依頼文</b>を、そのチャットに貼って試すだけです。</span></p>
 
-      <div class="ctarow">
-        <a class="cta" href="vibe-skill-tree.html"><span class="shine"></span>最初のスキルを解放する <span class="ar">→</span></a>
-        <a class="ghost" href="vibe-skill-tree.html">ツリー全体を見る</a>
-      </div>
-
-      <div class="chips">
-        <span class="chip"><span class="di">◆</span>初心者OK</span>
-        <span class="sep">·</span>
-        <span class="chip"><span class="di">◆</span>5分から始める</span>
-        <span class="sep">·</span>
-        <span class="chip"><span class="di">◆</span>進捗は自動保存</span>
+      <div id="entry">
+        <noscript>
+          <div class="ctarow"><a class="cta" href="vibe-skill-tree.html"><span class="shine"></span>スキルツリーを開く <span class="ar">→</span></a></div>
+        </noscript>
       </div>
     </div>
 
@@ -157,7 +187,7 @@
           <span class="hex" style="background:#2c4a4a"></span>
           <span class="hexface" style="background:linear-gradient(155deg,#173027,#0e1c1f);padding:8px 14px">
             <span class="nname" style="font-size:13.5px;font-weight:760;color:#79b9a4">バイブコーディング</span>
-            <span class="ntag" style="font-size:7.5px;letter-spacing:.16em;color:#456a5e">FINAL · 🔒 LOCKED</span>
+            <span class="ntag" style="font-size:7.5px;letter-spacing:.16em;color:#456a5e">FINAL · LOCKED</span>
           </span>
         </div>
 
@@ -211,7 +241,121 @@
     </div>
   </main>
 
-  <footer>進捗はこのブラウザに保存されます · BUILT WITH VIBE</footer>
+  <footer>進捗はこのブラウザに保存されます · BUILT WITH VIBE · <a href="disclaimer.html">免責事項</a></footer>
+
+  <div id="picker" class="ovl" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="作りたいものを選ぶ">
+      <button class="x" type="button" data-pclose aria-label="閉じる">✕</button>
+      <div data-pbody></div>
+    </div>
+  </div>
+
+<script>
+/* ── 入口の出し分け（Phase 2）：初回＝作例を選んで目標化→ツリー／復帰＝続きから ── */
+(function(){
+  var K={V2:'vibeSkillTree.v2',PROG:'vibeSkillTree.progress.v1',TGT:'vibeSkillTree.target.v1',ONB:'vibeSkillTree.onboarding.v1'};
+  function getStr(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function getJSON(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
+  function setJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function setStr(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  var EXAMPLES=[
+    {id:"intro-page",title:"自己紹介ページ",blurb:"画像と文章を並べた、自分の名刺がわりのページ。",to:"htmlcss"},
+    {id:"fortune-app",title:"今日の運勢アプリ",blurb:"ボタンを押すとランダムで結果が出る、動きのある画面。",to:"jsdom"},
+    {id:"todo-keep",title:"閉じても残るToDoリスト",blurb:"入力した内容が、次に開いたときも残る。",to:"localstorage"},
+    {id:"share-page",title:"友達に送れる公開ページ",blurb:"URLを送れば誰でも開ける場所に置く。",to:"static-deploy"},
+    {id:"weather-view",title:"天気を読み込んで表示",blurb:"外の公開データを呼んで画面に出す。",to:"http"},
+    {id:"ai-diary",title:"AIが一言コメントする日記",blurb:"APIキーを安全に隠してAIにつなぐ。",to:"api"},
+    {id:"sync-record",title:"PCもスマホも同じ記録",blurb:"端末をまたいでデータを保存・共有する。",to:"database"},
+    {id:"multi-user",title:"みんなで使う・人ごとに分ける",blurb:"ログインして、各自のデータだけを見せる。",to:"auth"},
+    {id:"csv-cron",title:"毎朝CSVを自動で集計",blurb:"大量ファイルをまとめ、決まった時間に自動実行。",to:"scheduler"},
+    {id:"py-automate",title:"繰り返し作業をPythonで",blurb:"手作業を短いスクリプトに置き換える。",to:"python"}
+  ];
+
+  var acquired=getJSON(K.V2,[]); if(!Array.isArray(acquired))acquired=[];
+  var prog=getJSON(K.PROG,{})||{};
+  var target=getJSON(K.TGT,null);
+  /* 復帰扱い：オンボーディング済み or すでに何か解放している */
+  var returning=(getStr(K.ONB)==='done')||acquired.length>0;
+
+  var entry=document.getElementById('entry');
+  var picker=document.getElementById('picker');
+  var pbody=picker.querySelector('[data-pbody]');
+
+  function daysAgo(ymd){if(!ymd)return null;var d=Math.round((Date.now()-Date.parse(ymd+'T00:00:00'))/86400000);return isNaN(d)?null:d;}
+
+  function renderEntry(){
+    if(returning){
+      var ago=daysAgo(prog.lastVisit);
+      entry.innerHTML=
+        '<div class="welcome">'+
+          '<p class="wb">おかえりなさい。</p>'+
+          (target&&target.title?'<p class="wt">目指している作品：<b>'+esc(target.title)+'</b></p>':'')+
+          '<p class="wn">'+(acquired.length===0?'最初の一歩はこれから。続きからどうぞ。':'これまでに <b>'+acquired.length+'</b> 個のスキルを解放'+(ago!=null&&ago>0?'・前回から <b>'+ago+'日</b>ぶり':''))+'</p>'+
+        '</div>'+
+        '<div class="ctarow">'+
+          '<a class="cta" href="vibe-skill-tree.html"><span class="shine"></span>続きから <span class="ar">→</span></a>'+
+          '<button class="ghost" type="button" id="choose">別の作りたいものを選ぶ</button>'+
+        '</div>';
+    }else{
+      entry.innerHTML=
+        '<div class="ctarow">'+
+          '<button class="cta" type="button" id="choose"><span class="shine"></span>作りたいものを選ぶ <span class="ar">→</span></button>'+
+          '<a class="ghost" href="vibe-skill-tree.html">とりあえずツリーを見る</a>'+
+        '</div>'+
+        '<div class="chips">'+
+          '<span class="chip"><span class="di">◆</span>初心者OK</span><span class="sep">·</span>'+
+          '<span class="chip"><span class="di">◆</span>5分から始める</span><span class="sep">·</span>'+
+          '<span class="chip"><span class="di">◆</span>進捗は自動保存</span>'+
+        '</div>';
+    }
+    var ch=document.getElementById('choose'); if(ch)ch.onclick=openPicker;
+  }
+
+  function openPicker(){renderGrid();picker.hidden=false;document.body.style.overflow='hidden';var x=picker.querySelector('[data-pclose]');if(x)x.focus();}
+  function closePicker(){picker.hidden=true;document.body.style.overflow='';}
+
+  function renderGrid(){
+    pbody.innerHTML=
+      '<div class="kick">何を作ってみたい？</div>'+
+      '<h2 class="ptitle">作りたいものから選ぶ</h2>'+
+      '<p class="psub">小さいものでOK。選ぶと、最初の一歩を案内します。迷ったら一番上から。</p>'+
+      '<div class="exgrid">'+EXAMPLES.map(function(ex){
+        return '<button class="excard" type="button" data-ex="'+ex.id+'"><b>'+esc(ex.title)+'</b><span>'+esc(ex.blurb)+'</span></button>';
+      }).join('')+'</div>';
+    Array.prototype.forEach.call(pbody.querySelectorAll('[data-ex]'),function(b){
+      b.onclick=function(){var ex=EXAMPLES.filter(function(x){return x.id===b.getAttribute('data-ex');})[0];if(ex)renderFirstStep(ex);};
+    });
+  }
+
+  function renderFirstStep(ex){
+    pbody.innerHTML=
+      '<div class="kick">目指す作品</div>'+
+      '<h2 class="ptitle">'+esc(ex.title)+'</h2>'+
+      '<p class="psub">'+esc(ex.blurb)+'</p>'+
+      '<div class="step"><div class="kick">最初の一歩</div>'+
+        '<p>どの作品でも、出発点は同じ。<b>「目的・完成条件」</b>＝“今日どこまで作るか”を3分で決めるところから始めます。あとはツリーが、次に必要なスキルを順番に光らせてくれます。</p></div>'+
+      '<button class="cta wide" type="button" data-start><span class="shine"></span>最初の「目的・完成条件」から始める <span class="ar">→</span></button>'+
+      '<button class="ghost back" type="button" data-back>← 別の作品を選ぶ</button>';
+    pbody.querySelector('[data-back]').onclick=renderGrid;
+    pbody.querySelector('[data-start]').onclick=function(){startWith(ex);};
+  }
+
+  function startWith(ex){
+    setJSON(K.TGT,{exampleId:ex.id,title:ex.title,skillId:ex.to,selectedAt:Date.now()});
+    setStr(K.ONB,'done');
+    var hasGoal=acquired.indexOf('goal')>=0;
+    location.href=hasGoal?'vibe-skill-tree.html':'vibe-skill-tree.html?focus=goal';
+  }
+
+  picker.querySelector('[data-pclose]').onclick=closePicker;
+  picker.addEventListener('click',function(e){if(e.target===picker)closePicker();});
+  document.addEventListener('keydown',function(e){if(!picker.hidden&&e.key==='Escape')closePicker();});
+
+  renderEntry();
+})();
+</script>
 
 <script>
 (function(){

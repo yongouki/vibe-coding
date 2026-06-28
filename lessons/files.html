@@ -29,7 +29,7 @@
   <p>ターミナルでファイルを実行しようとして「そんなファイルは無い」と言われる。多くの場合、ファイルが壊れているのではなく、自分が思っている場所と、ターミナルが今いる場所がズレているだけです。</p>
   <p>だから最初にやることは、いつも同じです。今いる場所を確認し、そこに対象ファイルが見えるかを確かめる。この2つだけで、つまずきの多くは消えます。</p>
   <ol>
-    <li>今いる場所を表示する（Windowsなら <span class="mono">cd</span>、Mac/Linuxなら <span class="mono">pwd</span>）</li>
+    <li>今いる場所を表示する（PowerShell / Mac / Linuxなら <span class="mono">pwd</span>。PowerShellでは <span class="mono">Get-Location</span> でもよい）</li>
     <li>その場所のファイル一覧を表示する（<span class="mono">dir</span> または <span class="mono">ls</span>）</li>
     <li>対象が一覧に見えたら、初めて実行する</li>
   </ol>
@@ -71,14 +71,15 @@
 
   <div class="box try">
     <h3>やってみよう</h3>
-    <p>フォルダ内のファイル名を一覧で書き出す短いスクリプトを作りましょう。次の文をそのままAIに渡してみてください。</p>
-    <p style="margin:0">指定したフォルダの中のファイル名を一覧で表示する短いスクリプトを書いてください。実行方法と、対象フォルダの指定の仕方も、初めての人向けに説明してください。</p>
+    <p>この単元では、スクリプトを書く前に「現在地を確かめて移動し、対象を見つける」ところまでを実際に行います。次の文をAIに渡し、コマンドを一つずつ実行してください。</p>
+    <p style="margin:0">PowerShellを使っています。pwd（またはGet-Location）で現在地を確認し、Get-ChildItemで一覧を表示し、Set-Locationで対象フォルダへ移動して、実行したいファイルが見えることを確認するまで、一つずつ案内してください。各コマンドの結果を私が貼るまで、次へ進まないでください。</p>
   </div>
 
   <div class="checkpoint">
     <span class="kicker mono">チェックポイント</span>
-    <p>「ファイルが無い」と言われたとき、権限を疑う前に、まず現在地と対象の実在を確認できれば十分です。</p>
-    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+    <p>現在地を表示し、目的のフォルダへ移動し、一覧の中に対象ファイルがあることを実際に確認できれば十分です。「ファイルが無い」と「権限がない」も言い分けてください。</p>
+    <p class="returnhint">読み終えたら、開いていた<strong>スキルツリーのタブに戻って</strong>このスキルを「解放」しましょう（理解度チェックは任意です）。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">スキルツリーを開く →</a>
   </div>
 
   <nav class="lnav">

@@ -44,9 +44,11 @@
   <ol>
     <li><strong>Request</strong>：こちらが何を送ったか（送り先・中身）</li>
     <li><strong>Response</strong>：相手が何を返したか（エラーメッセージが入ることが多い）</li>
-    <li><strong>Status</strong>：成功か失敗か（200番台は成功、400・500番台は失敗の合図）</li>
+    <li><strong>Status</strong>：結果の分類（200番台は成功、300番台は移動やキャッシュ、400番台は依頼側、500番台はサーバー側の問題を示す目安）</li>
   </ol>
   <p>専門用語に見えますが、覚えるのは「送ったもの・返ってきたもの・成否」だけです。これをコピーして渡せば十分です。</p>
+
+  <p><strong>貼る前に秘密を伏せます。</strong>Request Headers、Cookie、Authorization、URLのクエリ、Responseには、認証トークン・メールアドレス・個人情報が含まれることがあります。値を <code>[REDACTED]</code> に置き換え、項目名とエラーの形だけを残してからAIへ渡します。</p>
 
   <div class="box">
     <h3>AIへ渡すときの言い方</h3>
@@ -65,13 +67,14 @@
   <div class="box try">
     <h3>やってみよう</h3>
     <p>ブラウザのDevToolsでConsoleとNetworkを開き、手元の不具合からエラー1件を選んで、AIへ渡せる形に整理してください。整理を手伝ってもらうには、次の文をそのまま貼ります。</p>
-    <p style="margin:0">これからブラウザで起きた不具合を相談します。推測で修正せず、まず必要な再現手順、Consoleエラー、NetworkのRequest・Response・Status、関連コードを順番に質問してください。集めた情報から原因候補を一つずつ絞ってください。</p>
+    <p style="margin:0">これからブラウザで起きた不具合を相談します。推測で修正せず、まず必要な再現手順、Consoleエラー、NetworkのRequest・Response・Status、関連コードを順番に質問してください。貼る前にCookie、Authorization、トークン、個人情報を伏せる箇所も指摘してください。集めた情報から原因候補を一つずつ絞ってください。</p>
   </div>
 
   <div class="checkpoint">
     <span class="kicker mono">チェックポイント</span>
-    <p>画面に見える結果だけでなく、ブラウザ内部の記録を取り出してAIへ渡せれば、原因探しはぐっと速くなります。</p>
-    <a class="tolink" href="../vibe-skill-tree.html">ツリーで理解度チェック →</a>
+    <p>再現手順・Console・Networkの該当通信を一組にまとめ、秘密情報を伏せたことを確認してからAIへ渡せれば次へ進めます。</p>
+    <p class="returnhint">読み終えたら、開いていた<strong>スキルツリーのタブに戻って</strong>このスキルを「解放」しましょう（理解度チェックは任意です）。</p>
+    <a class="tolink" href="../vibe-skill-tree.html">スキルツリーを開く →</a>
   </div>
 
   <nav class="lnav">

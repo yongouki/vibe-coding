@@ -26,6 +26,7 @@
     body.map-open #mapBack{display:inline-flex!important}
     body.map-open #legend{display:flex!important}
     body.map-open #treeHint{display:block!important}
+    body.map-open #dashboard{display:none!important}
   }
 </style>
 </head>
@@ -50,6 +51,8 @@
     <button id="reset" style="border:1px solid #2c3c50;background:#101926;color:#8fa1b6;border-radius:9px;padding:8px 12px;cursor:pointer;font-size:11px">進捗をリセット</button>
   </div>
 
+  <section id="dashboard" aria-label="学習の記録" style="width:min(100% - 24px,1240px);margin:16px auto 0"></section>
+
   <div id="legend" style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding:15px 12px 4px;color:#768aa1;font-size:10.5px">
     <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--common);display:inline-block"></i>土台</span>
     <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:3px;background:var(--web);display:inline-block"></i>ブラウザ</span>
@@ -60,7 +63,7 @@
   </div>
   <p id="treeHint" style="text-align:center;margin:7px 12px 12px;color:#61758c;font-size:11px">光っている <b style="color:#9fb0c3;font-weight:600">NEXT</b> のスキルから習得。ドラッグで移動／ホイール・ピンチで拡大縮小。</p>
 
-  <section id="mobileNav" aria-label="次の一歩" style="--accent:var(--quality);display:none;width:min(100% - 24px,560px);margin:4px auto 26px;padding:18px;border:1px solid #1e2b3b;border-radius:18px;background:linear-gradient(170deg,#101b27,#0a1019)"></section>
+  <section id="mobileNav" aria-label="次の一歩" style="--accent:var(--quality);display:none;width:min(100% - 24px,560px);margin:4px auto 22px;padding:18px;border:1px solid #1e2b3b;border-radius:18px;background:linear-gradient(170deg,#101b27,#0a1019)"></section>
   <main id="viewport" style="position:relative;width:min(100% - 16px,1240px);height:min(76vh,860px);min-height:520px;margin:0 auto 30px;overflow:hidden;border:1px solid #1e2b3b;border-radius:18px;background:linear-gradient(var(--grid1) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),radial-gradient(650px 380px at 50% 7%,rgba(246,214,111,.05),transparent 70%),rgba(7,12,19,.62);background-size:40px 40px,40px 40px,auto,auto;box-shadow:0 24px 80px rgba(0,0,0,.25) inset;touch-action:none;cursor:grab;user-select:none">
     <button id="mapBack" aria-label="ナビに戻る" style="display:none;position:absolute;right:12px;top:12px;z-index:7;align-items:center;gap:5px;border:1px solid #34475c;border-radius:10px;background:rgba(14,23,34,.96);color:#cdd9e7;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer">← ナビに戻る</button>
     <div style="position:absolute;left:14px;top:14px;z-index:3;padding:5px 9px;border:1px solid #3b3927;border-radius:6px;color:#9a8f5c;background:rgba(13,17,22,.82);font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none">▲ GOAL</div>
@@ -85,7 +88,7 @@
 
   <div id="overlay" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,6,10,.78);backdrop-filter:blur(5px)"><section id="modal" role="dialog" aria-modal="true"></section></div>
   <div id="toast" role="status" aria-live="polite" style="position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,18px);opacity:0;padding:11px 17px;border:1px solid #34475c;border-radius:11px;background:#14202d;color:#d8e2ec;font-size:12px;pointer-events:none;transition:.25s;box-shadow:0 12px 38px rgba(0,0,0,.4)"></div>
-  <footer style="text-align:center;padding:0 18px 34px;color:#52657b;font-size:10px;line-height:1.7">このツリーの「習得」はゴールではなく、次の実践を始めるための通過点です。進捗はこのブラウザ内に保存されます。</footer>
+  <footer style="text-align:center;padding:0 18px 34px;color:#52657b;font-size:10px;line-height:1.7">このツリーの「習得」はゴールではなく、次の実践を始めるための通過点です。進捗はこのブラウザ内に保存されます。<br><a href="disclaimer.html" style="color:#5a7388">免責事項・ご利用上の注意</a></footer>
 </div>
 
 <script>
@@ -304,16 +307,16 @@
     };
     /* 作れるもの実例カタログ：欲望から入り、必要な技術の道のりをツリーで光らせる。 */
     const EXAMPLES=[
-      {title:"自己紹介ページ",blurb:"画像と文章を並べた、自分の名刺がわりのページ。",to:"htmlcss"},
-      {title:"今日の運勢アプリ",blurb:"ボタンを押すとランダムで結果が出る、動きのある画面。",to:"jsdom"},
-      {title:"閉じても残るToDoリスト",blurb:"入力した内容が、次に開いたときも残る。",to:"localstorage"},
-      {title:"友達に送れる公開ページ",blurb:"URLを送れば誰でも開ける場所に置く。",to:"static-deploy"},
-      {title:"天気を読み込んで表示",blurb:"外の公開データを呼んで画面に出す。",to:"http"},
-      {title:"AIが一言コメントする日記",blurb:"APIキーを安全に隠してAIにつなぐ。",to:"api"},
-      {title:"PCもスマホも同じ記録",blurb:"端末をまたいでデータを保存・共有する。",to:"database"},
-      {title:"みんなで使う・人ごとに分ける",blurb:"ログインして、各自のデータだけを見せる。",to:"auth"},
-      {title:"毎朝CSVを自動で集計",blurb:"大量ファイルをまとめ、決まった時間に自動実行。",to:"scheduler"},
-      {title:"繰り返し作業をPythonで",blurb:"手作業を短いスクリプトに置き換える。",to:"python"}
+      {id:"intro-page",title:"自己紹介ページ",blurb:"画像と文章を並べた、自分の名刺がわりのページ。",to:"htmlcss"},
+      {id:"fortune-app",title:"今日の運勢アプリ",blurb:"ボタンを押すとランダムで結果が出る、動きのある画面。",to:"jsdom"},
+      {id:"todo-keep",title:"閉じても残るToDoリスト",blurb:"入力した内容が、次に開いたときも残る。",to:"localstorage"},
+      {id:"share-page",title:"友達に送れる公開ページ",blurb:"URLを送れば誰でも開ける場所に置く。",to:"static-deploy"},
+      {id:"weather-view",title:"天気を読み込んで表示",blurb:"外の公開データを呼んで画面に出す。",to:"http"},
+      {id:"ai-diary",title:"AIが一言コメントする日記",blurb:"APIキーを安全に隠してAIにつなぐ。",to:"api"},
+      {id:"sync-record",title:"PCもスマホも同じ記録",blurb:"端末をまたいでデータを保存・共有する。",to:"database"},
+      {id:"multi-user",title:"みんなで使う・人ごとに分ける",blurb:"ログインして、各自のデータだけを見せる。",to:"auth"},
+      {id:"csv-cron",title:"毎朝CSVを自動で集計",blurb:"大量ファイルをまとめ、決まった時間に自動実行。",to:"scheduler"},
+      {id:"py-automate",title:"繰り返し作業をPythonで",blurb:"手作業を短いスクリプトに置き換える。",to:"python"}
     ];
     SKILLS.forEach(s=>{if(MISSIONS[s.id])s.mission=MISSIONS[s.id];if(DESIRES[s.id])s.desire=DESIRES[s.id];if(SAY[s.id])s.say=SAY[s.id];});
 
@@ -373,6 +376,70 @@
     let acquired=new Set();
     try{const saved=JSON.parse(localStorage.getItem(KEY)||"[]");acquired=new Set(saved.filter(id=>MAP[id]));}catch(e){}
     const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...acquired]));}catch(e){}};
+
+    /* ════ 継続のための状態：制作ログ・連続記録・今日のおさらい ════ */
+    const PKEY="vibeSkillTree.progress.v1"+ns;
+    let prog={built:{},days:[],daily:{},lastVisit:"",maxStage:0};
+    try{const sp=JSON.parse(localStorage.getItem(PKEY)||"{}");if(sp&&typeof sp==='object')prog=Object.assign(prog,sp);}catch(e){}
+    if(!prog.built||typeof prog.built!=='object')prog.built={};
+    if(!Array.isArray(prog.days))prog.days=[];
+    if(!prog.daily||typeof prog.daily!=='object')prog.daily={};
+    const saveProg=()=>{try{const c=Object.assign({},prog);delete c._welcome;localStorage.setItem(PKEY,JSON.stringify(c));}catch(e){}};
+    let booted=false;
+    const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const todayStr=()=>ymd(new Date());
+    const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d);};
+    const dayDiff=(a,b)=>Math.round((Date.parse(b+'T00:00:00')-Date.parse(a+'T00:00:00'))/86400000);
+    const dateSeed=str=>{let h=0;for(let i=0;i<str.length;i++)h=(h*31+str.charCodeAt(i))>>>0;return h;};
+    const builtCount=()=>Object.keys(logBuilt()).length;
+    function recordActivity(){/* 活動日は log.v1 から導出するため記録しない（後方互換の空関数） */}
+    /* やさしい連続記録：1日の抜けは自動の「おやすみ補填」で1回だけ繋ぐ。 */
+    function computeStreak(){
+      const set=logDays();let streak=0,cursor=todayStr(),grace=1,guard=0;
+      if(!set.has(cursor))cursor=addDays(cursor,-1);
+      while(guard++<800){
+        if(set.has(cursor)){streak++;cursor=addDays(cursor,-1);}
+        else if(grace>0&&streak>0){grace--;cursor=addDays(cursor,-1);}
+        else break;
+      }
+      return streak;
+    }
+    function weekStartStr(){const d=new Date();const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd);return ymd(d);}
+    function activeThisWeek(){const ws=weekStartStr();let n=0;logDays().forEach(x=>{if(x>=ws)n++;});return n;}
+    function todaysReview(){const pool=SKILLS.filter(s=>acquired.has(s.id)&&s.quiz);if(!pool.length)return null;return pool[dateSeed(todayStr())%pool.length];}
+
+    /* ════ Phase 1: イベントログ(log.v1) と 目指す作品(target.v1) ════
+       log.v1 を活動の「正本」にする。記録するのは acquire / review / build の3種だけ。
+       訪問は lastVisit にのみ残し、カレンダーには塗らない。
+       描画は移行期のあいだ progress.v1 のまま（Phase 4 で log.v1 からの導出へ切替）。 */
+    const LKEY="vibeSkillTree.log.v1"+ns, GKEY="vibeSkillTree.target.v1"+ns;
+    let activityLog=[];
+    try{const l=JSON.parse(localStorage.getItem(LKEY)||"[]");if(Array.isArray(l))activityLog=l.filter(e=>e&&typeof e.t==="number"&&e.type);}catch(e){}
+    const saveLog=()=>{try{localStorage.setItem(LKEY,JSON.stringify(activityLog));}catch(e){}};
+    function logEvent(type,id,extra){const ev=Object.assign({t:Date.now(),type:type,id:id||null},extra||{});activityLog.push(ev);saveLog();return ev;}
+    /* log.v1 からの導出（Phase 4）：カレンダー・連続記録・今週・制作ログ・おさらいの正本。 */
+    const evDay=e=>ymd(new Date(e.t));
+    function logDays(){const s=new Set();for(let i=0;i<activityLog.length;i++)s.add(evDay(activityLog[i]));return s;}
+    function logBuilt(){const m={};for(let i=0;i<activityLog.length;i++){const e=activityLog[i];if(e.type==='build'&&e.id){const d=evDay(e);if(!m[e.id]||m[e.id]<d)m[e.id]=d;}}return m;}
+    function reviewedOn(ds){return activityLog.some(e=>e.type==='review'&&evDay(e)===ds);}
+    /* 目指している作品は「作例」単位で持つ＝同じスキルへ向かう別作例を区別できる。 */
+    let activeTarget=null;
+    try{const g=JSON.parse(localStorage.getItem(GKEY)||"null");if(g&&g.skillId&&MAP[g.skillId])activeTarget=g;}catch(e){}
+    function setTarget(t){activeTarget=(t&&t.skillId&&MAP[t.skillId])?t:null;try{if(activeTarget)localStorage.setItem(GKEY,JSON.stringify(activeTarget));else localStorage.removeItem(GKEY);}catch(e){}}
+    /* 既存 progress.v1 → log.v1 への一度きりの移行。過去の正確な時刻が無い分は migrated 印を付ける。 */
+    try{
+      if(!prog.logMigrated){
+        const dayT=ds=>{const t=Date.parse((ds||todayStr())+'T12:00:00');return isNaN(t)?Date.now():t;};
+        const evs=[];
+        Object.keys(prog.built||{}).forEach(id=>evs.push({t:dayT(prog.built[id]),type:'build',id:id,migrated:true}));
+        Object.keys(prog.daily||{}).forEach(ds=>{if(prog.daily[ds])evs.push({t:dayT(ds),type:'review',id:null,migrated:true});});
+        [...acquired].forEach(id=>evs.push({t:dayT(prog.lastVisit),type:'acquire',id:id,migrated:true}));
+        /* 過去の活動日（prog.days）も legacy イベントとして残し、カレンダー・連続記録の履歴を維持する。 */
+        (prog.days||[]).forEach(ds=>evs.push({t:dayT(ds),type:'legacy',id:null,migrated:true}));
+        if(evs.length){evs.sort((a,b)=>a.t-b.t);activityLog=evs.concat(activityLog);saveLog();}
+        prog.logMigrated=true;saveProg();
+      }
+    }catch(e){}
 
     const reduced = !!props.reducedMotion || !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     const tree=q('#tree'), svg=q('#edges'), overlay=q('#overlay'), modal=q('#modal'), viewport=q('#viewport');
@@ -444,7 +511,7 @@
       b.style.cssText=`position:absolute;left:${s.x-w/2}px;top:${s.y}px;width:${w}px;height:${h}px;border:0;padding:0;background:transparent;color:inherit;cursor:pointer;z-index:4;transition:transform .17s ease,filter .25s ease`;
       b.style.setProperty('--accent',`var(--${s.kind})`);
       b.dataset.id=s.id;
-      b.innerHTML=`<span data-shell style="${shellCSS}"></span><span data-face style="${faceCSS}"><span data-name style="font-size:${s.final?17:13}px;font-weight:750;line-height:1.27;text-align:center;transition:.3s"></span><span data-tag style="margin-top:5px;font-size:${s.final?9:8}px;letter-spacing:.16em;text-transform:uppercase;transition:.3s;font-family:${MONO}">${s.tag}</span><span data-mark style="position:absolute;right:18px;top:9px;font-size:11px;color:transparent;transition:.3s">✓</span></span><span data-pub style="position:absolute;left:16px;top:8px;width:7px;height:7px;border-radius:50%;background:transparent;z-index:5;transition:.3s"></span><span data-badge style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.14em;padding:2px 8px;border-radius:99px;background:var(--accent);color:#08111a;font-weight:800;white-space:nowrap;opacity:0;transition:.3s;z-index:6;pointer-events:none">NEXT</span>`;
+      b.innerHTML=`<span data-shell style="${shellCSS}"></span><span data-face style="${faceCSS}"><span data-name style="font-size:${s.final?17:13}px;font-weight:750;line-height:1.27;text-align:center;transition:.3s"></span><span data-tag style="margin-top:5px;font-size:${s.final?9:7.5}px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;transition:.3s;font-family:${MONO}">${s.tag}</span><span data-mark style="position:absolute;right:18px;top:9px;font-size:11px;color:transparent;transition:.3s">✓</span></span><span data-pub style="position:absolute;left:16px;top:8px;width:7px;height:7px;border-radius:50%;background:transparent;z-index:5;transition:.3s"></span><span data-badge style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.14em;padding:2px 8px;border-radius:99px;background:var(--accent);color:#08111a;font-weight:800;white-space:nowrap;opacity:0;transition:.3s;z-index:6;pointer-events:none">NEXT</span>`;
       b.querySelector('[data-name]').textContent=s.name;
       b.addEventListener('mouseenter',()=>{if(!gesture.moved)b.style.transform='translateY(-3px)';});
       b.addEventListener('mouseleave',()=>{b.style.transform='translateY(0)';});
@@ -497,7 +564,11 @@
 
     /* 次の一歩：状態から「いま押すべき1アクション」を決める。固定バー主ボタンとモバイルカードで共用。 */
     function nextStep(){
-      if(!acquired.size) return {label:'作りたいものを選ぶ',hint:'まず目的・完成条件から',run:()=>renderExamples()};
+      if(!acquired.size){
+        const tf=targetFirstStep();
+        if(tf)return {label:`次の一歩：${MAP[tf].name}`,hint:MAP[tf].tag,skill:MAP[tf],run:()=>{focusNode(tf);openSkill(MAP[tf]);}};
+        return {label:'作りたいものを選ぶ',hint:'まず目的・完成条件から',run:()=>renderExamples()};
+      }
       let avail=SKILLS.filter(s=>available(s));
       const onPath=avail.filter(s=>recommendedPath.has(s.id));
       if(onPath.length)avail=onPath;
@@ -526,16 +597,17 @@
         const stageLabel=passed.length?passed[passed.length-1].label:'まず目的から';
         const est=ns.skill?(ns.skill.mission?'約5分で要点 ＋ 15分ミッション':'約5分で要点をつかむ'):'';
         el.innerHTML=`
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:13px;color:#86e3c0;font-size:10px;letter-spacing:.15em;font-family:${MONO}"><span style="width:6px;height:6px;border-radius:50%;background:var(--quality);box-shadow:0 0 8px var(--quality)"></span>${acquired.size?'続きはここから':'ここから始める'}</div>
           <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">現在地</div>
           <div style="margin:4px 0 16px;color:var(--quality);font-size:17px;font-weight:800">${stageLabel}（${passed.length}/${MILESTONES.length}段階）</div>
           <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">次にやること</div>
           <div style="margin:4px 0 2px;color:#e3ebf5;font-size:18px;font-weight:800;line-height:1.4">${ns.label}</div>
           ${ns.hint?`<div style="color:#8294aa;font-size:12px">${ns.hint}</div>`:''}
           ${est?`<div style="margin-top:4px;color:#667c94;font-size:12px">${est}</div>`:''}
-          <button data-mnext style="${css.primary};margin-top:18px">${acquired.size?'続きから始める':'作りたいものを選ぶ'}</button>
+          <button data-mnext style="${css.primary};margin-top:18px">${acquired.size?'続きから始める':(ns.skill?'始める':'作りたいものを選ぶ')}</button>
           <button data-mmap style="${css.secondary}">全体マップを見る</button>`;
         el.querySelector('[data-mnext]').onclick=ns.run;
-        el.querySelector('[data-mmap]').onclick=()=>{document.body.classList.add('map-open');requestAnimationFrame(()=>recenter());};
+        el.querySelector('[data-mmap]').onclick=()=>{document.body.classList.add('map-open');requestAnimationFrame(()=>{recenter();if(window.innerWidth>640)viewport.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});});};
       }
     }
     function refresh(){
@@ -554,6 +626,7 @@
       q('#fill').style.width=Math.round(stage/MILESTONES.length*100)+'%';
       const pb=q('#progbar');if(pb){pb.setAttribute('aria-valuenow',String(stage));pb.setAttribute('aria-valuetext',stage?`${passed[passed.length-1].label}（${stage}/${MILESTONES.length}段階）`:'まだ始まり');}
       renderMobileNav();
+      renderDashboard();
     }
 
     /* ── modal ── */
@@ -574,11 +647,16 @@
       if(s.anyOf){const ok=(s.anyOf||[]).some(id=>acquired.has(id));rows.push(`<div style="display:flex;gap:8px;align-items:center;margin-top:6px;color:${ok?'#70dcb7':'#7e91a7'};font-size:12px"><i style="font-style:normal;width:14px;text-align:center">${ok?'✓':'○'}</i><span>次のどれか：${s.anyOf.map(id=>MAP[id].name).join('／')}</span></div>`);}
       return `<div style="margin:2px 0 18px;padding:13px 14px;border:1px solid #26364a;border-radius:11px;background:#0b131e"><h3 style="margin:0 0 8px;color:#71869e;font-size:10px;letter-spacing:.12em">解放条件</h3>${rows.join('')}</div>`;
     }
-    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" target="_blank" rel="noopener" style="${css.learn}">もっと詳しく学ぶ →</a>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">📖 まずはこの画面で、3分で要点をつかもう</div>`;};
+    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" target="_blank" rel="noopener" style="${css.learn}">もっと詳しく学ぶ →</a><p style="margin:-10px 0 16px;color:#667c94;font-size:11px;line-height:1.6;text-align:center">別タブで開きます。読み終えたら、このタブに戻って解放しましょう。</p>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">まずはこの画面で、3分で要点をつかもう</div>`;};
     const note=t=>`<p style="margin:12px 0 0;color:#667c94;font-size:11px;line-height:1.6;text-align:center">${t}</p>`;
-    const missionBlock=s=>{ if(!s.mission)return ""; return `<div style="margin:12px 0 0;padding:13px 14px;border-radius:11px;border:1px solid color-mix(in srgb,var(--accent) 38%,#2a394c);background:#0c1622"><span style="display:block;margin-bottom:7px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:10px;letter-spacing:.14em;font-family:${MONO}">⏱ 15分ミッション</span><p style="margin:0 0 11px;color:#cdd8e6;font-size:13px;line-height:1.7">${s.mission.do}</p>${s.mission.prompt?`<button data-copy style="width:100%;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--accent) 50%,#34475c);border-radius:9px;background:#0e1722;color:color-mix(in srgb,var(--accent) 72%,white);cursor:pointer;font-weight:650;font-size:12px;font-family:inherit">AIに渡す依頼文をコピー 📋</button>`:""}</div>`; };
+    const missionBlock=(s,allowBuilt)=>{ if(!s.mission)return "";
+      const built=logBuilt(),did=!!built[s.id];
+      const buildUI=!allowBuilt?'':(did
+        ? `<div style="margin-top:10px;display:flex;align-items:center;gap:8px;color:#86e3c0;font-size:12px"><span>✓ 制作ログに追加済み（${built[s.id]}）</span><button data-unbuilt style="margin-left:auto;border:1px solid #2c3c50;background:transparent;color:#8294aa;border-radius:7px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:inherit">取り消す</button></div>`
+        : `<button data-built style="width:100%;margin-top:10px;padding:10px 12px;border:0;border-radius:9px;background:linear-gradient(100deg,color-mix(in srgb,var(--quality) 80%,white),var(--quality));color:#08131a;cursor:pointer;font-weight:750;font-size:12px;font-family:inherit">作れた！制作ログに記録する</button>`);
+      return `<div style="margin:12px 0 0;padding:13px 14px;border-radius:11px;border:1px solid color-mix(in srgb,var(--accent) 38%,#2a394c);background:#0c1622"><span style="display:block;margin-bottom:7px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:10px;letter-spacing:.14em;font-family:${MONO}">15分ミッション</span><p style="margin:0 0 11px;color:#cdd8e6;font-size:13px;line-height:1.7">${s.mission.do}</p>${s.mission.prompt?`<button data-copy style="width:100%;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--accent) 50%,#34475c);border-radius:9px;background:#0e1722;color:color-mix(in srgb,var(--accent) 72%,white);cursor:pointer;font-weight:650;font-size:12px;font-family:inherit">AIに渡す依頼文をコピー</button>`:""}${buildUI}</div>`; };
     const desireBlock=s=>{ if(!s.desire)return ""; return `<div style="margin:14px 0 0;padding:14px 15px;border-radius:12px;border:1px solid #26364a;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 9%,#0c1420),#0b121b)"><span style="display:block;margin-bottom:8px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:10px;letter-spacing:.14em;font-family:${MONO}">次はどうしたい？</span><p style="margin:0 0 12px;color:#e3ebf5;font-size:14px;font-weight:600;line-height:1.7">${s.desire.q}</p><div style="display:grid;gap:8px">${s.desire.opts.map(o=>`<button data-desire data-to="${o.to}" style="display:flex;flex-direction:column;gap:3px;width:100%;padding:11px 13px;border:1px solid #2c3c50;border-radius:10px;background:#111c29;color:#cdd9e7;text-align:left;cursor:pointer;line-height:1.5;font-family:inherit"><b style="font-size:13.5px;font-weight:700">${o.label}</b><span style="color:color-mix(in srgb,var(--accent) 65%,#7d90a6);font-size:11px">→ ${MAP[o.to]?MAP[o.to].name:o.to}</span></button>`).join('')}</div><p style="margin:11px 0 0;color:#667c94;font-size:11px;text-align:center">どれも正解。選ぶと、その技術がツリーで光ります。</p></div>`; };
-    const sayBlock=s=>{ if(!s.say)return ""; return `<div style="margin:12px 0 0;padding:12px 14px;border-radius:11px;border:1px solid #26364a;background:#0b131e"><span style="display:block;margin-bottom:7px;color:#8da4bc;font-size:10px;letter-spacing:.13em;font-family:${MONO}">🗣 AIへの言い方</span><p style="margin:0;color:#cdd8e6;font-size:13px;line-height:1.8">${s.say}</p></div>`; };
+    const sayBlock=s=>{ if(!s.say)return ""; return `<div style="margin:12px 0 0;padding:12px 14px;border-radius:11px;border:1px solid #26364a;background:#0b131e"><span style="display:block;margin-bottom:7px;color:#8da4bc;font-size:10px;letter-spacing:.13em;font-family:${MONO}">AIへの言い方</span><p style="margin:0;color:#cdd8e6;font-size:13px;line-height:1.8">${s.say}</p></div>`; };
     const consultBlock=s=>`<button data-consult style="width:100%;margin:10px 0 0;padding:11px 13px;border:1px solid color-mix(in srgb,var(--common) 42%,#304156);border-radius:10px;background:color-mix(in srgb,var(--common) 8%,#0e1722);color:color-mix(in srgb,var(--common) 70%,white);cursor:pointer;font-weight:700;font-size:12px;font-family:inherit">「${s.tag}」を使うべきかAIに相談する</button>`;
 
     function currentStackSkills(){
@@ -635,29 +713,35 @@
         <textarea data-next rows="2" placeholder="例：PCとスマホで同じ記録を見たい" style="width:100%;resize:vertical;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.6 inherit">${seed?seed.name:''}</textarea>
         <label style="display:block;margin:12px 0 5px;color:#8da4bc;font-size:10px;letter-spacing:.1em">条件・制約</label>
         <input data-constraints value="初心者、低コスト、管理対象を増やしすぎない" style="width:100%;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.5 inherit">
-        <button data-copy-stack style="${css.primary};margin-top:15px">AIへの技術選定相談文をコピー</button>
-        ${note('「おすすめを教えて」ではなく、現在地・要求・制約・移行条件までAIへ渡します。')}
+        <button data-copy-stack style="${css.primary};margin-top:15px">相談文をコピー</button>
+        <div style="display:flex;gap:9px;margin-top:9px">
+          <button data-open-gpt style="flex:1;padding:11px 10px;border:1px solid #2c3c50;border-radius:10px;background:#0e1722;color:#cdd9e7;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">コピーして ChatGPT を開く ↗</button>
+          <button data-open-claude style="flex:1;padding:11px 10px;border:1px solid #2c3c50;border-radius:10px;background:#0e1722;color:#cdd9e7;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">コピーして Claude を開く ↗</button>
+        </div>
+        ${note('「おすすめを教えて」ではなく、現在地・要求・制約・移行条件までAIへ渡します。開いたタブに貼り付け（Ctrl/⌘+V）してください。')}
       </div>`;
       bindClose();addHovers();
-      q('#modal [data-copy-stack]').onclick=()=>{
-        const text=stackPrompt(q('#modal [data-project]').value.trim(),q('#modal [data-next]').value.trim(),q('#modal [data-constraints]').value.trim(),seed);
-        copyText(text,'技術選定の相談文をコピーしました');
-      };
+      const buildStackText=()=>stackPrompt(q('#modal [data-project]').value.trim(),q('#modal [data-next]').value.trim(),q('#modal [data-constraints]').value.trim(),seed);
+      q('#modal [data-copy-stack]').onclick=()=>copyText(buildStackText(),'技術選定の相談文をコピーしました');
+      const handoff=url=>{ copyText(buildStackText(),'相談文をコピーしました。開いたタブに貼り付け（Ctrl/⌘+V）してください'); window.open(url,'_blank','noopener'); };
+      const og=q('#modal [data-open-gpt]');if(og)og.onclick=()=>handoff('https://chatgpt.com/');
+      const oc=q('#modal [data-open-claude]');if(oc)oc.onclick=()=>handoff('https://claude.ai/new');
     }
     function renderExamples(){
       const shell={kind:'web',tag:'WHAT CAN I MAKE',name:'作れるものから選ぶ'};
       showOverlay();setModalShell(shell);
-      const cards=EXAMPLES.map(ex=>{const t=MAP[ex.to];return `<button data-example data-to="${ex.to}" style="display:block;width:100%;text-align:left;padding:13px 14px;border:1px solid #2a394c;border-radius:11px;background:#101a27;color:#cdd9e7;cursor:pointer;font-family:inherit;line-height:1.6"><b style="display:block;font-size:14px;color:#e3ebf5">${ex.title}</b><span style="display:block;margin-top:3px;font-size:12px;color:#9fb0c3">${ex.blurb}</span><span style="display:inline-block;margin-top:8px;font-size:10.5px;color:color-mix(in srgb,var(--accent) 72%,#7d90a6);font-family:${MONO}">→ ${t?t.name:ex.to}（${t?t.tag:''}）への道のりが光ります</span></button>`;}).join('');
+      const cards=EXAMPLES.map(ex=>{const t=MAP[ex.to];return `<button data-example data-ex="${ex.id}" data-to="${ex.to}" style="display:block;width:100%;text-align:left;padding:13px 14px;border:1px solid #2a394c;border-radius:11px;background:#101a27;color:#cdd9e7;cursor:pointer;font-family:inherit;line-height:1.6"><b style="display:block;font-size:14px;color:#e3ebf5">${ex.title}</b><span style="display:block;margin-top:3px;font-size:12px;color:#9fb0c3">${ex.blurb}</span><span style="display:inline-block;margin-top:8px;font-size:10.5px;color:color-mix(in srgb,var(--accent) 72%,#7d90a6);font-family:${MONO}">→ ${t?t.name:ex.to}（${t?t.tag:''}）への道のりが光ります</span></button>`;}).join('');
       modal.innerHTML=head(shell,'EXAMPLES')+`<div style="padding:21px 24px 24px"><p style="margin:0 0 14px;color:#cbd6e3;font-size:13px;line-height:1.85">「何を作るか」から選ぶと、そこに必要な技術の道のりがツリーで光ります。小さいものから選んでOK。迷ったら一番上から。</p><div style="display:grid;gap:9px">${cards}</div></div>`;
       bindClose();addHovers();
       qa('#modal [data-example]').forEach(b=>{
         b.onmouseenter=()=>b.style.borderColor='#526981';
         b.onmouseleave=()=>b.style.borderColor='#2a394c';
-        b.onclick=()=>{const t=MAP[b.dataset.to];if(t)renderPathGuide(t);};
+        b.onclick=()=>{const ex=EXAMPLES.find(x=>x.id===b.dataset.ex);const t=ex&&MAP[ex.to];if(t)renderPathGuide(t,ex);};
       });
     }
-    function renderPathGuide(target){
+    function renderPathGuide(target,example){
       const path=unmetPath(target.id);
+      if(example)setTarget({exampleId:example.id,title:example.title,skillId:example.to,selectedAt:Date.now()});
       recommendedPath=new Set(path);refresh();
       const shell={kind:target.kind||'common',tag:'RECOMMENDED PATH',name:'この要求に必要な追加候補'};
       showOverlay();setModalShell(shell);
@@ -678,6 +762,8 @@
       const cp=q('#modal [data-copy]'); if(cp)cp.onclick=()=>copyText((s.mission&&s.mission.prompt)||"",'依頼文をコピーしました');
       qa('#modal [data-desire]').forEach(b=>b.onclick=()=>{const target=MAP[b.dataset.to];if(target)renderPathGuide(target);});
       const consult=q('#modal [data-consult]');if(consult)consult.onclick=()=>renderStackGuide(s);
+      const bd=q('#modal [data-built]');if(bd)bd.onclick=()=>{logEvent('build',s.id,activeTarget?{targetId:activeTarget.exampleId}:null);renderDashboard();toast('制作ログに追加しました');if(acquired.has(s.id))renderDone(s);};
+      const ub=q('#modal [data-unbuilt]');if(ub)ub.onclick=()=>{activityLog=activityLog.filter(e=>!(e.type==='build'&&e.id===s.id));saveLog();renderDashboard();if(acquired.has(s.id))renderDone(s);};
     }
     const bindClose=()=>{const b=q('#modal [data-close]');if(b)b.onclick=closeModal;};
     const modalObserver=new MutationObserver(()=>requestAnimationFrame(()=>q('#modal [data-close]')?.focus()));
@@ -711,31 +797,44 @@
       const sf=q('#modal [data-startfirst]');if(sf)sf.onclick=()=>{closeModal();focusNode(first);openSkill(MAP[first]);};
       q('#modal [data-back]').onclick=closeModal;
     }
-    function renderDone(s){ modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s)}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);q('#modal [data-back]').onclick=closeModal; }
+    function renderDone(s){ modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s,true)}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);q('#modal [data-back]').onclick=closeModal; }
     function renderLearn(s){
-      const progression=hasDependent(s.id)?"習得すると、上につながるスキルが解放されます。":"専門化スキルです。必要になったときに選択できます。";
-      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"CHALLENGE":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${s.quiz?`<button data-toquiz style="${css.primary}">理解度チェックへ</button>`:`<button data-acquire style="${css.primary}">このルートから始める</button>`}${consultBlock(s)}${note(progression)}</div>`;
+      const progression=s.entry?"まず解放して始めましょう。理解度チェックは任意です。":hasDependent(s.id)?"習得すると、上につながるスキルが解放されます。":"専門化スキルです。必要になったときに選択できます。";
+      /* entryスキル（最初の一歩）は、テストの前にまず解放して成功体験を渡す。クイズは任意挑戦に。 */
+      const actions=s.entry
+        ? `<button data-acquire style="${css.primary}">ここから始める（解放）</button>${s.quiz?`<button data-toquiz style="${css.secondary}">理解度チェックに挑戦（任意）</button>`:''}`
+        : s.quiz
+          ? `<button data-toquiz style="${css.primary}">理解度チェックへ</button>`
+          : `<button data-acquire style="${css.primary}">このルートから始める</button>`;
+      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"CHALLENGE":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${actions}${consultBlock(s)}${note(progression)}</div>`;
       bindClose();addHovers();wireExtras(s);
-      if(s.quiz)q('#modal [data-toquiz]').onclick=()=>renderQuiz(s); else q('#modal [data-acquire]').onclick=()=>acquire(s);
+      const aq=q('#modal [data-acquire]');if(aq)aq.onclick=()=>acquire(s);
+      const tq=q('#modal [data-toquiz]');if(tq)tq.onclick=()=>renderQuiz(s);
     }
-    function renderQuiz(s){
+    function renderQuiz(s,review){
       const shown=s.quiz.opts.map((text,i)=>({text,correct:i===s.quiz.a}));
       for(let i=shown.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shown[i],shown[j]]=[shown[j],shown[i]];}
-      modal.innerHTML=head(s,"CHECK")+`<div style="padding:21px 24px 24px"><p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">SCENARIO</span>${s.quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">習得する</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">解説に戻る</button></div></div>`;
+      const passLabel=review?'おさらいを完了する':'習得する';
+      const backLabel=review?'スキルの詳細に戻る':'解説に戻る';
+      modal.innerHTML=head(s,review?"REVIEW":"CHECK")+`<div style="padding:21px 24px 24px">${review?`<p style="margin:0 0 12px;color:#86e3c0;font-size:11px;letter-spacing:.04em">今日のおさらい — 一度習得した内容を、忘れないうちにもう一度。</p>`:''}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">SCENARIO</span>${s.quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">${passLabel}</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">${backLabel}</button></div></div>`;
       bindClose();addHovers();
       const pass=q('#modal [data-pass]'),retry=q('#modal [data-retry]'),fb=q('#modal [data-fb]');
       qa('#modal [data-opt]').forEach(o=>o.onclick=()=>{
         qa('#modal [data-opt]').forEach(x=>{x.disabled=true;x.dataset.answered="1";if(x.dataset.correct==="true"){x.style.borderColor='var(--quality)';x.style.background='#0d2a22';x.style.color='#a8f1d5';}});
         if(o.dataset.correct==="true"){
           pass.disabled=false;pass.style.opacity='1';pass.style.cursor='pointer';
-          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${s.quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+missionBlock(s);
-          wireExtras(s);
+          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${s.quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+(review?'':missionBlock(s));
+          if(!review)wireExtras(s);
         }else{
           o.style.borderColor='var(--danger)';o.style.background='#2b1518';o.style.color='#ffc1bd';retry.hidden=false;
           fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#2b1518;color:#ffaaa4">おしい。緑が最適解です。${s.quiz.why||""}${s.quiz.hint?" ヒント："+s.quiz.hint:""}</div>`;
         }
       });
-      pass.onclick=()=>{if(!pass.disabled)acquire(s);};retry.onclick=()=>renderQuiz(s);q('#modal [data-backlearn]').onclick=()=>renderLearn(s);
+      pass.onclick=()=>{ if(pass.disabled)return;
+        if(review){ logEvent('review',s.id);renderDashboard();toast('今日のおさらい完了！また明日');closeModal(); }
+        else acquire(s); };
+      retry.onclick=()=>renderQuiz(s,review);
+      q('#modal [data-backlearn]').onclick=()=>{ review?renderDone(s):renderLearn(s); };
     }
     function renderFinal(s){
       const items=["作りたいものと完成条件を言葉にした","実装を確認できる小さなタスクに分けた","AIが生成したコードと差分を確認した","実際に動かし、失敗条件もテストした","変更を保存し、他の人が試せる状態にした","結果を見て、改善を一つ加えた"];
@@ -784,15 +883,129 @@
       panX=r.width/2-s.x*scale; panY=r.height/2-(s.y+44)*scale; apply();
       const e=els[id]; if(e&&!reduced)e.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.1)',filter:'brightness(1.85)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:1100,easing:'ease-out'});
     }
-    function acquire(s){ acquired.add(s.id);recommendedPath.delete(s.id);save();refresh();celebrate(s);
+    /* ── ダッシュボード：連続記録・今日のおさらい・いま作れること・制作ログ ── */
+    function capabilityHTML(){
+      if(!acquired.size)return 'まだ始まったばかり。最初のスキルを解放すると、ここに<b>「いま作れること」</b>が表示されます。';
+      const bn=builtCount();
+      return `いま、あなたは <b style="color:#bfe7d6">${stackPattern()}</b> を作れます。`+(bn?` これまで <b style="color:#bfe7d6">${bn}個</b> 作りました。`:'');
+    }
+    function shareSummary(){
+      const passed=MILESTONES.filter(m=>m.test(acquired)),stage=passed.length;
+      const label=stage?passed[stage-1].label:'まず目的から';
+      return `バイブコーディング スキルツリー\n到達段階 ${stage}/${MILESTONES.length}（${label}）／習得 ${acquired.size}・制作 ${builtCount()}\nhttps://yongouki.github.io/vibe-coding/`;
+    }
+    function doShare(){ const text=shareSummary();
+      if(navigator.share){navigator.share({title:'バイブコーディング スキルツリー',text}).catch(()=>{});}
+      else copyText(text,'共有用テキストをコピーしました'); }
+    function calendarHTML(){
+      const set=logDays(),WEEKS=10,today=new Date();
+      const start=new Date();const wd=(start.getDay()+6)%7;start.setDate(start.getDate()-wd-(WEEKS-1)*7);
+      let cols='';
+      for(let w=0;w<WEEKS;w++){let col='';
+        for(let d=0;d<7;d++){const cur=new Date(start);cur.setDate(start.getDate()+w*7+d);const key=ymd(cur);
+          const future=cur>today,on=set.has(key);
+          const bg=future?'transparent':on?'var(--quality)':'#172430';
+          col+=`<span title="${key}${on?' ・学習':''}" style="width:11px;height:11px;border-radius:3px;background:${bg};display:block"></span>`;}
+        cols+=`<div style="display:grid;grid-template-rows:repeat(7,11px);gap:3px">${col}</div>`;}
+      return `<div style="display:flex;gap:3px;overflow-x:auto;padding-bottom:2px">${cols}</div>`;
+    }
+    function buildLogHTML(){
+      /* 作品単位のログ：build イベントをそのまま並べ、targetId から作例名を引く（無ければスキル名）。 */
+      const builds=activityLog.filter(e=>e.type==='build'&&e.id);
+      if(!builds.length)return `<p style="margin:0;color:#71869e;font-size:12px;line-height:1.7">まだありません。スキルを習得して <b style="color:#9fb0c3">15分ミッション</b> を作ると、ここに「作った証」が残ります。</p>`;
+      const items=builds.slice().sort((a,b)=>a.t-b.t).reverse().map(e=>{
+        const ex=e.targetId?EXAMPLES.find(x=>x.id===e.targetId):null;
+        return {title:ex?ex.title:(MAP[e.id]?MAP[e.id].name:e.id),tag:MAP[e.id]?MAP[e.id].tag:'',date:evDay(e)};
+      });
+      return `<div style="display:grid;gap:7px">${items.map(it=>`<div style="display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid #213040;border-radius:9px;background:#0d1722"><span style="color:var(--quality)">✓</span><span style="flex:1;min-width:0"><b style="display:block;color:#dbe6f1;font-size:13px">${it.title}</b><span style="color:#71869e;font-size:10px;font-family:${MONO}">${it.tag}</span></span><span style="color:#7d90a6;font-size:11px;font-family:${MONO}">${it.date}</span></div>`).join('')}</div>`;
+    }
+    /* 目標バナー：index で選んだ作品（target.v1）への現在地を常時表示する。 */
+    function targetFirstStep(){
+      if(!(activeTarget&&MAP[activeTarget.skillId])||acquired.has(activeTarget.skillId))return null;
+      const path=unmetPath(activeTarget.skillId);
+      for(let i=0;i<path.length;i++){if(available(MAP[path[i]]))return path[i];}
+      return null;
+    }
+    function targetBannerHTML(){
+      const primMini="border:0;border-radius:9px;padding:8px 13px;font-size:12px;font-weight:750;cursor:pointer;font-family:inherit;background:linear-gradient(100deg,color-mix(in srgb,var(--common) 82%,white),var(--common));color:#08131a";
+      const ghostMini="border:1px solid #2c3c50;background:#101926;color:#9fb2c4;border-radius:8px;padding:7px 11px;font-size:11px;cursor:pointer;font-family:inherit";
+      const box=(inner,border)=>`<div style="margin-bottom:12px;padding:13px 15px;border:1px solid ${border};border-radius:13px;background:linear-gradient(150deg,#0f1925,#0b121b)">${inner}</div>`;
+      if(activeTarget&&MAP[activeTarget.skillId]){
+        if(acquired.has(activeTarget.skillId)){
+          return box(`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="flex:1;min-width:140px;font-size:13px;color:#bfe7d6">「<b>${activeTarget.title}</b>」に必要なスキルがそろいました。作って、制作ログに残そう。</span><button data-tgt-new style="${ghostMini}">別の作品を選ぶ</button></div>`,'color-mix(in srgb,var(--quality) 32%,#26364a)');
+        }
+        const remain=unmetPath(activeTarget.skillId).length, first=targetFirstStep();
+        return box(`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:150px"><div style="font-family:${MONO};font-size:9px;letter-spacing:.14em;color:#71869e">目指している作品</div><div style="margin-top:3px;font-size:15px;font-weight:800;color:#e7eef6">${activeTarget.title}<span style="margin-left:8px;font-size:11px;font-weight:600;color:#8aa0b3">あと ${remain} スキル</span></div></div>
+          ${first?`<button data-tgt-go style="${primMini}">次の一歩：${MAP[first].name} →</button>`:''}
+          <button data-tgt-new style="${ghostMini}">変更</button>
+        </div>`,'color-mix(in srgb,var(--common) 32%,#26364a)');
+      }
+      return box(`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="flex:1;min-width:150px;font-size:13px;color:#aebfce">目標がまだありません。作りたいものを選ぶと、そこまでの道のりが光ります。</span><a href="index.html" style="${primMini};text-decoration:none;display:inline-flex;align-items:center">作りたいものを選ぶ →</a></div>`,'#26364a');
+    }
+    function renderDashboard(){
+      const el=q('#dashboard');if(!el)return;
+      const streak=computeStreak(),wk=activeThisWeek(),GOAL=2;
+      const rev=todaysReview(),dDone=reviewedOn(todayStr()),back=prog._welcome;
+      const card="padding:13px 15px;border:1px solid #1e2b3b;border-radius:13px;background:linear-gradient(165deg,#0f1925,#0a121b)";
+      const kick=`font-size:9px;letter-spacing:.15em;font-family:${MONO};color:#71869e`;
+      const daily = !acquired.size
+        ? `<div style="${kick}">今日の一歩</div><div style="margin-top:5px;color:#cdd8e6;font-size:13px;line-height:1.6">まずは最初のスキルを解放しよう。</div>`
+        : !rev
+          ? `<div style="${kick}">今日の一歩</div><div style="margin-top:5px;color:#cdd8e6;font-size:13px;line-height:1.6">スキルを習得すると、毎日1問の「おさらい」が出ます。</div>`
+          : dDone
+            ? `<div style="${kick}">今日のおさらい</div><div style="margin-top:7px;color:#86e3c0;font-size:15px;font-weight:750">✓ 完了！また明日</div>`
+            : `<div style="${kick}">今日のおさらい・1問</div><div style="margin:5px 0 9px;color:#cdd8e6;font-size:13px;line-height:1.5">「${rev.name}」を1分で確認</div><button data-daily style="width:100%;padding:9px 12px;border:0;border-radius:9px;background:linear-gradient(100deg,color-mix(in srgb,var(--quality) 80%,white),var(--quality));color:#08131a;font-weight:750;font-size:12px;cursor:pointer;font-family:inherit">おさらいする</button>`;
+      el.innerHTML=`
+        ${targetBannerHTML()}
+        ${back?`<div style="margin-bottom:12px;padding:11px 14px;border:1px solid color-mix(in srgb,var(--quality) 32%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--quality) 7%,#0d1622);color:#bfe7d6;font-size:12.5px">おかえりなさい。前回から <b>${back.days}日</b>ぶり。続きからどうぞ。</div>`:''}
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <div style="${card}"><div style="${kick}">連続学習</div><div style="margin-top:5px;font-size:23px;font-weight:850;color:#e7eef6">${streak}<span style="font-size:12px;font-weight:600;color:#8294aa"> 日</span></div></div>
+          <div style="${card}"><div style="${kick}">今週さわった日</div><div style="margin-top:5px;font-size:23px;font-weight:850;color:#e7eef6">${wk}<span style="font-size:12px;font-weight:600;color:#8294aa">/${GOAL} 日</span></div><div style="margin-top:3px;color:${wk>=GOAL?'#86e3c0':'#71869e'};font-size:10.5px">${wk>=GOAL?'今週の目標達成！':'週に2日でも、続けば力になります'}</div></div>
+          <div style="${card}">${daily}</div>
+        </div>
+        <div style="margin:11px 0 0;padding:12px 15px;border:1px solid #1e2b3b;border-radius:12px;background:#0c1420;color:#aebfce;font-size:13px;line-height:1.7">${capabilityHTML()}</div>
+        <div style="margin-top:14px"><div style="${kick};margin-bottom:8px">学習カレンダー（直近10週）</div>${calendarHTML()}</div>
+        <details style="margin-top:14px">
+          <summary style="cursor:pointer;color:#8da4bc;font-size:12px;padding:6px 2px">▸ 作ったもの・制作ログ${builtCount()?'（'+builtCount()+'）':''}</summary>
+          <div style="margin-top:12px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="${kick}">作ったもの</span><button data-share style="margin-left:auto;border:1px solid #2c3c50;background:#101926;color:#9fb2c4;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit">達成を共有</button></div>${buildLogHTML()}</div>
+        </details>`;
+      const db=q('#dashboard [data-daily]');if(db)db.onclick=openDailyReview;
+      const sh=q('#dashboard [data-share]');if(sh)sh.onclick=doShare;
+      const tg=q('#dashboard [data-tgt-go]');if(tg)tg.onclick=()=>{const f=targetFirstStep();if(f){focusNode(f);openSkill(MAP[f]);}};
+      const tn=q('#dashboard [data-tgt-new]');if(tn)tn.onclick=()=>renderExamples();
+    }
+    function openDailyReview(){const s=todaysReview();if(!s)return;showOverlay();setModalShell(s);renderQuiz(s,true);}
+    function showStageModal(stage,after){
+      const m=MILESTONES[stage-1];if(!m){if(after)after();return;}
+      const shell={kind:'quality',tag:'MILESTONE',name:m.label};
+      showOverlay();setModalShell(shell);
+      modal.innerHTML=head(shell,`段階 ${stage}/${MILESTONES.length} 到達`)+`<div style="padding:22px 24px 24px">
+        <div style="text-align:center;margin:2px 0 16px"><p style="margin:0;color:#e7eef6;font-size:18px;font-weight:800">${m.label}</p><p style="margin:6px 0 0;color:#8294aa;font-size:11px;font-family:${MONO}">STAGE ${stage} / ${MILESTONES.length} CLEARED</p></div>
+        <div style="padding:13px 14px;border:1px solid color-mix(in srgb,var(--quality) 30%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--quality) 7%,#0c1622);color:#cdd8e6;font-size:13px;line-height:1.7">いま作れるもの → <b style="color:#bfe7d6">${stackPattern()}</b></div>
+        <button data-cont style="${css.primary};margin-top:16px">続ける</button></div>`;
+      bindClose();addHovers();
+      const cont=()=>{if(after)after();else closeModal();};
+      const cb=q('#modal [data-cont]');if(cb)cb.onclick=cont;
+      const cl=q('#modal [data-close]');if(cl)cl.onclick=cont;
+    }
+
+    function acquire(s){
+      const before=MILESTONES.filter(m=>m.test(acquired)).length;
+      acquired.add(s.id);recommendedPath.delete(s.id);save();logEvent('acquire',s.id);
+      const after=MILESTONES.filter(m=>m.test(acquired)).length;
+      refresh();celebrate(s);
       toast(s.final?"到達！ バイブコーディングを習得しました":"習得！ 上のスキルに光が伝わりました");
-      if(s.desire){renderDesire(s);}else{closeModal();} }
+      const cont = s.desire ? (()=>renderDesire(s)) : (()=>closeModal());
+      if(after>before && after>(prog.maxStage||0)){ prog.maxStage=after;saveProg();showStageModal(after,cont); }
+      else cont();
+    }
     let toastTimer; function toast(msg){const t=q('#toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translate(-50%,0)';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translate(-50%,18px)';},2200);}
 
     q('#stackGuide').onclick=()=>renderStackGuide();
     q('#examples').onclick=()=>renderExamples();
     q('#mapBack').onclick=()=>document.body.classList.remove('map-open');
-    q('#reset').onclick=()=>{ if(confirm("習得した進捗をすべてリセットしますか？")){acquired.clear();recommendedPath.clear();save();refresh();fitStart();} };
+    q('#reset').onclick=()=>{ if(confirm("習得した進捗と制作ログ・連続記録をすべてリセットしますか？")){acquired.clear();recommendedPath.clear();save();activityLog=[];saveLog();setTarget(null);prog={built:{},days:[],daily:{},lastVisit:todayStr(),maxStage:0,logMigrated:true};saveProg();refresh();fitStart();} };
 
     /* ── pan / zoom ── */
     let scale=1,panX=0,panY=0; const TW=1160,TH=2080;
@@ -819,9 +1032,35 @@
     viewport.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:.89);},{passive:false});
 
     /* ── boot ── */
+    (function(){
+      const t=todayStr();
+      if(prog.lastVisit&&prog.lastVisit<t){const d=dayDiff(prog.lastVisit,t);if(d>=1)prog._welcome={days:d};}
+      prog.lastVisit=t; /* 訪問だけでは活動日にしない（カレンダーに塗らない）。acquire/review/build のときだけ記録する。 */
+      prog.maxStage=Math.max(prog.maxStage||0,MILESTONES.filter(m=>m.test(acquired)).length); saveProg();
+    })();
     applyTheme(theme);
     refresh();
-    requestAnimationFrame(()=>{ (props.initialView==='overview')?fitAll():fitStart(); });
+    booted=true;
+    /* index からの受け渡し（rAFに依存せず同期で実行）：
+       目指す作品(target.v1)への経路を点灯し、?focus で最初の一歩を開く。 */
+    var didHandoff=false;
+    try{
+      if(activeTarget&&MAP[activeTarget.skillId]&&!acquired.has(activeTarget.skillId)){
+        recommendedPath=new Set(unmetPath(activeTarget.skillId));refresh();
+      }
+      var params=new URLSearchParams(location.search);
+      var f=params.get('focus');
+      if(f&&MAP[f]){
+        didHandoff=true;
+        focusNode(f); if(!acquired.has(f))openSkill(MAP[f]);
+        try{history.replaceState({},'',location.pathname);}catch(e){}
+      }else if(activeTarget&&MAP[activeTarget.skillId]&&!acquired.has(activeTarget.skillId)){
+        var path=unmetPath(activeTarget.skillId),first=null;
+        for(var i=0;i<path.length;i++){if(available(MAP[path[i]])){first=path[i];break;}}
+        if(first){didHandoff=true;focusNode(first);}
+      }
+    }catch(e){}
+    requestAnimationFrame(()=>{ if(!didHandoff){ (props.initialView==='overview')?fitAll():fitStart(); } });
   }
   if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
 })();
