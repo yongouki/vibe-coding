@@ -68,8 +68,8 @@
     <button id="mapBack" aria-label="ナビに戻る" style="display:none;position:absolute;right:12px;top:12px;z-index:7;align-items:center;gap:5px;border:1px solid #34475c;border-radius:10px;background:rgba(14,23,34,.96);color:#cdd9e7;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer">← ナビに戻る</button>
     <div style="position:absolute;left:14px;top:14px;z-index:3;padding:5px 9px;border:1px solid #3b3927;border-radius:6px;color:#9a8f5c;background:rgba(13,17,22,.82);font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none">▲ GOAL</div>
     <div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;color:#7587a0;font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none;text-align:center">まず目的から · START ▼</div>
-    <div id="tree" style="position:absolute;left:0;top:0;width:1160px;height:2080px;transform-origin:0 0">
-      <svg id="edges" viewBox="0 0 1160 2080" style="position:absolute;left:0;top:0;width:1160px;height:2080px;overflow:visible;pointer-events:none" aria-hidden="true">
+    <div id="tree" style="position:absolute;left:0;top:0;width:1160px;height:2210px;transform-origin:0 0">
+      <svg id="edges" viewBox="0 0 1160 2210" style="position:absolute;left:0;top:0;width:1160px;height:2210px;overflow:visible;pointer-events:none" aria-hidden="true">
         <defs>
           <marker id="arrow-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#334358"></path></marker>
           <marker id="arrow-ready" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#9a8442"></path></marker>
@@ -179,17 +179,19 @@
       {id:"task",x:580,y:1690,name:"小さなタスクに分ける",tag:"DECOMPOSE",kind:"common",allOf:["collab"],
        desc:"大きな依頼を、結果を一つずつ確認できる変更へ分ける。",
        points:["一回の依頼で変える目的を一つにする","各タスクに確認方法を付ける"]},
-      {id:"collab",x:580,y:1820,name:"AIとの対話・文脈",tag:"COLLABORATE",kind:"common",allOf:["goal"],
+      {id:"collab",x:580,y:1820,name:"AIとの対話・文脈",tag:"COLLABORATE",kind:"common",allOf:["scope"],
        desc:"目的・対象・制約・出力形式をAIへ渡し、対話しながら認識をそろえる。",
        points:["変更してよい範囲を伝える","分からない点を先に確認させる"]},
-      {id:"goal",x:580,y:1950,name:"目的・完成条件",tag:"DEFINE DONE",kind:"common",entry:true,
+      {id:"scope",x:580,y:1950,name:"まず作る範囲",tag:"FIRST VERSION",kind:"common",allOf:["goal"],
+       desc:"やりたいこと全部ではなく、今日動かす一番小さな形を決める。",
+       points:["今回作るものと、あとで足すものを分ける","最初は一つの動作に絞る"]},
+      {id:"goal",x:580,y:2080,name:"目的・完成条件",tag:"DEFINE DONE",kind:"common",entry:true,
        desc:"作り始める前に、誰の何を変え、どこまでできたら完成かを言葉にする。これがどの道でも最初の一歩。",
        points:["利用者と解決したいことを決める","目で確認できる完成条件を置く"]}
     ];
     const HARD_QUIZZES={
       "goal":{q:"営業部から『CSVの日報を楽に集計したい』と相談された。実装前の完成条件として最も検証しやすいものは？",opts:["担当者が使いやすいと感じる集計ツールにする","CSVを読み込むと10秒以内に担当者別の週次件数が表示され、不正な行は元データを変えずに一覧化される","AIが最適だと判断した構成で、将来の機能追加にも対応する"],a:1,why:"時間、入力、期待する出力、失敗時の扱いが観察可能な形で定義されています。→ AIには『これができたら完成、という確認できる画面』を最初に渡す。",hint:"第三者が実行して、達成・未達を同じ結論で判定できるか考えてみよう。"},
       "collab":{q:"既存アプリへCSV出力だけを追加したい。DB構造と既存画面は変えてはいけない。AIへの最初の依頼として最も安全なのは？",opts:["CSV出力を追加して。必要なら全体をきれいにリファクタリングしてよい","対象ファイル、変えてよい範囲、維持すべき挙動、出力例を示し、不明点と実装案を先に回答させる","CSV出力のベストプラクティスを使い、完成するまで自律的に修正させる"],a:1,why:"対象・制約・不変条件・期待値を渡し、変更前に認識を確認できます。→ AIには『変えていい範囲』と『壊さない挙動』を必ず添える。",hint:"AIが善意で余計な変更を加えても防げる依頼かを見よう。"},
-      "task":{q:"ログイン後だけ画面が真っ白になる。調査と修正をAIへ渡す順番として最も適切なのは？",opts:["認証処理を新方式で書き直す → UIも整理する → 最後に動作確認する","再現条件を固定する → ブラウザとサーバーのログを確認する → 原因候補を一つ修正する → 回帰テストする","真っ白な画面を直す → 関連しそうな警告を全部消す → テストを追加する"],a:1,why:"観察、仮説、最小修正、再発防止が一つずつ確認できる順序です。→ AIには『〜まででいったん止めて』と、一度の変更を小さく区切らせる。",hint:"原因がまだ分からない段階で、大きな変更から始めていないかを確認しよう。"},
       "htmlcss":{q:"商品カード全体をクリックで詳細へ移動させたい。AIへの頼み方として最も良いのは？",opts:["「とにかくクリックで動くようにして」と頼む","「カード全体で遷移したい。見た目用の div ではなく意味の合う a 要素にして、キーボード操作とフォーカス表示も効くように」と頼む","「div に onclick と cursor:pointer を付けて」と頼む"],a:1,why:"『何のための要素か（遷移）』を伝えると、AIは適切なHTMLを選び、キーボード操作も自然に付いてきます。→ AIには『見た目を似せて』ではなく『意味の合う要素にして』と頼む。",hint:"見た目をボタンらしくする依頼と、要素の意味を正す依頼は別物です。"},
       "files":{q:"AIの指示どおりコマンドを実行したら『対象ファイルが見つからない』と出た。次に行う確認として最も適切なのは？",opts:["同名の空ファイルを作ってから再実行する","現在のフォルダ、一覧、指定した相対パスと大文字小文字を確認する","管理者権限で同じコマンドを実行する"],a:1,why:"まず現在地と対象の実在を確認すれば、権限や処理内容を変えずに原因を切り分けられます。→ AIには『まず今いる場所と対象ファイルの有無を確認して』と頼む。",hint:"ファイルがない問題と権限の問題を混ぜないようにしよう。"},
       "http":{q:"POST /tasks が 422 を返し、レスポンス本文にはフィールドエラーが入っている。最初に比較すべきものは？",opts:["同じURLへGETを送り、成功するか確認する","送信したJSONとAPIの入力スキーマ、Content-Type、エラー詳細を比較する","タイムアウト時間を延ばして同じPOSTを再送する"],a:1,why:"422は多くの場合、届いた入力をサーバーが検証できなかったことを示します。→ AIには『送ったJSONとAPIの入力スキーマ、Content-Type、エラー詳細を比べて』と頼む。",hint:"通信できていないのか、通信後に入力を拒否されたのかを区別しよう。"},
@@ -215,7 +217,18 @@
       "iterate":{q:"10人にURLを送った。8人は最初の入力画面で離脱し、2人は最後まで使った。次にすることは？",opts:["機能を10個追加する","離脱した場所とエラーを確認し、入力を一つ減らして比べる","アプリ名とロゴを変更する"],a:1,why:"初めて誰かに使ってもらえた興奮の続き。どこで離れたかを見て、一つ減らして比べるのが次の一歩です。→ AIには『一度に増やさず、離脱した一点だけ直して比べたい』と頼む。",hint:"思いつきで足す前に、まず“どこで離れたか”を見ましょう。"},
       "scheduler":{q:"毎朝7時のCSV集計が、通信再試行で同じ日に2回動くことがある。安全な設計は？",opts:["毎回同じ出力へ無条件で追記する","実行日やジョブIDで重複を判定し、同じ処理が再実行されても結果が壊れないようにする","失敗しても記録せず、翌日まで待つ"],a:1,why:"SchedulerやWebhookは重複実行を前提に、冪等性と実行履歴を持たせます。→ AIには『二度動いても結果が壊れないように（冪等に）して』と頼む。",hint:"『一度しか呼ばれない』ことに依存せず、二度動いても同じ結果になるかを考えよう。"}
     };
-    SKILLS.forEach(s=>{if(HARD_QUIZZES[s.id])s.quiz=HARD_QUIZZES[s.id];});
+    /* 30秒チェック：そのノードの核を1つだけ、やさしく確認する。解放はここで止めず、すぐ次へ進める。 */
+    const BASIC_QUIZZES={
+      "goal":{q:"作り始める前に決める「完成のサイン」として、いちばん確かめやすいのは？",opts:["なんとなく良い感じに仕上がっている","ボタンを押すと、画面に結果が1つ表示される","AIが本格的だと判断してくれる"],a:1,why:"目で見て確かめられる動きが一つあること。これが最初の完成条件になります。",hint:"あとで『できた／まだ』を自分の目で判定できるのはどれ？"},
+      "scope":{q:"最初の15分で作るものとして、ちょうどいい大きさは？",opts:["「押す→結果が出る」一つの動きだけ","ログイン・履歴・通知まで一度に全部","あとで使うかもしれない機能の一覧を先に作る"],a:0,why:"履歴やログインは、動くものが一つできてから足せます。最初は一番小さな形だけで十分。",hint:"今日中に動かせて、目で確認できる一番小さい形はどれ？"},
+      "collab":{q:"AIへの最初の頼み方として、いちばん伝わりやすいのは？",opts:["いい感じに作っておいて","押すと結果を1つ表示して。保存やログインはまだ不要","最新技術で本格的に作って"],a:1,why:"何をして、何を今回はやらないかを具体的に伝えると、AIは迷いません。",hint:"AIが勝手に判断せずに済む、具体的な指示はどれ？"},
+      "task":{q:"最初にAIへ頼む一歩として、ちょうどいいのは？",opts:["まず見出し・結果欄・ボタンを画面に出し、ブラウザで開けるか確認する","デザイン・保存・公開・ログインまで一度に完成させる","将来必要そうなデータベースを先に設計する"],a:0,why:"一度に一つだけ作って、その都度ブラウザで確認する。小さく確かめながら進めます。",hint:"一回で確認できる、小さな一歩はどれ？"}
+    };
+    SKILLS.forEach(s=>{
+      if(BASIC_QUIZZES[s.id])s.basic=BASIC_QUIZZES[s.id];   /* 30秒チェック（解放前の軽い1問） */
+      if(HARD_QUIZZES[s.id])s.challenge=HARD_QUIZZES[s.id]; /* 実践チャレンジ（習得後の任意問題） */
+      s.quiz=s.challenge||s.basic||null;                    /* おさらいの題材：あれば実践、無ければ基本 */
+    });
 
     /* 15分ミッション：習得直後に「今すぐ作れる小さなもの」＋AIへ渡すコピペ依頼文を出す。 */
     const MISSIONS={
@@ -797,44 +810,53 @@
       const sf=q('#modal [data-startfirst]');if(sf)sf.onclick=()=>{closeModal();focusNode(first);openSkill(MAP[first]);};
       q('#modal [data-back]').onclick=closeModal;
     }
-    function renderDone(s){ modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s,true)}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);q('#modal [data-back]').onclick=closeModal; }
+    function renderDone(s){ const challengeBtn=s.challenge?`<button data-challenge style="${css.secondary}">実践チャレンジに挑戦（任意）</button>`:''; modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s,true)}${challengeBtn}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);const ch=q('#modal [data-challenge]');if(ch)ch.onclick=()=>renderQuiz(s,s.challenge,{mode:'challenge'});q('#modal [data-back]').onclick=closeModal; }
     function renderLearn(s){
-      const progression=s.entry?"まず解放して始めましょう。理解度チェックは任意です。":hasDependent(s.id)?"習得すると、上につながるスキルが解放されます。":"専門化スキルです。必要になったときに選択できます。";
-      /* entryスキル（最初の一歩）は、テストの前にまず解放して成功体験を渡す。クイズは任意挑戦に。 */
-      const actions=s.entry
-        ? `<button data-acquire style="${css.primary}">ここから始める（解放）</button>${s.quiz?`<button data-toquiz style="${css.secondary}">理解度チェックに挑戦（任意）</button>`:''}`
-        : s.quiz
-          ? `<button data-toquiz style="${css.primary}">理解度チェックへ</button>`
-          : `<button data-acquire style="${css.primary}">このルートから始める</button>`;
-      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"CHALLENGE":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${actions}${consultBlock(s)}${note(progression)}</div>`;
+      /* 解放は試験で止めない。基本ノードは軽い30秒チェック、それ以外はそのまま解放。実践チャレンジは習得後に回す。 */
+      const progression=s.basic?(s.entry?"まず軽いチェックから。むずかしくありません。":"30秒チェックを抜けると解放できます。"):hasDependent(s.id)?"解放すると、上につながるスキルが見えてきます。":"専門化スキルです。必要になったときに選べます。";
+      const actions=s.basic
+        ? `<button data-toquiz style="${css.primary}">${s.entry?'30秒チェックで始める':'30秒チェックへ'}</button>`
+        : `<button data-acquire style="${css.primary}">${s.entry?'ここから始める（解放）':'このルートから始める'}</button>`;
+      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"NEXT STEP":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${actions}${consultBlock(s)}${note(progression)}</div>`;
       bindClose();addHovers();wireExtras(s);
       const aq=q('#modal [data-acquire]');if(aq)aq.onclick=()=>acquire(s);
-      const tq=q('#modal [data-toquiz]');if(tq)tq.onclick=()=>renderQuiz(s);
+      const tq=q('#modal [data-toquiz]');if(tq)tq.onclick=()=>renderQuiz(s,s.basic,{mode:'unlock'});
     }
-    function renderQuiz(s,review){
-      const shown=s.quiz.opts.map((text,i)=>({text,correct:i===s.quiz.a}));
+    /* mode: 'unlock'（解放前の30秒チェック）／'review'（今日のおさらい）／'challenge'（習得後の実践チャレンジ・任意） */
+    function renderQuiz(s,quiz,opts){
+      opts=opts||{}; const mode=opts.mode||'unlock';
+      quiz=quiz||s.quiz; if(!quiz)return;
+      const isReview=mode==='review', isChallenge=mode==='challenge';
+      const shown=quiz.opts.map((text,i)=>({text,correct:i===quiz.a}));
       for(let i=shown.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shown[i],shown[j]]=[shown[j],shown[i]];}
-      const passLabel=review?'おさらいを完了する':'習得する';
-      const backLabel=review?'スキルの詳細に戻る':'解説に戻る';
-      modal.innerHTML=head(s,review?"REVIEW":"CHECK")+`<div style="padding:21px 24px 24px">${review?`<p style="margin:0 0 12px;color:#86e3c0;font-size:11px;letter-spacing:.04em">今日のおさらい — 一度習得した内容を、忘れないうちにもう一度。</p>`:''}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">SCENARIO</span>${s.quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">${passLabel}</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">${backLabel}</button></div></div>`;
+      const passLabel=isReview?'おさらいを完了する':isChallenge?'クリアにする':'習得する';
+      const backLabel=(isReview||isChallenge)?'スキルの詳細に戻る':'解説に戻る';
+      const intro=isReview
+        ? `<p style="margin:0 0 12px;color:#86e3c0;font-size:11px;letter-spacing:.04em">今日のおさらい — 一度習得した内容を、忘れないうちにもう一度。</p>`
+        : isChallenge
+          ? `<p style="margin:0 0 12px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:11px;letter-spacing:.04em">実践チャレンジ — 現実に近い状況で判断してみよう。間違えても習得は外れません。</p>`
+          : '';
+      const badgeLabel=(isReview||isChallenge)?'SCENARIO':'CHECK';
+      modal.innerHTML=head(s,isReview?"REVIEW":isChallenge?"CHALLENGE":"CHECK")+`<div style="padding:21px 24px 24px">${intro}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">${badgeLabel}</span>${quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">${passLabel}</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">${backLabel}</button></div></div>`;
       bindClose();addHovers();
       const pass=q('#modal [data-pass]'),retry=q('#modal [data-retry]'),fb=q('#modal [data-fb]');
       qa('#modal [data-opt]').forEach(o=>o.onclick=()=>{
         qa('#modal [data-opt]').forEach(x=>{x.disabled=true;x.dataset.answered="1";if(x.dataset.correct==="true"){x.style.borderColor='var(--quality)';x.style.background='#0d2a22';x.style.color='#a8f1d5';}});
         if(o.dataset.correct==="true"){
           pass.disabled=false;pass.style.opacity='1';pass.style.cursor='pointer';
-          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${s.quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+(review?'':missionBlock(s));
-          if(!review)wireExtras(s);
+          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+((mode==='unlock')?missionBlock(s):'');
+          if(mode==='unlock')wireExtras(s);
         }else{
           o.style.borderColor='var(--danger)';o.style.background='#2b1518';o.style.color='#ffc1bd';retry.hidden=false;
-          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#2b1518;color:#ffaaa4">おしい。緑が最適解です。${s.quiz.why||""}${s.quiz.hint?" ヒント："+s.quiz.hint:""}</div>`;
+          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#2b1518;color:#ffaaa4">おしい。緑が最適解です。${quiz.why||""}${quiz.hint?" ヒント："+quiz.hint:""}</div>`;
         }
       });
       pass.onclick=()=>{ if(pass.disabled)return;
-        if(review){ logEvent('review',s.id);renderDashboard();toast('今日のおさらい完了！また明日');closeModal(); }
+        if(isReview){ logEvent('review',s.id);renderDashboard();toast('今日のおさらい完了！また明日');closeModal(); }
+        else if(isChallenge){ logEvent('challenge',s.id);toast('実践チャレンジ クリア！');renderDone(s); }
         else acquire(s); };
-      retry.onclick=()=>renderQuiz(s,review);
-      q('#modal [data-backlearn]').onclick=()=>{ review?renderDone(s):renderLearn(s); };
+      retry.onclick=()=>renderQuiz(s,quiz,opts);
+      q('#modal [data-backlearn]').onclick=()=>{ (isReview||isChallenge)?renderDone(s):renderLearn(s); };
     }
     function renderFinal(s){
       const items=["作りたいものと完成条件を言葉にした","実装を確認できる小さなタスクに分けた","AIが生成したコードと差分を確認した","実際に動かし、失敗条件もテストした","変更を保存し、他の人が試せる状態にした","結果を見て、改善を一つ加えた"];
@@ -975,7 +997,7 @@
       const tg=q('#dashboard [data-tgt-go]');if(tg)tg.onclick=()=>{const f=targetFirstStep();if(f){focusNode(f);openSkill(MAP[f]);}};
       const tn=q('#dashboard [data-tgt-new]');if(tn)tn.onclick=()=>renderExamples();
     }
-    function openDailyReview(){const s=todaysReview();if(!s)return;showOverlay();setModalShell(s);renderQuiz(s,true);}
+    function openDailyReview(){const s=todaysReview();if(!s)return;showOverlay();setModalShell(s);renderQuiz(s,s.quiz,{mode:'review'});}
     function showStageModal(stage,after){
       const m=MILESTONES[stage-1];if(!m){if(after)after();return;}
       const shell={kind:'quality',tag:'MILESTONE',name:m.label};
@@ -1008,7 +1030,7 @@
     q('#reset').onclick=()=>{ if(confirm("習得した進捗と制作ログ・連続記録をすべてリセットしますか？")){acquired.clear();recommendedPath.clear();save();activityLog=[];saveLog();setTarget(null);prog={built:{},days:[],daily:{},lastVisit:todayStr(),maxStage:0,logMigrated:true};saveProg();refresh();fitStart();} };
 
     /* ── pan / zoom ── */
-    let scale=1,panX=0,panY=0; const TW=1160,TH=2080;
+    let scale=1,panX=0,panY=0; const TW=1160,TH=2210;
     const zl=q('#zoomLabel');
     const clampS=v=>Math.max(.35,Math.min(1.7,v));
     function apply(){ tree.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`; if(zl)zl.textContent=Math.round(scale*100)+'%'; }
