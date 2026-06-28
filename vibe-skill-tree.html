@@ -660,7 +660,7 @@
       if(s.anyOf){const ok=(s.anyOf||[]).some(id=>acquired.has(id));rows.push(`<div style="display:flex;gap:8px;align-items:center;margin-top:6px;color:${ok?'#70dcb7':'#7e91a7'};font-size:12px"><i style="font-style:normal;width:14px;text-align:center">${ok?'✓':'○'}</i><span>次のどれか：${s.anyOf.map(id=>MAP[id].name).join('／')}</span></div>`);}
       return `<div style="margin:2px 0 18px;padding:13px 14px;border:1px solid #26364a;border-radius:11px;background:#0b131e"><h3 style="margin:0 0 8px;color:#71869e;font-size:10px;letter-spacing:.12em">解放条件</h3>${rows.join('')}</div>`;
     }
-    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" target="_blank" rel="noopener" style="${css.learn}">もっと詳しく学ぶ →</a><p style="margin:-10px 0 16px;color:#667c94;font-size:11px;line-height:1.6;text-align:center">別タブで開きます。読み終えたら、このタブに戻って解放しましょう。</p>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">まずはこの画面で、3分で要点をつかもう</div>`;};
+    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" style="${css.learn}">もっと詳しく学ぶ →</a><p style="margin:-10px 0 16px;color:#667c94;font-size:11px;line-height:1.6;text-align:center">じっくり読むページへ移動します。読み終えたら、ページ下のボタンからそのまま${s.basic?'チェック':'解放'}まで進めます。</p>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">まずはこの画面で、3分で要点をつかもう</div>`;};
     const note=t=>`<p style="margin:12px 0 0;color:#667c94;font-size:11px;line-height:1.6;text-align:center">${t}</p>`;
     const missionBlock=(s,allowBuilt)=>{ if(!s.mission)return "";
       const built=logBuilt(),did=!!built[s.id];
@@ -1063,6 +1063,20 @@
     applyTheme(theme);
     refresh();
     booted=true;
+    /* レッスンページからの戻り導線：#open-＜id＞ でノード詳細、#check-＜id＞ で30秒チェックを直接開く。
+       ノードIDとレッスンファイル名は一致しているので、レッスン側はファイル名だけでリンクできる。 */
+    function openFromHash(){
+      var h=(location.hash||'').replace(/^#/,'');
+      var m=h.match(/^(open|check)-(.+)$/);
+      if(!m)return false;
+      var s=MAP[m[2]]; if(!s)return false;
+      focusNode(s.id);
+      if(m[1]==='check'&&!acquired.has(s.id)&&s.basic){ showOverlay();setModalShell(s);renderQuiz(s,s.basic,{mode:'unlock'}); }
+      else openSkill(s);
+      try{history.replaceState({},'',location.pathname+location.search);}catch(e){}
+      return true;
+    }
+    window.addEventListener('hashchange',openFromHash);
     /* index からの受け渡し（rAFに依存せず同期で実行）：
        目指す作品(target.v1)への経路を点灯し、?focus で最初の一歩を開く。 */
     var didHandoff=false;
@@ -1070,9 +1084,10 @@
       if(activeTarget&&MAP[activeTarget.skillId]&&!acquired.has(activeTarget.skillId)){
         recommendedPath=new Set(unmetPath(activeTarget.skillId));refresh();
       }
+      if(openFromHash())didHandoff=true;
       var params=new URLSearchParams(location.search);
       var f=params.get('focus');
-      if(f&&MAP[f]){
+      if(!didHandoff&&f&&MAP[f]){
         didHandoff=true;
         focusNode(f); if(!acquired.has(f))openSkill(MAP[f]);
         try{history.replaceState({},'',location.pathname);}catch(e){}
