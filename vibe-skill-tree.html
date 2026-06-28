@@ -78,8 +78,8 @@
     <button id="mapBack" aria-label="ナビに戻る" style="display:none;position:absolute;right:12px;top:12px;z-index:7;align-items:center;gap:5px;border:1px solid #34475c;border-radius:10px;background:rgba(14,23,34,.96);color:#cdd9e7;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer">← ナビに戻る</button>
     <div style="position:absolute;left:14px;top:14px;z-index:3;padding:5px 9px;border:1px solid #3b3927;border-radius:6px;color:#9a8f5c;background:rgba(13,17,22,.82);font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none">▲ GOAL</div>
     <div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;color:#7587a0;font-size:9px;letter-spacing:.2em;font-family:'SFMono-Regular',Consolas,monospace;pointer-events:none;text-align:center">まず目的から · START ▼</div>
-    <div id="tree" style="position:absolute;left:0;top:0;width:1160px;height:2210px;transform-origin:0 0">
-      <svg id="edges" viewBox="0 0 1160 2210" style="position:absolute;left:0;top:0;width:1160px;height:2210px;overflow:visible;pointer-events:none" aria-hidden="true">
+    <div id="tree" style="position:absolute;left:0;top:0;width:1160px;height:2340px;transform-origin:0 0">
+      <svg id="edges" viewBox="0 0 1160 2340" style="position:absolute;left:0;top:0;width:1160px;height:2340px;overflow:visible;pointer-events:none" aria-hidden="true">
         <defs>
           <marker id="arrow-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#334358"></path></marker>
           <marker id="arrow-ready" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#9a8442"></path></marker>
@@ -98,7 +98,7 @@
 
   <div id="overlay" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,6,10,.78);backdrop-filter:blur(5px)"><section id="modal" role="dialog" aria-modal="true"></section></div>
   <div id="toast" role="status" aria-live="polite" style="position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,18px);opacity:0;padding:11px 17px;border:1px solid #34475c;border-radius:11px;background:#14202d;color:#d8e2ec;font-size:12px;pointer-events:none;transition:.25s;box-shadow:0 12px 38px rgba(0,0,0,.4)"></div>
-  <footer style="text-align:center;padding:0 18px 34px;color:#52657b;font-size:10px;line-height:1.7">このツリーの「習得」はゴールではなく、次の実践を始めるための通過点です。進捗はこのブラウザ内に保存されます。<br><a href="disclaimer.html" style="color:#5a7388">免責事項・ご利用上の注意</a></footer>
+  <footer style="text-align:center;padding:0 18px 34px;color:#52657b;font-size:10px;line-height:1.7">このツリーの「習得」はゴールではなく、次の実践を始めるための通過点です。進捗はこのブラウザ内に保存されます。<br><a href="lessons/glossary.html" style="color:#5a7388">用語集</a> ／ <a href="disclaimer.html" style="color:#5a7388">免責事項・ご利用上の注意</a></footer>
 </div>
 
 <script>
@@ -129,12 +129,21 @@
       {id:"read",x:470,y:650,name:"AIが何を変えたか知りたい",tag:"Diff / Review",kind:"quality",allOf:["product"],
        desc:"AIが何を変更したかを確認する。入口・データ・副作用・出口を追う。",
        points:["変更されたファイルと範囲を見る","想定外の変更を見逃さない"]},
-      {id:"devtools",x:250,y:650,name:"何が起きたか伝えたい",tag:"DevTools / Console / Network",kind:"quality",allOf:["product"],
+      {id:"devtools",x:250,y:650,name:"何が起きたか伝えたい",tag:"DevTools / Console / Network",kind:"quality",allOf:["errors"],
        desc:"画面の症状だけでなく、ブラウザが持つエラーと通信の記録を見て、AIへ渡せる材料にする。",
        points:["Consoleのエラーと再現手順をそろえる","NetworkでRequest・Response・Statusを確認する"]},
-      {id:"git",x:690,y:650,name:"壊れても戻れるようにしたい",tag:"Git",kind:"quality",allOf:["product"],
+      {id:"errors",x:250,y:780,name:"エラーが出ても怖くなくなりたい",tag:"Read the Error",kind:"quality",allOf:["product"],
+       desc:"エラーは作業を止める敵ではなく、次の一手のヒント。全文をそのままAIに渡し、一度に一つずつ直す。",
+       points:["エラー文を省略せず全文コピーできる","原因を推測で増やさず、一つずつ確かめる"]},
+      {id:"git",x:690,y:390,name:"壊れても戻れるようにしたい",tag:"Git",kind:"quality",allOf:["git-setup"],
        desc:"変更を小さな保存点として残し、失敗しても比較・復元できるようにする。",
        points:["一つの目的ごとに変更を区切る","何を変えたか分かる言葉を残す"]},
+      {id:"git-setup",x:690,y:520,name:"今の状態を最初に保存したい",tag:"Git Setup / First Commit",kind:"quality",allOf:["terminal"],
+       desc:"Gitを始めて、いま動いているフォルダを最初の保存点（コミット）として残す。ここが「戻れる」の出発点。GitHubでの公開はまだ要らない。",
+       points:["GitとGitHubの違いを一言で説明できる","git add → git commit で最初の保存点を作れる"]},
+      {id:"terminal",x:690,y:650,name:"ターミナルに慣れたい",tag:"Terminal / CLI",kind:"quality",allOf:["product"],
+       desc:"コマンドを文字で打って操作する画面。Gitもデプロイも、ライブラリの追加も、多くはここから動かす。最初は『今どこにいて、何を打つと何が起きるか』だけ分かれば十分。",
+       points:["コマンドは『PCへの文字の指示』だと分かる","結果（成功／エラー）を読んでAIに渡せる"]},
       {id:"product",x:580,y:780,name:"まず一つ動かす",tag:"ONE WORKING THING",kind:"common",anyOf:["static-deploy","auth","ai-eval","dataflow"],
        desc:"選んだ範囲で、実際に一つ動くものを形にした証。完成範囲を小さく絞るほど、改善のサイクルを回しやすい。",
        points:["最小の完成条件を満たしている","自分または他の人が同じ結果を再現できる"]},
@@ -171,31 +180,43 @@
       {id:"jsdom",x:410,y:1430,name:"押したら動いてほしい",tag:"JavaScript / DOM",kind:"web",allOf:["htmlcss"],
        desc:"ボタンや入力に反応して、画面の表示を書き換える。ブラウザの中だけで動く部分。",
        points:["イベントを受けて処理する","状態から画面を更新する"]},
-      {id:"htmlcss",x:410,y:1560,name:"まず画面を出したい",tag:"HTML / CSS",kind:"web",allOf:["task"],
+      {id:"htmlcss",x:410,y:1560,name:"まず画面を出したい",tag:"HTML / CSS",kind:"web",allOf:["web-basics"],
        desc:"画面の意味と構造をHTMLで、見た目と配置をCSSで表す。",
        points:["意味に合ったHTML要素を選ぶ","余白・揃え・読みやすさを整える"]},
-      {id:"dataflow",x:900,y:1300,name:"まとめて変換・集計したい",tag:"Data processing",kind:"auto",allOf:["python"],
+      {id:"web-basics",x:410,y:1690,name:"Webページの中身を知りたい",tag:"Web Basics / HTML・CSS・JS",kind:"web",allOf:["task"],
+       desc:"画面はHTML（中身・構造）・CSS（見た目）・JavaScript（動き）の3つでできていて、ブラウザがそれを読んで表示している。コードはただの文字で、AIが書き、自分は読んで指示する。",
+       points:["HTML・CSS・JSの役割の違いを言える","コードは文字で、ブラウザが画面に変えると分かる"]},
+      {id:"library",x:700,y:1690,name:"既製の部品を借りたい",tag:"Libraries / Packages",kind:"common",allOf:["web-basics"],
+       desc:"よくある機能は、誰かが作った既製の部品（ライブラリ／パッケージ）を借りて足せる。npm（JavaScript）やpip（Python）で導入する。",
+       points:["自作と既製品の借用を使い分ける","入れた部品と用途を記録する"]},
+      {id:"dataflow",x:900,y:1170,name:"まとめて変換・集計したい",tag:"Data processing",kind:"auto",allOf:["python"],
        desc:"入力を読み、変換し、結果を保存する流れを組み立てる。画面が要らないなら最短で組める。",
        points:["入力と出力を分けて考える","途中経過と失敗理由を記録する"]},
-      {id:"scheduler",x:900,y:1170,name:"開かなくても勝手に動いてほしい",tag:"Scheduler / Cron / Webhook",kind:"auto",allOf:["dataflow"],
+      {id:"scheduler",x:900,y:1040,name:"開かなくても勝手に動いてほしい",tag:"Scheduler / Cron / Webhook",kind:"auto",allOf:["dataflow"],
        desc:"手で実行していた処理を、決まった時間や外部イベントをきっかけに自動で動かす。",
        points:["同じ処理が重なっても壊れないようにする","実行結果と失敗を通知・記録する"]},
-      {id:"python",x:900,y:1430,name:"繰り返しを任せたい",tag:"Python",kind:"auto",allOf:["files"],
+      {id:"python",x:900,y:1300,name:"繰り返しを任せたい",tag:"Python",kind:"auto",allOf:["py-setup"],
        desc:"小さなプログラムを書いて実行し、必要なライブラリを環境ごとに管理する。",
        points:["変数・条件分岐・関数を使う","依存を再現できる形で残す"]},
+      {id:"py-setup",x:900,y:1430,name:"PythonをこのPCで動かしたい",tag:"Python Setup / venv",kind:"auto",allOf:["files"],
+       desc:"Pythonがこの環境で動くか確かめ、仮想環境を作って短いスクリプトを実行する。新しいフォルダで同じ手順を再現できれば十分。",
+       points:["python / py のどちらで動くか確認できる","仮想環境を作って .py を実行できる"]},
       {id:"files",x:900,y:1560,name:"大量のファイルを扱いたい",tag:"Files / CLI",kind:"auto",allOf:["task"],
        desc:"ファイルの場所を把握し、ターミナルから移動・実行・確認する。",
        points:["現在地と対象ファイルを確認する","コマンドの結果を読んで次を決める"]},
-      {id:"task",x:580,y:1690,name:"小さなタスクに分ける",tag:"DECOMPOSE",kind:"common",allOf:["collab"],
+      {id:"task",x:580,y:1820,name:"小さなタスクに分ける",tag:"DECOMPOSE",kind:"common",allOf:["collab"],
        desc:"大きな依頼を、結果を一つずつ確認できる変更へ分ける。",
        points:["一回の依頼で変える目的を一つにする","各タスクに確認方法を付ける"]},
-      {id:"collab",x:580,y:1820,name:"AIとの対話・文脈",tag:"COLLABORATE",kind:"common",allOf:["scope"],
+      {id:"collab",x:580,y:1950,name:"AIとの対話・文脈",tag:"COLLABORATE",kind:"common",allOf:["scope"],
        desc:"目的・対象・制約・出力形式をAIへ渡し、対話しながら認識をそろえる。",
        points:["変更してよい範囲を伝える","分からない点を先に確認させる"]},
-      {id:"scope",x:580,y:1950,name:"まず作る範囲",tag:"FIRST VERSION",kind:"common",allOf:["goal"],
+      {id:"ai-mistakes",x:350,y:1950,name:"AIの答えを鵜呑みにしたくない",tag:"AI Can Be Wrong",kind:"ai",allOf:["collab"],
+       desc:"AIの答えはもっともらしくても間違うことがある。鵜呑みにせず、実際に動かして自分の目で確かめる。",
+       points:["『たぶん正しい』と『確かめた』を分ける","おかしいと感じたら根拠を聞き返す"]},
+      {id:"scope",x:580,y:2080,name:"まず作る範囲",tag:"FIRST VERSION",kind:"common",allOf:["goal"],
        desc:"やりたいこと全部ではなく、今日動かす一番小さな形を決める。",
        points:["今回作るものと、あとで足すものを分ける","最初は一つの動作に絞る"]},
-      {id:"goal",x:580,y:2080,name:"目的・完成条件",tag:"DEFINE DONE",kind:"common",entry:true,
+      {id:"goal",x:580,y:2210,name:"目的・完成条件",tag:"DEFINE DONE",kind:"common",entry:true,
        desc:"作り始める前に、誰の何を変え、どこまでできたら完成かを言葉にする。これがどの道でも最初の一歩。",
        points:["利用者と解決したいことを決める","目で確認できる完成条件を置く"]}
     ];
@@ -218,6 +239,7 @@
       "ai-eval":{q:"AIが気分記録を要約してくれたが、書いていない予定を勝手に追加することがある。次に何を作る？",opts:["プロンプトへ「絶対に間違えないで」と書き足す","代表的な入力と合格条件を用意し、変更前後を比べる","回答をもっと長くしてもらう"],a:1,why:"AIは“それっぽく”間違えます。代表例と合格条件で変更前後を比べる仕組みを持つと、品質を確かめられます。→ AIには『言葉を強める前に、良い例と失敗例で検証する仕組みを』と頼む。",hint:"お願いの言葉を強めることと、出力を検証できることは別です。"},
       "ai-cost":{q:"AIコメント機能を公開したら、一人が短時間に1,000回実行し、API料金が急増した。次に必要なのは？",opts:["ボタンを目立たなくする","利用者ごとの回数制限、使用量の記録、予算上限を設ける","APIキーを毎日変更する"],a:1,why:"Rate Limit・Usage Tracking・Budgetを組み合わせ、悪用と想定外の請求を制御します。→ AIには『利用者ごとの回数制限・使用量記録・予算上限をサーバー側に』と頼む。",hint:"UIの見た目ではなく、サーバー側で利用量を測って止められる必要があります。"},
       "product":{q:"自分のスマホだけで使う、1週間分の気分記録を週末に作りたい。最初の構成として最も過不足がないのは？",opts:["HTML・CSS・JavaScript と localStorage","バックエンド、DB、認証、管理画面","Python、AI API、ベクトルDB"],a:0,why:"今の欲望（自分・1端末・記録を残すだけ）に必要なものだけ。技術が多いほど偉いわけではありません。→ AIには『今の欲しいものに対して過剰にせず、最小構成で』と頼む。",hint:"『他の人』『他の端末』が要らないうちは、ブラウザの中で足ります。"},
+      "web-basics":{q:"「フロントエンド」と「バックエンド」の説明として正しいのは？",opts:["フロントエンド＝ブラウザの外で動く部分／バックエンド＝画面に見える部分","フロントエンド＝ブラウザの中で動く画面側／バックエンド＝ブラウザの外で動く裏側（共有データや秘密の鍵を扱う）","フロントエンドとバックエンドは同じもので、呼び方が違うだけ"],a:1,why:"目に見える画面側（ブラウザの中）がフロントエンド、共有データや秘密の鍵を扱う裏側（ブラウザの外）がバックエンド。HTML・CSS・JavaScriptはフロント側です。今はフロントだけで十分で、バックは『自分の端末だけ』を超えたくなった時に出てきます。→ AIには『これはフロント側／バック側のどちらの話か』を意識して頼む。",hint:"『ブラウザの中』と『ブラウザの外』、どちらがどちらかで考えてみよう。"},
       "read":{q:"AIにボタンの色だけを変えてもらったら、ログインできなくなった。次から安心して試すには何が欲しい？",opts:["変更前後の差分を確認する","動いていた状態をGitへ保存する","ログインのテストを残す","すべて必要"],a:3,why:"差分を読む・Gitで戻れる・テストで気づける。この3つが揃うと、もっと気軽にAIへ頼める“安全装置”になります。→ AIには『どのファイルの何を変えたか差分で説明して』と頼む。",hint:"どれか一つでは、AIの予想外の変更を全部は受け止めきれません。"},
       "devtools":{q:"ボタンを押しても画面が変わらない。AIへ相談する前に、最も原因を絞りやすい情報は？",opts:["『動きません』という説明だけ","再現手順、Consoleのエラー、NetworkのRequest・Response・Status","使っているブラウザのアイコン画像"],a:1,why:"症状・再現手順・Console・Networkをそろえると、AIが推測ではなく観測結果から原因を追えます。→ AIには『推測で直さず、再現手順・Consoleエラー・Networkの記録から原因を絞って』と頼む。",hint:"画面に見える結果だけでなく、ブラウザ内部の記録を渡せるかを考えよう。"},
       "git":{q:"作業中にバグ修正、全体フォーマット、依存ライブラリ更新が一つの差分に混ざった。履歴を扱いやすくする方法は？",opts:["すべて『各種修正』という一つのコミットにする","差分を目的別に分け、それぞれ動作確認できる単位でコミットする","ファイルごとに一コミットへ分ける"],a:1,why:"ファイル数ではなく変更理由で分けると、レビューや切り戻しがしやすくなります。→ AIには『目的ごとにコミットを分けて』と頼む。",hint:"後で一つだけ取り消したいとき、どの分け方が役立つかを考えよう。"},
@@ -232,7 +254,15 @@
       "goal":{q:"作り始める前に決める「完成のサイン」として、いちばん確かめやすいのは？",opts:["なんとなく良い感じに仕上がっている","ボタンを押すと、画面に結果が1つ表示される","AIが本格的だと判断してくれる"],a:1,why:"目で見て確かめられる動きが一つあること。これが最初の完成条件になります。",hint:"あとで『できた／まだ』を自分の目で判定できるのはどれ？"},
       "scope":{q:"最初の15分で作るものとして、ちょうどいい大きさは？",opts:["「押す→結果が出る」一つの動きだけ","ログイン・履歴・通知まで一度に全部","あとで使うかもしれない機能の一覧を先に作る"],a:0,why:"履歴やログインは、動くものが一つできてから足せます。最初は一番小さな形だけで十分。",hint:"今日中に動かせて、目で確認できる一番小さい形はどれ？"},
       "collab":{q:"AIへの最初の頼み方として、いちばん伝わりやすいのは？",opts:["いい感じに作っておいて","押すと結果を1つ表示して。保存やログインはまだ不要","最新技術で本格的に作って"],a:1,why:"何をして、何を今回はやらないかを具体的に伝えると、AIは迷いません。",hint:"AIが勝手に判断せずに済む、具体的な指示はどれ？"},
-      "task":{q:"最初にAIへ頼む一歩として、ちょうどいいのは？",opts:["まず見出し・結果欄・ボタンを画面に出し、ブラウザで開けるか確認する","デザイン・保存・公開・ログインまで一度に完成させる","将来必要そうなデータベースを先に設計する"],a:0,why:"一度に一つだけ作って、その都度ブラウザで確認する。小さく確かめながら進めます。",hint:"一回で確認できる、小さな一歩はどれ？"}
+      "task":{q:"最初にAIへ頼む一歩として、ちょうどいいのは？",opts:["まず見出し・結果欄・ボタンを画面に出し、ブラウザで開けるか確認する","デザイン・保存・公開・ログインまで一度に完成させる","将来必要そうなデータベースを先に設計する"],a:0,why:"一度に一つだけ作って、その都度ブラウザで確認する。小さく確かめながら進めます。",hint:"一回で確認できる、小さな一歩はどれ？"},
+      "git-setup":{q:"今あるフォルダで、最初の保存点（コミット）を作る進め方は？",opts:["先にGitHubのアカウントを作り、URLで公開してから考える","フォルダでGitを始め、git status で確認し、git add → git commit で保存点を作る","ファイルを日付付きの別フォルダにコピーして取っておく"],a:1,why:"最初の一歩はGitHubでの公開ではなく、手元で最初のコミットを作ること。これで「戻れる」土台ができます。GitHubは後から足せます。",hint:"いきなり公開しなくても、手元だけで保存点は作れます。"},
+      "py-setup":{q:"新しいフォルダでPythonをこのPCで動かす、最初の一歩は？",opts:["まず requirements.txt にライブラリをたくさん書く","Pythonが入っているか確認し、仮想環境を作って有効化してから .py を実行する","クラウドのサーバーを借りて、そこで動かす"],a:1,why:"まず「このPCで動くか」を確かめ、仮想環境を作って短い .py を実行する。同じ手順を別のフォルダで再現できれば十分です。",hint:"ライブラリ管理やクラウドの前に、手元で一度動かすのが先です。"},
+      "web-basics":{q:"Webページの「HTML・CSS・JavaScript」の役割の組み合わせとして正しいのは？",opts:["HTML=見た目／CSS=動き／JavaScript=中身","HTML=中身・構造／CSS=見た目／JavaScript=動き","3つとも同じで、どれで書いても変わらない"],a:1,why:"中身と構造はHTML、見た目はCSS、押したときの動きはJavaScript。AIが書いたコードも、この3つの役割で読み分けられます。",hint:"「何があるか」「どう見えるか」「押したらどうなるか」で分けてみよう。"},
+      "static-deploy":{q:"「デプロイ（公開）」の意味として、いちばん近いのは？",opts:["自分のPCの中だけでアプリを動かすこと","作ったものをネット上の置き場所へ上げて、URL（住所）で誰でも開けるようにすること","コードをきれいに書き直すこと"],a:1,why:"デプロイ＝作ったものをネット上の置き場所に上げ、URL（住所）で誰でも開けるようにすること。ブラウザだけで動くものなら、無料の静的ホスティングで十分です。ドメインはそのURLの覚えやすい名前部分で、最初は無料サービスのURLでかまいません。",hint:"『自分のPCの中』から『誰でも開けるURL』へ、の変化はどれ？"},
+      "terminal":{q:"ターミナル（コマンドライン）とは、ざっくり言うと？",opts:["プログラムのバグを自動で直してくれる画面","文字でコマンドを打って、PCに指示を出すための画面","インターネットを見るためのブラウザの一種"],a:1,why:"ターミナルは『文字でPCへ指示を出す画面』。Gitもデプロイも、ライブラリの追加もここから動かします。コマンドを打つと、結果（成功やエラー）が文字で返ってきます。",hint:"マウスでクリックではなく、何で操作する画面でしょう？"},
+      "errors":{q:"コードを動かしてエラーが赤く出た。最初にすることは？",opts:["とりあえず別の場所をいくつも書き換えてみる","エラー文を省略せず全文コピーして、状況と一緒にAIに渡す","エラーを閉じて、見なかったことにする"],a:1,why:"エラーは次の一手のヒント。全文をそのままAIに渡し、原因を一つずつ確かめます。あちこち同時に変えると、何が効いたのか分からなくなります。",hint:"エラー文には、次に何をすればいいかが書かれています。"},
+      "ai-mistakes":{q:"AIが自信たっぷりにコードと説明をくれた。どう扱う？",opts:["自信がありそうなので、そのまま信じて本番に出す","もっともらしくても間違うことがあるので、実際に動かして確かめる","長い説明ほど正しいので、長さで判断する"],a:1,why:"AIはもっともらしく間違えます（ハルシネーション）。鵜呑みにせず、自分で動かして結果を確かめるのが、安全に壁打ちするコツです。",hint:"『たぶん正しい』と『確かめた』は同じでしょうか？"},
+      "library":{q:"『カレンダー表示』のような、よくある機能を足したい。まず考えるのは？",opts:["全部自分でゼロから書くしかない","誰かが作った既製の部品（ライブラリ）を借りられないか探す","機能をあきらめる"],a:1,why:"よくある機能は、既製のライブラリ／パッケージを借りて足せることが多いです。JavaScriptならnpm、Pythonならpipで導入します。自作と借用を使い分けると速く作れます。",hint:"よくある機能なら、たいてい誰かがもう作っています。"}
     };
     /* 解放前チェックを全非最終スキルへ割り当てる：BASIC優先、無ければHARDを解放前チェックに流用。
        BASICとHARDの両方を持つスキルだけ、HARDを習得後チャレンジとして残す（同じ問題を二度出さない）。 */
@@ -269,7 +299,21 @@
       "files":{do:"フォルダ内のファイル名を一覧で書き出すスクリプトを作ろう。",
         prompt:"指定したフォルダの中のファイル名を一覧で表示する短いスクリプトを書いてください。実行方法と、対象フォルダの指定の仕方も初めての人向けに説明してください。"},
       "python":{do:"数字を入れると合計と平均を返す、小さなPythonスクリプトを作ろう。",
-        prompt:"Python で、数値のリストを受け取って合計と平均を表示する短いスクリプトを書いてください。実行方法と、自分の数字に差し替える箇所も説明してください。"}
+        prompt:"Python で、数値のリストを受け取って合計と平均を表示する短いスクリプトを書いてください。実行方法と、自分の数字に差し替える箇所も説明してください。"},
+      "git-setup":{do:"いま動いているフォルダで、Gitを始めて最初のコミットを1つ作ろう。",
+        prompt:"Gitを初めて使います。今この作業フォルダにあるものを、最初の保存点（コミット）として残したいです。GitとGitHubの違いを一言で説明し、Gitがこの環境に入っているかの確認、git init、git status での状態確認、git add と git commit までを、初めての人向けに順番に案内してください。GitHubへの公開は今回はまだしません。"},
+      "py-setup":{do:"新しいフォルダで仮想環境を作り、短い .py を1つ実行しよう。",
+        prompt:"Pythonを自分のPCで初めて動かします。Windowsを想定して、python と py のどちらで動くかの確認、新しいフォルダの作成、仮想環境の作成と有効化、短い hello.py の作成と実行、終了（無効化）までを順番に案内してください。pip が「今使っている環境に部品を足すもの」である点も一言で説明してください。"},
+      "web-basics":{do:"AIに小さなページを作らせ、HTML・CSS・JavaScriptがどこかを指でなぞってみよう。",
+        prompt:"プログラミングは初めてです。1ファイルだけの、ボタンを押すと文字が変わるごく小さなWebページを作ってください。そのうえで、どこがHTML（中身・構造）、どこがCSS（見た目）、どこがJavaScript（動き）かを、コードにコメントを付けて初心者向けに説明してください。作ったファイルをブラウザで開く方法も教えてください。"},
+      "terminal":{do:"ターミナルを開いて、今いる場所の確認と一覧表示だけやってみよう。",
+        prompt:"ターミナル（WindowsならPowerShell）は初めてです。アプリの開き方から、今いる場所を表示するコマンド、フォルダの中身を一覧するコマンド、別のフォルダへ移動するコマンドまでを、一つずつ、各コマンドが何をするかの説明付きで教えてください。打ち込むと結果がどうなるかも添えてください。"},
+      "errors":{do:"わざとエラーを出して、その全文をAIに渡して直してもらおう。",
+        prompt:"これから出るエラーメッセージを全文貼ります。推測であちこち直さず、まずエラー文の読み方（どこに原因のヒントがあるか）を説明し、原因の候補を一つずつ挙げ、一度に一つだけ修正する形で進めてください。"},
+      "ai-mistakes":{do:"AIの回答を一つ選び、『本当に合ってる？』と検証を頼んでみよう。",
+        prompt:"さっきの回答について、本当に正しいか自分で確かめたいです。前提や根拠を示し、実際に動かして確認する手順（具体的な入力と期待する結果）を教えてください。もし不確かな部分があれば正直に指摘してください。"},
+      "library":{do:"作りたい機能に使えそうな定番ライブラリを、AIに2〜3つ挙げてもらおう。",
+        prompt:"ある機能（例：日付の選択、グラフ表示など作りたいもの）を足したいです。自分で書くべきか、既製のライブラリを使うべきかを判断したいので、定番の選択肢を2〜3つ、それぞれの長所短所、npm／pipでの入れ方、メンテ状況（更新が続いているか）の見分け方と一緒に教えてください。"}
     };
     /* 欲望を選ぶ問題：正解なし。分岐点で「次に何を足したい？」を選ぶと、その技術がツリーで光る。 */
     const DESIRES={
@@ -307,6 +351,7 @@
       goal:"『誰の何を解決するか』と『これができたら完成、という確認できる画面』を先に伝える。例：『金額を入力して追加すると一覧に1件出る、ここまでで完成。保存やログインは今回作らない』",
       collab:"『対象ファイルはこれ。変えていいのはここだけ。この挙動は壊さないで。不明点は先に質問して』と、範囲と前提を渡す。",
       task:"『まとめてやらず、〜まででいったん止めて。確認してから次に進めたい』と、一度の変更を小さく区切らせる。",
+      "web-basics":"『プログラミングは初めてです。これはHTML・CSS・JavaScriptのどの部分で、何をしているのかを、初心者向けに説明して』と、まず全体像から教わる。",
       htmlcss:"『クリックで移動するならdivではなく意味の合うa要素にして。見た目はCSSで整えて』と、要素の意味を指定する。",
       jsdom:"『サーバーは使わず、クリックを受けて状態を更新し、その値で画面の表示を書き換えて（JavaScriptとDOM操作で）』",
       "static-deploy":"『これはブラウザだけで動くので、GitHub Pagesなどの静的ホスティングで公開する手順を教えて』",
@@ -323,7 +368,13 @@
       scheduler:"『毎朝決まった時間に動かして。二度実行されても結果が壊れないように（冪等に）して、失敗時は通知して』",
       python:"『これはPythonの短いスクリプトで。必要なライブラリと実行手順も、別のPCで再現できる形で書いて』",
       files:"『ターミナルでこのフォルダのファイルを一覧／移動／実行したい。まず今いる場所を確認するコマンドから教えて』",
+      terminal:"『ターミナルは初めてです。今いる場所の確認から、一つずつコマンドを教えて。打ち込む前に、それが何をするコマンドかも一言添えて』",
+      errors:"『このエラーの全文を貼ります。推測で直さず、原因の候補を一つずつ挙げて、一度に一つだけ直す形で進めて』",
+      "ai-mistakes":"『この回答、本当に合ってる？根拠と、自分で動かして確かめる手順も教えて。不確かな部分は正直に指摘して』",
+      library:"『これは自分で書くべき？それとも既製のライブラリを使うべき？npm／pipで入る定番があれば、選び方の基準と一緒に教えて』",
+      "git-setup":"『まだGitを使っていません。今のフォルダで最初のコミットを作りたいので、git init から git status・git add・git commit まで順番に教えて。公開はまだしない』",
       git:"『この変更をGitで保存点として残したい。目的ごとにコミットを分けて、あとで戻せるようにして』",
+      "py-setup":"『PythonをこのPCで初めて動かしたい。入っているか確認して、仮想環境を作って有効化し、短い.pyを実行するまでをWindows向けに順番に教えて』",
       read:"『どのファイルの何を変えたか、差分(diff)で要点を説明して。想定外の変更がないか一緒に確認したい』",
       devtools:"『推測で直す前に、再現手順・Consoleのエラー・NetworkのRequest/Response/Statusを見て原因を絞って』",
       debug:"『あちこち変えず、まず再現手順を固定して。原因の仮説を一つずつ、最小の変更で確かめて』",
@@ -351,9 +402,12 @@
       // 共通幹
       goal:"lessons/goal.html",
       collab:"lessons/collab.html",
+      "ai-mistakes":"lessons/ai-mistakes.html",
       task:"lessons/task.html",
+      "library":"lessons/library.html",
       product:"lessons/product.html",
       // Web 前面
+      "web-basics":"lessons/web-basics.html",
       htmlcss:"lessons/htmlcss.html",
       jsdom:"lessons/jsdom.html",
       localstorage:"lessons/localstorage.html",
@@ -361,6 +415,7 @@
       "ui-structure":"lessons/ui-structure.html",
       // 自動化
       files:"lessons/files.html",
+      "py-setup":"lessons/py-setup.html",
       python:"lessons/python.html",
       dataflow:"lessons/dataflow.html",
       scheduler:"lessons/scheduler.html",
@@ -374,7 +429,10 @@
       "ai-cost":"lessons/ai-cost.html",
       // 品質
       read:"lessons/read.html",
+      "errors":"lessons/errors.html",
       devtools:"lessons/devtools.html",
+      "terminal":"lessons/terminal.html",
+      "git-setup":"lessons/git-setup.html",
       git:"lessons/git.html",
       debug:"lessons/debug.html",
       test:"lessons/test.html",
@@ -1330,7 +1388,7 @@
     q('#reset').onclick=()=>{ if(confirm("習得した進捗と制作ログ・連続記録をすべてリセットしますか？")){acquired.clear();recommendedPath.clear();save();activityLog=[];saveLog();setTarget(null);prog={built:{},days:[],daily:{},lastVisit:todayStr(),maxStage:0,logMigrated:true};saveProg();refresh();fitStart();} };
 
     /* ── pan / zoom ── */
-    let scale=1,panX=0,panY=0; const TW=1160,TH=2210;
+    let scale=1,panX=0,panY=0; const TW=1160,TH=2340;
     const zl=q('#zoomLabel');
     const clampS=v=>Math.max(.35,Math.min(1.7,v));
     function apply(){ tree.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`; if(zl)zl.textContent=Math.round(scale*100)+'%'; }

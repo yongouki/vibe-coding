@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エラーが出ても怖くなくなりたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">READ THE ERROR</span>
+    <h1>エラーは敵じゃない。次の一手のヒント</h1>
+    <p class="lead">赤い文字が出ると、何か壊した気がして手が止まります。でもエラーは、<strong>「ここを直して」とPCが教えてくれているメモ</strong>です。読み方と、AIへの渡し方さえ分かれば、エラーは怖くなくなります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">エラーが出たとき、<strong>全文をそのままAIに渡し、一度に一つずつ直す</strong>進め方が身につく。</p>
+  </div>
+
+  <h2>エラーが出るのは「失敗」ではない</h2>
+  <p>プログラムを書く人は、毎日のようにエラーを見ています。エラーは異常ではなく、開発のふつうの一部です。むしろ、何がダメだったかを具体的に教えてくれる、ありがたい手がかりです。</p>
+  <p>vibe coding の基本ループは、実はとてもシンプルです。</p>
+  <ol>
+    <li>AIがコードを書く</li>
+    <li>動かす → エラーが出る</li>
+    <li>エラーの全文をAIに渡す</li>
+    <li>原因を一つに絞って、一つだけ直す</li>
+    <li>また動かす</li>
+  </ol>
+  <p>この往復ができれば、たいていの詰まりは抜けられます。</p>
+
+  <h2>全文をそのまま渡す。要約しない</h2>
+  <p>つい「なんかエラーが出ました」とだけ伝えがちですが、それではAIも推測するしかありません。<strong>エラーメッセージは省略せず、全文をコピーして渡します</strong>。長くても、最後の行だけでなく全体に手がかりがあります。</p>
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">伝わらない</span>
+      「動きません」「エラーが出ます」とだけ伝える。</div>
+    <div class="ex good"><span class="tagline">原因に近づく</span>
+      何をしたら、どんなエラー全文が出たかを、そのまま貼る。</div>
+  </div>
+
+  <h2>一度に一つだけ直す</h2>
+  <p>焦ってあちこち同時に書き換えると、直ったのか・どの変更が効いたのかが分からなくなります。<strong>原因の候補を一つずつ確かめ、一回の修正は一か所</strong>。遠回りに見えて、これが一番速い道です。</p>
+
+  <h2>AIへ渡すときの形</h2>
+  <div class="box">
+    <p style="margin:0">これから出るエラーメッセージを全文貼ります。推測であちこち直さず、まずエラー文の読み方（どこに原因のヒントがあるか）を説明し、原因の候補を一つずつ挙げ、一度に一つだけ修正する形で進めてください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>エラーは異常ではなく、次の一手のヒント。</li>
+      <li>全文をそのまま渡す。要約や省略をしない。</li>
+      <li>原因は推測で増やさず、一つずつ確かめる。</li>
+      <li>一回の修正は一か所。直ったら次へ。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>わざと小さなミスのあるコードをAIに書かせる（または既存コードを少し壊す）と、エラーが出ます。そのエラーの<strong>全文</strong>をコピーし、上の依頼文と一緒にAIへ渡して、原因を一つずつ絞りながら直してみましょう。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>エラーの全文を渡し、原因を一つに絞って一か所だけ直し、もう一度動かして確認できたらクリアです。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-errors">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="product.html"><span class="dir">前の単元</span>まず一つ動かす</a>
+    <a class="next" href="devtools.html"><span class="dir">次の単元</span>何が起きたか伝えたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>

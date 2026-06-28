@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webページの中身を知りたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-web">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">WEB BASICS / HTML・CSS・JS</span>
+    <h1>画面を作る前に、Webページの正体を知る</h1>
+    <p class="lead">コードを自分で書けるようになる必要はありません。でも、AIが書いたものが「何でできているか」だけは先に知っておくと、この先ずっと迷いません。Webページは、たった3つの役割でできています。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">AIが出したコードを見て、<strong>HTML・CSS・JavaScriptのどれが何をしているか</strong>を役割で読み分けられる。</p>
+  </div>
+
+  <h2>Webページは3つの役割でできている</h2>
+  <p>どんなに複雑なサイトも、つきつめると次の3つの組み合わせです。家にたとえると分かりやすいです。</p>
+  <ul>
+    <li><strong>HTML</strong>：中身・構造。「ここに見出し」「ここにボタン」「ここに一覧」と、<em>何があるか</em>を決める。家でいう骨組みと間取り。</li>
+    <li><strong>CSS</strong>：見た目。色・余白・大きさ・並び方など、<em>どう見えるか</em>を決める。家でいう内装や塗装。</li>
+    <li><strong>JavaScript</strong>：動き。ボタンを押したら表示が変わる、入力に反応する、など<em>押したらどうなるか</em>を決める。家でいうスイッチや仕掛け。</li>
+  </ul>
+  <p>この3つの役割が分かっていれば、AIが書いた長いコードも「これは中身、これは見た目、これは動き」と仕分けながら読めます。</p>
+
+  <h2>ブラウザが、その3つを「画面」に変えている</h2>
+  <p>HTML・CSS・JavaScriptは、それ自体は<strong>ただの文字（テキスト）</strong>です。その文字を読み取って、実際の画面として表示してくれているのがブラウザ（Chrome、Edge、Safariなど）です。</p>
+  <p>つまり、あなたが見ている「ボタンのあるきれいな画面」は、ブラウザが文字を解釈した結果です。コードを書く＝魔法の呪文ではなく、ブラウザへの指示書を文字で書いている、と捉えると気が楽になります。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">身構えてしまう</span>
+      「プログラミング＝才能が要る難しいもの」と思って、最初の一歩が出ない。</div>
+    <div class="ex good"><span class="tagline">正体が分かる</span>
+      「コードは文字。AIが書き、自分は役割で読んで指示する」と分かり、安心して触れる。</div>
+  </div>
+
+  <h2>「ブラウザの中」と「ブラウザの外」── フロントエンドとバックエンド</h2>
+  <p>ここまでの HTML・CSS・JavaScript は、すべて<strong>ブラウザの中</strong>で動く部分です。この、目に見える画面側をまとめて<strong>フロントエンド</strong>と呼びます。</p>
+  <p>一方で、「みんなで同じデータを共有したい」「秘密の鍵（APIキーなど）を人に見られないよう隠したい」となると、ブラウザの中だけでは足りず、<strong>ブラウザの外</strong>にもう一つ動く場所が要ります。この目に見えない裏側を<strong>バックエンド</strong>と呼びます。</p>
+  <div class="compare">
+    <div class="ex good"><span class="tagline">フロントエンド</span>
+      ブラウザの中で動く、目に見える画面側。HTML・CSS・JavaScript はここ。</div>
+    <div class="ex good"><span class="tagline">バックエンド</span>
+      ブラウザの外で動く裏側。共有データの保存や、秘密の鍵を扱うのはここ。</div>
+  </div>
+  <p>今の段階は<strong>フロントエンドだけで十分</strong>です。バックエンドは「自分の端末だけ」を超えて共有したくなった時に出てきます。今は名前と場所——<em>中がフロント、外がバック</em>——だけ覚えておけば大丈夫です。</p>
+
+  <h2>あなたの役割は「書く」より「読んで指示する」</h2>
+  <p>バイブコーディングでは、コードの多くをAIが書きます。だから、あなたに必要なのは全部を覚えることではありません。</p>
+  <ul>
+    <li>AIが出したものを、3つの役割で<strong>読める</strong>こと</li>
+    <li>「ここの動きを変えて」「見た目だけ直して」と、<strong>役割を指して頼める</strong>こと</li>
+  </ul>
+  <p>用語を暗記するより、「これはHTML・CSS・JavaScriptのどれ？」とAIに聞き返せる方が、ずっと役に立ちます。</p>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">プログラミングは初めてです。1ファイルだけの、ボタンを押すと文字が変わるごく小さなWebページを作ってください。そのうえで、どこがHTML（中身・構造）、どこがCSS（見た目）、どこがJavaScript（動き）かを、コードにコメントを付けて初心者向けに説明してください。作ったファイルをブラウザで開く方法も教えてください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>Webページは HTML（中身）・CSS（見た目）・JavaScript（動き）の3つでできている。</li>
+      <li>コードはただの文字で、ブラウザがそれを画面に変えている。</li>
+      <li>ブラウザの中＝フロントエンド、ブラウザの外＝バックエンド。今はフロントだけで十分。</li>
+      <li>全部覚える必要はない。役割で読み分け、役割を指して頼めれば十分。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>上の依頼文をAIにそのまま渡して、小さなページを1つ作らせてください。返ってきたコードを上から眺め、「ここは中身（HTML）」「ここは見た目（CSS）」「ここは動き（JavaScript）」と、3色に塗り分けるつもりで指でなぞってみましょう。全部分からなくて大丈夫。3つの固まりが見分けられれば成功です。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>暗記できたかではありません。AIが出したコードを見て、HTML（中身）・CSS（見た目）・JavaScript（動き）の3つに見分けられたらクリアです。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-web-basics">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="task.html"><span class="dir">前の単元</span>小さなタスクに分ける</a>
+    <a class="next" href="htmlcss.html"><span class="dir">次の単元</span>まず画面を出したい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>

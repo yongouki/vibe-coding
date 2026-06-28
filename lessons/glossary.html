@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用語集 ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+<style>
+  /* 用語集ページ専用の追加スタイル（共通は lesson.css） */
+  .gloss-intro{margin:0 0 22px;color:var(--muted);font-size:15px}
+  .gloss-search{position:sticky;top:10px;z-index:5;margin:0 0 26px}
+  .gloss-search input{width:100%;padding:13px 16px;border-radius:12px;
+    border:1px solid #2a3b50;background:#0c141f;color:var(--ink);
+    font-size:15px;font-family:inherit;outline:none}
+  .gloss-search input:focus{border-color:color-mix(in srgb,var(--accent) 55%,#2a3b50);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent)}
+  .gloss-search input::placeholder{color:#5a6c81}
+  .gloss-count{margin:8px 2px 0;font-size:12px;color:#67798f}
+
+  .gcat{margin:0 0 30px}
+  .gcat-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;
+    font-size:13px;letter-spacing:.1em;color:#8294aa;text-transform:uppercase}
+  .gcat-h::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--cat,#b397ff)}
+
+  .gterm{scroll-margin-top:80px;margin:0 0 12px;padding:16px 18px;border-radius:13px;
+    border:1px solid #26364a;background:#0b131e;transition:border-color .2s,background .2s}
+  .gterm:target{border-color:color-mix(in srgb,var(--cat,#b397ff) 55%,#26364a);
+    background:linear-gradient(160deg,color-mix(in srgb,var(--cat,#b397ff) 12%,#0b131e),#0b131e)}
+  .gterm-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+  .gterm-name{font-size:17px;font-weight:750;
+    color:color-mix(in srgb,var(--cat,#b397ff) 32%,var(--ink))}
+  .gterm-kana{font-size:11.5px;color:#7d8fa6;letter-spacing:.04em}
+  .gterm-def{margin:0;color:#cbd6e3;font-size:14.5px;line-height:1.85}
+  .gterm-say{margin:10px 0 0;padding:9px 12px;border-radius:10px;
+    background:color-mix(in srgb,var(--cat,#b397ff) 9%,#0c1420);
+    border:1px solid color-mix(in srgb,var(--cat,#b397ff) 22%,#26364a);
+    font-size:13px;color:#bccadb;line-height:1.8}
+  .gterm-say b{display:block;margin-bottom:3px;font-size:10px;letter-spacing:.1em;
+    color:color-mix(in srgb,var(--cat,#b397ff) 55%,#fff);font-weight:700}
+  .gterm-lesson{display:inline-block;margin-top:10px;font-size:12.5px;text-decoration:none;
+    color:color-mix(in srgb,var(--cat,#b397ff) 60%,#fff)}
+  .gterm-lesson:hover{text-decoration:underline}
+
+  .gloss-empty{display:none;padding:30px 4px;color:#67798f;text-align:center;font-size:14px}
+</style>
+</head>
+<body class="lesson kind-common glossary-page">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">GLOSSARY</span>
+    <h1>用語集</h1>
+    <p class="lead">レッスンに出てくる言葉を、やさしい言い換えでまとめました。一部の用語には「AIへの頼み方」も載せています。レッスン本文では、これらの語にマウスを乗せると同じ説明がその場で出ます。</p>
+  </header>
+
+  <p class="gloss-intro">用語を丸暗記する必要はありません。「これってどういう意味だっけ？」を、必要なときに引ければ十分です。各項目のリンクから、その語をくわしく扱うレッスンへ飛べます。</p>
+
+  <div class="gloss-search">
+    <input id="q" type="search" placeholder="用語を検索（例：API、コミット、認証 …）" autocomplete="off" aria-label="用語を検索">
+    <p class="gloss-count" id="count" aria-live="polite"></p>
+  </div>
+
+  <div id="root"></div>
+  <p class="gloss-empty" id="empty">一致する用語が見つかりませんでした。</p>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+
+<!-- 用語データ（ホバー用カードと共通） -->
+<script src="glossary.js"></script>
+<script>
+(function () {
+  var CATS = [
+    { key: "web",     label: "Web画面の基本" },
+    { key: "data",    label: "データと通信" },
+    { key: "ai",      label: "AI・サーバー連携" },
+    { key: "auto",    label: "公開・自動化・Python" },
+    { key: "quality", label: "バージョン管理・品質・運用" }
+  ];
+  var CAT_COLOR = { web:"var(--web)", data:"var(--web)", ai:"var(--ai)", auto:"var(--auto)", quality:"var(--quality)" };
+
+  var DATA = window.VIBE_GLOSSARY || [];
+  var root = document.getElementById("root");
+  var qEl = document.getElementById("q");
+  var countEl = document.getElementById("count");
+  var emptyEl = document.getElementById("empty");
+
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+
+  function render() {
+    var html = "";
+    CATS.forEach(function (cat) {
+      var items = DATA.filter(function (t) { return t.cat === cat.key; });
+      if (!items.length) return;
+      html += '<section class="gcat" data-cat="' + cat.key + '" style="--cat:' + CAT_COLOR[cat.key] + '">';
+      html += '<h2 class="gcat-h">' + esc(cat.label) + "</h2>";
+      items.forEach(function (t) {
+        var search = (t.term + " " + (t.kana||"") + " " + (t.aliases||[]).join(" ") + " " + t.def
+          + " " + (t.say||"") + " " + (t.lesson ? t.lesson[1] : "") + " " + cat.label).toLowerCase();
+        html += '<article class="gterm" id="term-' + t.id + '" data-search="' + esc(search) + '">';
+        html += '<div class="gterm-head"><span class="gterm-name">' + esc(t.term) + "</span>";
+        if (t.kana) html += '<span class="gterm-kana">' + esc(t.kana) + "</span>";
+        html += "</div>";
+        html += '<p class="gterm-def">' + esc(t.def) + "</p>";
+        if (t.say) html += '<p class="gterm-say"><b>AIへの頼み方</b>' + esc(t.say) + "</p>";
+        if (t.lesson) html += '<a class="gterm-lesson" href="' + t.lesson[0] + '">レッスンで学ぶ：' + esc(t.lesson[1]) + " →</a>";
+        html += "</article>";
+      });
+      html += "</section>";
+    });
+    root.innerHTML = html;
+    updateCount(DATA.length);
+  }
+
+  function updateCount(n) { countEl.textContent = n + " 語"; }
+
+  function filter() {
+    var q = qEl.value.trim().toLowerCase();
+    var terms = root.querySelectorAll(".gterm");
+    var shown = 0;
+    terms.forEach(function (el) {
+      var hit = !q || el.getAttribute("data-search").indexOf(q) !== -1;
+      el.style.display = hit ? "" : "none";
+      if (hit) shown++;
+    });
+    root.querySelectorAll(".gcat").forEach(function (sec) {
+      var any = sec.querySelector('.gterm:not([style*="display: none"])');
+      sec.style.display = any ? "" : "none";
+    });
+    emptyEl.style.display = shown ? "none" : "block";
+    updateCount(shown);
+  }
+
+  render();
+  qEl.addEventListener("input", filter);
+
+  // #term-xxx で来たらハイライトしてスクロール
+  if (location.hash && location.hash.indexOf("#term-") === 0) {
+    var el = document.getElementById(location.hash.slice(1));
+    if (el) el.scrollIntoView({ block: "center" });
+  }
+})();
+</script>
+</body>
+</html>

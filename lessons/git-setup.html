@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今の状態を最初に保存したい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">GIT SETUP / FIRST COMMIT</span>
+    <h1>Gitを始めて、最初の保存点をひとつ作る</h1>
+    <p class="lead">一つ動くものができたら、まずやることは公開ではありません。いまの状態を「戻れる保存点」として手元に残すことです。ここがGitの出発点で、これさえできれば、この先どれだけ壊しても怖くなくなります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">いま動いているフォルダで<strong>最初のコミット（保存点）を1つ作る</strong>。GitHubへの公開はまだしない。</p>
+  </div>
+
+  <h2>GitとGitHubは別物</h2>
+  <p>最初につまずきやすいのがこの2つの違いです。ざっくり言うと、</p>
+  <ul>
+    <li><strong>Git</strong>：自分のPCの中で、変更を保存点として積んでいく仕組み。ネットは要りません。</li>
+    <li><strong>GitHub</strong>：そのGitの履歴を、ネット上に置いて公開・共有する場所。後から使えばよく、最初は要りません。</li>
+  </ul>
+  <p>今回は<strong>Gitだけ</strong>を使います。アカウント登録もURL公開もまだ不要です。手元に保存点を作ることに集中します。</p>
+
+  <h2>入っているか確認する</h2>
+  <p>まずGitがこのPCに入っているかを確かめます。ターミナル（Windowsなら PowerShell）で次を実行し、バージョンが表示されれば入っています。</p>
+  <div class="box"><p style="margin:0" class="mono">git --version</p></div>
+  <p>表示されなければ、AIに「Gitが入っていないようです。このOSへの入れ方を教えて」と頼めば案内してくれます。</p>
+
+  <h2>フォルダでGitを始めて、最初の保存点を作る</h2>
+  <p>作業フォルダの中で、次の流れを一度たどります。順番に意味があります。</p>
+  <ol>
+    <li><span class="mono">git init</span> … このフォルダでGitを始める（最初の1回だけ）</li>
+    <li><span class="mono">git status</span> … いま何が保存対象になっているか、現在地を見る</li>
+    <li><span class="mono">git add .</span> … 保存したいものを保存対象に選ぶ</li>
+    <li><span class="mono">git commit -m "最初の保存点"</span> … 選んだ内容を保存点として残す</li>
+  </ol>
+  <p><span class="mono">git status</span> は、迷ったらいつでも実行してよい「現在地を見る」コマンドです。何かする前後に挟むと、状態がつかめます。</p>
+
+  <div class="compare">
+    <div class="ex bad"><span class="tagline">手作業でコピー</span>
+      「念のため」とフォルダを日付付きで何個もコピーする → どれが最新か分からなくなる。</div>
+    <div class="ex good"><span class="tagline">保存点で残す</span>
+      コミットとして残す → 一覧で履歴を追え、いつでもその時点に戻れる。</div>
+  </div>
+
+  <h2>AIに最初の保存点づくりを手伝ってもらう</h2>
+  <p>コマンドを覚えていなくても大丈夫です。「初めてで、公開はまだしない」と添えると、手元の作業だけに絞って案内してくれます。</p>
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">Gitを初めて使います。今この作業フォルダにあるものを、最初の保存点（コミット）として残したいです。GitとGitHubの違いを一言で説明し、Gitがこの環境に入っているかの確認、git init、git status での状態確認、git add と git commit までを、初めての人向けに順番に案内してください。GitHubへの公開は今回はまだしません。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>GitはPC内の保存点づくり、GitHubはネットでの公開。今回はGitだけ。</li>
+      <li>最初の一歩は公開ではなく、手元で最初のコミットを作ること。</li>
+      <li>git status はいつでも「現在地」を見るコマンド。迷ったら実行する。</li>
+      <li>add（選ぶ）→ commit（残す）で保存点ができる。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま動いているフォルダで <span class="mono">git init</span> を実行し、<span class="mono">git status</span> で状態を見てから、<span class="mono">git add .</span> と <span class="mono">git commit -m "最初の保存点"</span> で最初のコミットを作ってみましょう。最後に <span class="mono">git log</span> で、その保存点が残っていることを確認します。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>大事なのは、いきなり公開することではなく、手元に「戻れる保存点」を1つ作れたかどうかです。git log に最初のコミットが出ていればクリアです。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-git-setup">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="terminal.html"><span class="dir">前の単元</span>ターミナルに慣れたい</a>
+    <a class="next" href="git.html"><span class="dir">次の単元</span>壊れても戻れるようにしたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>

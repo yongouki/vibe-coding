@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>既製の部品を借りたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-common">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">LIBRARIES / PACKAGES</span>
+    <h1>全部を自分で作らない。部品は借りる</h1>
+    <p class="lead">カレンダー、グラフ、日付の計算——よくある機能は、たいてい誰かがもう作っています。それを<strong>既製の部品（ライブラリ／パッケージ）として借りて足す</strong>。これを知っているだけで、作れるものの幅が一気に広がります。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">機能を足すとき、<strong>自分で書くか・既製のライブラリを借りるか</strong>を判断できるようになる。</p>
+  </div>
+
+  <h2>ライブラリ／パッケージって何？</h2>
+  <p>ライブラリ（パッケージとも呼びます）は、<strong>誰かが作って公開した、再利用できるコードのかたまり</strong>です。料理でいえば、だしを一から取らずに「めんつゆ」を使うようなもの。よくある処理は、借りてくれば自分で書かずに済みます。</p>
+  <p>導入は、言語ごとの「部品屋さん」から行います。</p>
+  <ul>
+    <li><strong>JavaScript／Web</strong>：<span class="mono">npm</span> で導入する</li>
+    <li><strong>Python</strong>：<span class="mono">pip</span> で導入する</li>
+  </ul>
+  <p>どちらも「今の環境に部品を足す」道具です。Pythonでは仮想環境を有効化してから入れると、他と混ざりません。</p>
+
+  <h2>自作と借用、どっちを選ぶ？</h2>
+  <p>なんでも借りればいいわけでも、なんでも自作すべきでもありません。ざっくりの目安です。</p>
+  <div class="compare">
+    <div class="ex good"><span class="tagline">借りるのが向く</span>
+      よくある機能、車輪の再発明になるもの、安全性が大事なもの（日付・認証・決済まわりなど）。</div>
+    <div class="ex bad"><span class="tagline">借りなくてよい</span>
+      数行で書ける小さな処理。たった一つの用途のために巨大な部品を入れる。</div>
+  </div>
+  <p>巨大な部品を一つ入れるたびに、サイズや更新の手間も増えます。「これは借りるべき？」と<strong>AIに判断ごと相談する</strong>のが近道です。</p>
+
+  <h2>選ぶときに見るところ</h2>
+  <ul>
+    <li><strong>更新が続いているか</strong>（何年も放置されていないか）</li>
+    <li><strong>使っている人が多いか</strong>（情報や事例が見つかるか）</li>
+    <li><strong>用途に対して大きすぎないか</strong></li>
+  </ul>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">ある機能（例：日付の選択、グラフ表示など作りたいもの）を足したいです。自分で書くべきか、既製のライブラリを使うべきかを判断したいので、定番の選択肢を2〜3つ、それぞれの長所短所、npm／pipでの入れ方、メンテ状況（更新が続いているか）の見分け方と一緒に教えてください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>よくある機能は、既製のライブラリを借りて足せる。</li>
+      <li>JavaScriptはnpm、Pythonはpipで導入する。</li>
+      <li>小さな処理は自作、よくある／安全が大事なものは借用。</li>
+      <li>更新・利用者数・サイズを見て選ぶ。迷ったらAIに相談。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>いま作っているもの（または作りたいもの）に足したい機能を一つ決め、上の依頼文をAIに渡して、定番ライブラリを2〜3つ挙げてもらいましょう。それぞれの長所短所と入れ方を読み、「自作か借用か」を自分で判断してみてください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>足したい機能に対して、自作か借用かを理由つきで選べたらクリアです。借りる場合は、入れ方（npm／pip）も分かっていれば十分です。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-library">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="web-basics.html"><span class="dir">前の単元</span>Webページの中身を知りたい</a>
+    <span class="next soon"><span class="dir">次の単元</span>必要になったときに</span>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>

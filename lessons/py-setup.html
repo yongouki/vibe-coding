@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PythonをこのPCで動かしたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-auto">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">PYTHON SETUP / VENV</span>
+    <h1>まず、このPCでPythonを一度動かす</h1>
+    <p class="lead">スクリプトや仮想環境の話に入る前に、入口がひとつ抜けがちです。「自分のPCでPythonが動くか」「短い .py を一度実行できるか」。ここを越えておくと、この先の自動化がぐっと楽になります。「環境構築」と身構えず、まず一度動かすことが目標です。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">新しいフォルダで<strong>仮想環境を作り、短いプログラムを実行</strong>し、終了後にもう一度同じ手順を再現できる。</p>
+  </div>
+
+  <h2>入っているか確認する（python か py か）</h2>
+  <p>まずPythonがこのPCにあるかを確かめます。Windowsでは <span class="mono">python</span> と <span class="mono">py</span> の<strong>どちらで動くか</strong>が環境によって違うので、両方試します。バージョンが表示された方が、あなたのPCで使えるコマンドです。</p>
+  <div class="box"><p style="margin:0" class="mono">python --version<br>py --version</p></div>
+  <p>どちらも表示されなければ、AIに「Windowsです。Pythonが入っていないようなので入れ方を教えて」と頼めば案内してくれます。</p>
+
+  <h2>.py ファイルを作って、ターミナルから実行する</h2>
+  <p>テキストエディタで <span class="mono">hello.py</span> を作り、一行だけ書きます。</p>
+  <div class="box"><p style="margin:0" class="mono">print("動いた")</p></div>
+  <p>そのファイルがあるフォルダで、確認できた方のコマンドで実行します。<span class="mono">動いた</span> と表示されれば、最初の成功体験です。</p>
+  <div class="box"><p style="margin:0" class="mono">python hello.py</p></div>
+
+  <h2>仮想環境を作って有効化する</h2>
+  <p>仮想環境は、そのフォルダ専用の「Pythonの作業部屋」です。部品（ライブラリ）を入れても、PC全体や他のプロジェクトと混ざりません。新しいフォルダで作り、有効化します。</p>
+  <ol>
+    <li>仮想環境を作る：<span class="mono">python -m venv .venv</span></li>
+    <li>有効化する（Windows）：<span class="mono">.venv\Scripts\activate</span></li>
+    <li>使い終わったら無効化：<span class="mono">deactivate</span></li>
+  </ol>
+  <p>有効化されると、行の先頭に <span class="mono">(.venv)</span> のような表示が出ます。これが「いま作業部屋の中にいる」目印です。</p>
+
+  <h2>pip は「今いる環境に部品を足す」道具</h2>
+  <p><span class="mono">pip</span> は、いま有効化しているPython環境へ外部の部品を追加するコマンドです。仮想環境を有効化してから <span class="mono">pip install</span> すれば、その部品はこのフォルダの作業部屋にだけ入ります。だから他に影響しません。</p>
+
+  <h2>エラーが出たら、何をAIへ渡すか</h2>
+  <p>つまずいたら、推測で直す前に次をそのまま渡すと、原因を絞りやすくなります。</p>
+  <ul>
+    <li>使ったコマンド（<span class="mono">python</span> か <span class="mono">py</span> か）</li>
+    <li>表示されたエラーメッセージ全文</li>
+    <li>OS（Windows）と、いま仮想環境を有効化しているか</li>
+  </ul>
+
+  <div class="box">
+    <h3>そのまま使える依頼文</h3>
+    <p style="margin:0">Pythonを自分のPCで初めて動かします。Windowsを想定して、python と py のどちらで動くかの確認、新しいフォルダの作成、仮想環境の作成と有効化、短い hello.py の作成と実行、終了（無効化）までを順番に案内してください。pip が「今使っている環境に部品を足すもの」である点も一言で説明してください。</p>
+  </div>
+
+  <div class="keypoints">
+    <h2>押さえるべきこと</h2>
+    <ul>
+      <li>まず python か py か、自分のPCで動く方を確かめる。</li>
+      <li>短い .py を一度実行できれば、最初の入口は越えている。</li>
+      <li>仮想環境はフォルダ専用の作業部屋。部品が混ざらない。</li>
+      <li>pip は「今いる環境に部品を足す」道具。有効化してから使う。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>やってみよう</h3>
+    <p>新しいフォルダを作り、<span class="mono">python -m venv .venv</span> で仮想環境を作って有効化します。<span class="mono">print("動いた")</span> だけの <span class="mono">hello.py</span> を実行し、表示を確認したら <span class="mono">deactivate</span> で抜けます。最後に、もう一度同じ手順を最初から再現できるか試してみてください。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>「Pythonを理解した」かどうかではありません。新しいフォルダで仮想環境を作り、短いプログラムを実行し、終了後にもう一度同じ手順を再現できれば十分です。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-py-setup">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="files.html"><span class="dir">前の単元</span>大量のファイルを扱いたい</a>
+    <a class="next" href="python.html"><span class="dir">次の単元</span>繰り返しを任せたい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ターミナルに慣れたい ─ VIBE CODING</title>
+<link rel="stylesheet" href="lesson.css">
+</head>
+<body class="lesson kind-quality">
+<div class="wrap">
+
+  <a class="back" href="../vibe-skill-tree.html">← スキルツリーに戻る</a>
+
+  <header class="lhead">
+    <span class="kicker mono">TERMINAL / CLI</span>
+    <h1>黒い画面は、ただの「文字の指示窓」</h1>
+    <p class="lead">AIは平気で「ターミナルで〜してください」と言います。でも、あの黒い画面は怖いものではありません。<strong>文字でコマンドを打って、PCに指示を出すだけ</strong>の窓です。Gitも、公開も、ライブラリの追加も、入口はここです。</p>
+  </header>
+
+  <div class="box goalbox">
+    <span class="kicker mono">今回の着地点</span>
+    <p style="margin:0">ターミナルを開き、<strong>今いる場所の確認・一覧・移動</strong>の3つだけ、自分で打てるようになる。</p>
+  </div>
+
+  <h2>ターミナルって何をする画面？</h2>
+  <p>普段はアイコンをマウスでクリックしてPCを操作します。ターミナルは、その操作を<strong>文字（コマンド）で命令する</strong>ための画面です。コマンドを1行打ってEnterを押すと、PCがそれを実行し、<strong>結果（成功した内容、またはエラー）を文字で返します</strong>。</p>
+  <p>つまり、やることは「打つ → 返事を読む」のくり返しだけ。難しい操作ではありません。</p>
+
+  <h2>まず覚えるのは3つだけ</h2>
+  <p>全コマンドを覚える必要はありません。最初は「迷子にならないための3つ」で十分です。</p>
+  <ol>
+    <li><strong>今どこにいる？</strong>（PowerShell / Mac / Linux：<span class="mono">pwd</span>。PowerShellは <span class="mono">Get-Location</span> でも可）</li>
+    <li><strong>ここに何がある？</strong>（<span class="mono">dir</span> または <span class="mono">ls</span>）</li>
+    <li><strong>別の場所へ移る</strong>（<span class="mono">cd フォルダ名</span>）</li>
+  </ol>
+  <p>「今いる場所」と「そこにある中身」が分かれば、たいていの『ファイルが見つからない』は防げます。</p>
+
+  <h2>結果は「成功」か「エラー」。どちらも情報</h2>
+  <p>コマンドを打つと、うまくいけば結果が、失敗すればエラーメッセージが出ます。赤い文字が出ても慌てないでください。<strong>その文には、次に何をすればいいかのヒントが書かれています</strong>。読めなければ、そのままAIに貼れば十分です。</p>
+
+  <h2>AIへ頼むときは「初めてです」と添える</h2>
+  <div class="box">
+    <p style="margin:0">ターミナル（WindowsならPowerShell）は初めてです。アプリの開き方から、今いる場所を表示するコマンド、フォルダの中身を一覧するコマンド、別のフォルダへ移動するコマンドまでを、一つずつ、各コマンドが何をするかの説明付きで教えてください。打ち込むと結果がどうなるかも添えてください。</p>
+  </div>
+  <p>OS（WindowsかMacか）を一言添えると、自分の画面で動くコマンドが返ってきます。ここを省くと噛み合わないことがあります。</p>
+
+  <div class="keypoints">
+    <h2>ここだけ持ち帰る</h2>
+    <ul>
+      <li>ターミナルは「文字でPCに指示を出す窓」。怖いものではない。</li>
+      <li>まずは「今どこ・何がある・どう移る」の3つだけ。</li>
+      <li>結果もエラーも情報。読めなければそのままAIに貼る。</li>
+      <li>頼むときはOSを添える。WindowsとMacで書き方が違う。</li>
+    </ul>
+  </div>
+
+  <div class="box try">
+    <h3>5分だけやってみる</h3>
+    <p>ターミナルを開き、<span class="mono">pwd</span>（または <span class="mono">Get-Location</span>）で今いる場所を表示し、<span class="mono">ls</span>（または <span class="mono">dir</span>）で中身を一覧し、<span class="mono">cd</span> で別のフォルダへ移動して、もう一度一覧してみましょう。「打つ→返事を読む」の感覚がつかめれば十分です。</p>
+  </div>
+
+  <div class="checkpoint">
+    <span class="kicker mono">チェックポイント</span>
+    <p>今いる場所を表示し、中身を一覧し、別のフォルダへ移動できたらクリアです。コマンドを暗記する必要はありません。</p>
+    <p class="returnhint">読み終えたら、下のボタンからツリーに戻り、そのまま理解度チェックへ進めます。タブを行き来する必要はありません。</p>
+    <a class="tolink" href="../vibe-skill-tree.html#check-terminal">理解度チェックへ →</a>
+  </div>
+
+  <nav class="lnav">
+    <a href="product.html"><span class="dir">前の単元</span>まず一つ動かす</a>
+    <a class="next" href="git-setup.html"><span class="dir">次の単元</span>今の状態を最初に保存したい</a>
+  </nav>
+
+  <p class="lfoot">VIBE CODING スキルツリー ／ <a href="../vibe-skill-tree.html">ツリーへ戻る</a></p>
+
+</div>
+  <script src="glossary.js" defer></script>
+</body>
+</html>
