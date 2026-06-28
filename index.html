@@ -3,114 +3,325 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIBE CODING ─ ホーム</title>
-<meta name="description" content="バイブコーディングを遊びながら学ぶ。スキルツリーとスキル盤で、できることを少しずつ解放していこう。">
+<title>バイブコーディング | AIと作りながら学ぶ</title>
+<meta name="description" content="AIと一緒に作りながら、目的の決め方から実装・確認・公開までを学ぶ。作りたいものを選び、必要なスキルを一つずつ解放していこう。">
+<!-- OGP / SNS共有用。og:image は公開後に og-image.png を用意してください（絶対URL） -->
+<meta property="og:title" content="バイブコーディング ─ AIと作りながら学ぶ">
+<meta property="og:description" content="AIと一緒に作りながら、必要な技術を一つずつ解放して学ぶスキルツリー。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yongouki.github.io/vibe-coding/">
+<meta property="og:image" content="https://yongouki.github.io/vibe-coding/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#061019">
 <style>
   :root{
-    --bg:#0a0f14;
-    --panel:#121b25;
-    --slate:#1b2632;
-    --slate-stroke:#2a3a4c;
-    --ink:#e7eef6;
-    --muted:#7e92a8;
-    --muted2:#5a6c80;
-    --amber:#f3b14a;
-    --teal:#2fe3c4;
-    --entry:#8aa0ff;
+    --bg:#061019;
+    --ink:#dff0f6;
+    --muted:#7fa0b2;
+    --dim:#4d6675;
+    --entry:#5b9dff;
+    --common:#7aa0ff;
+    --web:#45d5e7;
+    --auto:#56c7d8;
+    --final:#7fe0c8;
+    --line:rgba(52,152,182,.5);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
     background:
-      radial-gradient(1200px 700px at 50% -10%, #11202b 0%, transparent 60%),
-      radial-gradient(900px 600px at 90% 110%, #11181f 0%, transparent 55%),
+      radial-gradient(1100px 680px at 50% -12%,rgba(40,150,180,.16),transparent 66%),
+      radial-gradient(760px 540px at 92% 108%,rgba(91,157,255,.08),transparent 60%),
       var(--bg);
     color:var(--ink);
     font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
-    min-height:100vh;
     -webkit-font-smoothing:antialiased;
-    display:flex;flex-direction:column;
+    min-height:100vh;display:flex;flex-direction:column;
   }
-  .mono{font-family:"SF Mono",ui-monospace,"Roboto Mono",Menlo,Consolas,monospace}
+  .mono{font-family:"SFMono-Regular",ui-monospace,Consolas,monospace}
 
-  header{text-align:center;padding:64px 20px 8px}
-  .eyebrow{
-    font-family:"SF Mono",ui-monospace,monospace;
-    font-size:11px;letter-spacing:.42em;
-    color:var(--muted2);text-transform:uppercase;
-    margin:0 0 14px;padding-left:.42em;
-  }
-  h1{
-    margin:0;font-size:clamp(30px,6vw,52px);font-weight:800;letter-spacing:.02em;
-    background:linear-gradient(100deg,#dce8ff 0%,#a894ff 45%,#59e6c1 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .sub{margin:16px auto 0;max-width:540px;color:var(--muted);font-size:14px;line-height:1.8}
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;max-width:1140px;width:100%;margin:0 auto;padding:22px 30px 0}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.34em;color:#86a6ba}
+  .brand .live{width:8px;height:8px;border-radius:2px;background:var(--web);box-shadow:0 0 10px var(--web);display:inline-block}
+  .topbar .label{font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.2em;color:#4f6577}
 
-  main{flex:1;display:flex;align-items:center;justify-content:center;padding:36px 20px 24px}
-  .cards{
-    display:grid;gap:18px;width:100%;max-width:440px;
-    grid-template-columns:1fr;
-  }
-  .card{
-    position:relative;display:block;text-decoration:none;color:inherit;
-    background:linear-gradient(160deg,var(--panel),#0d141b);
-    border:1px solid var(--slate-stroke);border-radius:16px;
-    padding:26px 24px 24px;overflow:hidden;
-    transition:transform .2s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  .card::before{
-    content:"";position:absolute;inset:0;border-radius:16px;
-    box-shadow:0 0 32px -8px rgba(47,227,196,.0) inset;transition:box-shadow .3s ease;
-  }
-  .card:hover{transform:translateY(-3px);border-color:#34536a}
-  .card.tree:hover{box-shadow:0 14px 34px -18px rgba(138,160,255,.7)}
-  .card.grid:hover{box-shadow:0 14px 34px -18px rgba(47,227,196,.7)}
-  .ctag{
-    font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.24em;
-    text-transform:uppercase;color:var(--muted2);
-  }
-  .ctitle{margin:10px 0 8px;font-size:20px;font-weight:800}
-  .card.tree .ctitle{color:#c9d6ff}
-  .card.grid .ctitle{color:#a9f3e5}
-  .cdesc{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
-  .cgo{
-    display:inline-flex;align-items:center;gap:6px;margin-top:18px;
-    font-family:"SF Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.1em;
-  }
-  .card.tree .cgo{color:var(--entry)}
-  .card.grid .cgo{color:var(--teal)}
-  .cgo .arrow{transition:transform .2s ease}
-  .card:hover .cgo .arrow{transform:translateX(4px)}
+  /* hero */
+  .hero{flex:1;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(34px,5vw,68px);align-items:center;width:100%;max-width:1140px;margin:0 auto;padding:clamp(40px,7vh,86px) 30px}
+  .lead{max-width:520px}
+  .eyebrow{margin:0 0 18px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.26em;color:#5d7c92}
+  h1{margin:0;font-size:clamp(31px,4.6vw,50px);line-height:1.18;font-weight:820;letter-spacing:.01em;color:var(--ink);text-wrap:balance}
+  h1 .accent{color:var(--web)}
+  .desc{margin:20px 0 0;color:var(--muted);font-size:14.5px;line-height:1.92;max-width:430px}
 
-  footer{
-    text-align:center;padding:20px 16px 30px;
-    font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;
-    color:var(--muted2);
+  .ctarow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:30px}
+  .cta{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:11px;padding:15px 26px;border-radius:13px;text-decoration:none;font-weight:760;font-size:15px;color:#05151b;background:linear-gradient(100deg,var(--web),var(--entry));box-shadow:0 12px 34px -14px rgba(69,213,231,.5);transition:filter .2s ease,box-shadow .25s ease}
+  .cta>*{position:relative;z-index:1}
+  .cta .shine{position:absolute;top:0;left:-70%;width:42%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);transform:skewX(-18deg);pointer-events:none;z-index:0}
+  .cta:hover{filter:brightness(1.07);box-shadow:0 16px 40px -12px rgba(69,213,231,.55)}
+  .cta .ar{font-size:17px;transition:transform .2s ease}
+  .cta:hover .ar{transform:translateX(5px)}
+  .ghost{font-size:13px;color:#7e96a8;text-decoration:none;border-bottom:1px solid #34495c;padding-bottom:2px;transition:.2s}
+  .ghost:hover{color:#bcd4e2;border-bottom-color:#5d83a0}
+
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#8aa0b3}
+  .chip .di{color:var(--final)}
+  .sep{color:#33485b}
+
+  /* portal */
+  .portal{position:relative}
+  .panel{position:relative;width:100%;max-width:486px;margin:0 auto;aspect-ratio:486 / 568;border:1px solid rgba(52,152,182,.32);border-radius:20px;overflow:hidden;
+    background:
+      linear-gradient(rgba(52,152,182,.13) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(52,152,182,.1) 1px,transparent 1px),
+      radial-gradient(420px 300px at 50% 4%,rgba(127,224,200,.07),transparent 72%),
+      radial-gradient(420px 320px at 50% 100%,rgba(91,157,255,.1),transparent 70%),
+      rgba(6,15,24,.6);
+    background-size:38px 38px,38px 38px,auto,auto;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.015) inset;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);will-change:transform}
+  .scan{position:absolute;left:0;right:0;top:0;height:46%;opacity:0;background:linear-gradient(0deg,transparent,rgba(69,213,231,.12),transparent);pointer-events:none;z-index:1}
+  .tag-goal{position:absolute;left:16px;top:14px;z-index:4;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:9px;letter-spacing:.2em;color:#5f8b6e;border:1px solid #244a37;border-radius:6px;padding:4px 8px;background:rgba(8,18,16,.7)}
+  .tag-start{position:absolute;left:50%;bottom:13px;transform:translateX(-50%);z-index:4;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:9px;letter-spacing:.2em;color:#6c8aa6}
+  .wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:2}
+
+  .node{position:absolute;transform:translate(-50%,-50%);z-index:3}
+  .hex,.hexface{position:absolute;inset:0;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)}
+  .hexface{inset:1.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .nname{line-height:1.2}
+  .ntag{margin-top:3px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;letter-spacing:.14em}
+
+  footer{text-align:center;padding:18px 16px 30px;font-family:"SFMono-Regular",ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.16em;color:#3f566a}
+
+  .cta:focus-visible,.ghost:focus-visible{outline:2px solid var(--web);outline-offset:4px;border-radius:6px}
+
+  @media(max-width:880px){
+    .hero{grid-template-columns:1fr;gap:30px;padding-top:38px}
+    .lead{order:2;max-width:560px;margin:0 auto;text-align:center}
+    .lead .chips,.lead .ctarow{justify-content:center}
+    .portal{order:1}
   }
-  footer a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--muted2)}
 </style>
 </head>
 <body>
-  <header>
-    <p class="eyebrow">Vibe Coding</p>
-    <h1>バイブコーディング</h1>
-    <p class="sub">遊びながらコーディングを学ぶ。スキルを一つずつ解放して、できることを増やしていこう。<br>下のスキルツリーから始められます。</p>
-  </header>
 
-  <main>
-    <div class="cards">
-      <a class="card tree" href="vibe-skill-tree.html">
-        <span class="ctag">Skill Tree</span>
-        <h2 class="ctitle">スキルツリー</h2>
-        <p class="cdesc">前提から積み上がる学習マップ。順番に解放しながら、レッスンへ進んでいく王道ルート。</p>
-        <span class="cgo mono">はじめる <span class="arrow">→</span></span>
-      </a>
+  <div class="topbar">
+    <span class="brand"><span class="live"></span>VIBE CODING</span>
+    <span class="label">学習マップ / SKILL TREE</span>
+  </div>
+
+  <main class="hero">
+    <div class="lead">
+      <p class="eyebrow">遊びながら、できることを増やす</p>
+      <h1>目的から公開まで、<br>一つずつ<span class="accent">解放</span>して進む。</h1>
+      <p class="desc">AIと作りながら、次に必要な技術を見極める学習マップ。目的の決め方から実装・確認・公開、そして改善まで ── スキルツリーを一段ずつ登っていきます。</p>
+
+      <div class="ctarow">
+        <a class="cta" href="vibe-skill-tree.html"><span class="shine"></span>最初のスキルを解放する <span class="ar">→</span></a>
+        <a class="ghost" href="vibe-skill-tree.html">ツリー全体を見る</a>
+      </div>
+
+      <div class="chips">
+        <span class="chip"><span class="di">◆</span>初心者OK</span>
+        <span class="sep">·</span>
+        <span class="chip"><span class="di">◆</span>5分から始める</span>
+        <span class="sep">·</span>
+        <span class="chip"><span class="di">◆</span>進捗は自動保存</span>
+      </div>
+    </div>
+
+    <div class="portal">
+      <div class="panel">
+
+        <span class="scan"></span>
+        <span class="tag-goal">▲ GOAL</span>
+        <span class="tag-start">いま ここから ▼ START</span>
+
+        <svg id="lpwire" class="wires" viewBox="0 0 486 568" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <marker id="lp-dim" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2f4f63"></path></marker>
+            <marker id="lp-on" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5b9dff"></path></marker>
+          </defs>
+          <path class="dash" data-route data-active d="M243 488 C243 466,243 456,243 436" fill="none" stroke="#5b9dff" stroke-width="2.4" stroke-dasharray="5 7" marker-end="url(#lp-on)" style="filter:drop-shadow(0 0 5px rgba(91,157,255,.55))"></path>
+          <path class="dash" data-route d="M243 380 C243 360,243 350,243 330" fill="none" stroke="#3f6f86" stroke-width="2" stroke-dasharray="5 7" marker-end="url(#lp-dim)"></path>
+          <path data-route d="M243 272 C243 246,150 238,150 214" fill="none" stroke="#2a4456" stroke-width="2" marker-end="url(#lp-dim)"></path>
+          <path data-route d="M243 272 C243 246,336 238,336 214" fill="none" stroke="#2a4456" stroke-width="2" marker-end="url(#lp-dim)"></path>
+          <path data-route d="M150 158 C150 124,222 120,228 96" fill="none" stroke="#23394a" stroke-width="2" marker-end="url(#lp-dim)"></path>
+          <path data-route d="M336 158 C336 124,264 120,258 96" fill="none" stroke="#23394a" stroke-width="2" marker-end="url(#lp-dim)"></path>
+        </svg>
+
+        <!-- GOAL : vibe coding (locked) -->
+        <div class="node" data-i="4" style="left:50%;top:11.6%;width:46%;height:64px">
+          <span class="aura" style="position:absolute;inset:-7px;border-radius:14px;background:radial-gradient(circle,rgba(127,224,200,.22),transparent 70%)"></span>
+          <span class="hex" style="background:#2c4a4a"></span>
+          <span class="hexface" style="background:linear-gradient(155deg,#173027,#0e1c1f);padding:8px 14px">
+            <span class="nname" style="font-size:13.5px;font-weight:760;color:#79b9a4">バイブコーディング</span>
+            <span class="ntag" style="font-size:7.5px;letter-spacing:.16em;color:#456a5e">FINAL · 🔒 LOCKED</span>
+          </span>
+        </div>
+
+        <!-- branch L : Python -->
+        <div class="node" data-i="3" style="left:30.9%;top:30.6%;width:33%;height:58px">
+          <span class="hex" style="background:#26384a"></span>
+          <span class="hexface" style="background:linear-gradient(160deg,#14222f,#0d1722);padding:6px 10px;filter:saturate(.4) brightness(.86)">
+            <span class="nname" style="font-size:11.5px;font-weight:680;color:#74899d">Python・実行</span>
+            <span class="ntag" style="font-size:7px;color:#46586c">SCRIPTING</span>
+          </span>
+        </div>
+
+        <!-- branch R : HTML/CSS -->
+        <div class="node" data-i="3" style="left:69.1%;top:30.6%;width:33%;height:58px">
+          <span class="hex" style="background:#26384a"></span>
+          <span class="hexface" style="background:linear-gradient(160deg,#14222f,#0d1722);padding:6px 10px;filter:saturate(.4) brightness(.86)">
+            <span class="nname" style="font-size:11.5px;font-weight:680;color:#74899d">HTML・CSS</span>
+            <span class="ntag" style="font-size:7px;color:#46586c">STRUCTURE</span>
+          </span>
+        </div>
+
+        <!-- task -->
+        <div class="node" data-i="2" style="left:50%;top:53%;width:38%;height:58px">
+          <span class="hex" style="background:#28394c"></span>
+          <span class="hexface" style="background:linear-gradient(160deg,#162432,#0e1925);padding:6px 10px;filter:saturate(.55) brightness(.92)">
+            <span class="nname" style="font-size:12px;font-weight:700;color:#8395a8">小さなタスクに分ける</span>
+            <span class="ntag" style="font-size:7px;color:#4a5d70">DECOMPOSE</span>
+          </span>
+        </div>
+
+        <!-- collab : NEXT -->
+        <div class="node" data-i="1" data-bob="1" style="left:50%;top:72.2%;width:40%;height:58px">
+          <span class="nbadge mono" style="position:absolute;top:-11px;left:50%;transform:translate(-50%,0);font-size:8px;font-weight:840;letter-spacing:.14em;padding:3px 9px;border-radius:99px;background:var(--common);color:#08111a;white-space:nowrap;z-index:3">NEXT</span>
+          <span class="hex glowshell" data-color="rgba(122,160,255,.6)" data-spd="2.0" style="background:color-mix(in srgb,var(--common) 72%,#243346)"></span>
+          <span class="hexface" style="background:linear-gradient(155deg,color-mix(in srgb,var(--common) 14%,#192432),#0e1722);padding:6px 10px">
+            <span class="nname" style="font-size:12px;font-weight:740;color:color-mix(in srgb,var(--common) 52%,white)">AIとの対話・文脈</span>
+            <span class="ntag" style="font-size:7px;color:#62788f">COLLABORATE</span>
+          </span>
+        </div>
+
+        <!-- START : goal/define done (acquired-glow) -->
+        <div class="node" data-i="0" style="left:50%;top:90.8%;width:42%;height:62px">
+          <span class="hex glowshell" data-color="rgba(91,157,255,.7)" data-spd="1.7" style="background:var(--entry)"></span>
+          <span class="hexface" style="background:linear-gradient(150deg,color-mix(in srgb,var(--entry) 20%,#0e1c2a),#0a1622);padding:7px 12px">
+            <span class="nname" style="font-size:13px;font-weight:760;color:color-mix(in srgb,var(--entry) 56%,white)">目的・完成条件</span>
+            <span class="ntag" style="font-size:7.5px;letter-spacing:.16em;color:#5d82a8">START · DEFINE DONE</span>
+          </span>
+        </div>
+
+      </div>
     </div>
   </main>
 
-  <footer>
-    BUILT WITH VIBE ─ <a href="vibe-skill-tree.html">skill tree</a>
-  </footer>
+  <footer>進捗はこのブラウザに保存されます · BUILT WITH VIBE</footer>
+
+<script>
+(function(){
+  var NS="http://www.w3.org/2000/svg";
+  var $=function(s){return document.querySelector(s)};
+  var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var panel=$('.panel'), portal=$('.portal'), svg=$('#lpwire');
+  var lead=$('.lead'), scan=$('.scan'), live=$('.live'), shine=$('.shine');
+  var aura=$('.aura'), badge=$('.nbadge');
+  var nodes=$$('.node'), dashes=$$('.dash'), glows=$$('.glowshell');
+  var clamp=function(p){return p<0?0:p>1?1:p}, easeOut=function(p){return 1-Math.pow(1-p,3)};
+  var raf;
+
+  // base visible state (also the reduced-motion final state)
+  nodes.forEach(function(n){ n.style.opacity='1'; });
+  if(lead) lead.style.opacity='1';
+
+  if(reduced) return;
+
+  // traveling energy pulses along each wire (rAF-driven)
+  var dots=[];
+  if(svg){
+    $$('#lpwire path[data-route]').forEach(function(p,idx){
+      var len=0; try{ len=p.getTotalLength(); }catch(e){}
+      if(!len) return;
+      var active=p.hasAttribute('data-active');
+      var c=document.createElementNS(NS,'circle');
+      c.setAttribute('r', active?'3.1':'2.3');
+      c.setAttribute('fill', active?'#a8ccff':'#5f93d6');
+      c.setAttribute('opacity','0');
+      c.style.filter='drop-shadow(0 0 '+(active?7:5)+'px '+(active?'#7fb4ff':'#3f72c0')+')';
+      svg.appendChild(c);
+      dots.push({p:p,len:len,c:c,dur:active?1250:1850+idx*150,phase:idx*430,active:active});
+    });
+  }
+
+  // initial hidden state for entrance
+  nodes.forEach(function(n){ n.style.opacity='0'; });
+  if(lead) lead.style.opacity='0';
+
+  var t0=performance.now();
+  function frame(now){
+    var el=(now-t0)/1000, T=now/1000;
+
+    // lead entrance
+    if(lead){ var lp=easeOut(clamp((el-.05)/.55)); lead.style.opacity=lp.toFixed(3); lead.style.transform='translateY('+((1-lp)*14).toFixed(2)+'px)'; }
+
+    // nodes: staggered light-up START->GOAL + pop + bob
+    nodes.forEach(function(n){
+      var i=+n.dataset.i||0;
+      var p=easeOut(clamp((el-(.18+i*.13))/.5));
+      var ty=(1-p)*18, sc=(0.9+p*0.1);
+      var bob=0; if(n.dataset.bob) bob=Math.sin(T*1.6)*-4*p;
+      n.style.opacity=p.toFixed(3);
+      n.style.transform='translate(-50%,-50%) translateY('+(ty+bob).toFixed(2)+'px) scale('+sc.toFixed(3)+')';
+    });
+
+    // glow pulse on START / NEXT shells
+    glows.forEach(function(g){
+      var spd=+g.dataset.spd||1.8, k=0.5+0.5*Math.sin(T*spd);
+      g.style.filter='drop-shadow(0 0 '+(5+k*15).toFixed(1)+'px '+g.dataset.color+')';
+    });
+    // goal aura breathing
+    if(aura) aura.style.opacity=(0.4+0.5*(0.5+0.5*Math.sin(T*1.8))).toFixed(3);
+    // NEXT badge pulse
+    if(badge){ var bk=0.5+0.5*Math.sin(T*2.8); badge.style.transform='translate(-50%,0) scale('+(1+0.06*bk).toFixed(3)+')'; badge.style.opacity=(0.82+0.18*bk).toFixed(3); }
+    // live status blink
+    if(live) live.style.opacity=(0.3+0.7*Math.abs(Math.sin(T*1.3))).toFixed(3);
+
+    // dashed wire flow
+    dashes.forEach(function(d,ix){ d.style.strokeDashoffset=(-(now*0.02*(ix?0.7:1))%24).toFixed(2); });
+
+    // traveling pulses
+    for(var k2=0;k2<dots.length;k2++){
+      var d=dots[k2];
+      var tt=((now+d.phase)%d.dur)/d.dur;
+      var pt=d.p.getPointAtLength(tt*d.len);
+      d.c.setAttribute('cx',pt.x.toFixed(1));
+      d.c.setAttribute('cy',pt.y.toFixed(1));
+      d.c.setAttribute('opacity',(Math.sin(Math.PI*tt)*(d.active?.95:.55)).toFixed(3));
+    }
+
+    // scan band rising
+    if(scan){ var sp=(now/5600)%1; scan.style.transform='translateY('+((0.7-sp*2.4)*100).toFixed(1)+'%)'; scan.style.opacity=(Math.sin(Math.PI*sp)*0.55).toFixed(3); }
+
+    // CTA shine sweep
+    if(shine){ var ss=(now/3400)%1; shine.style.left=(ss*200-70).toFixed(1)+'%'; }
+
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+
+  // cursor parallax tilt
+  var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
+  if(fine && panel && portal){
+    portal.addEventListener('pointermove',function(e){
+      var r=panel.getBoundingClientRect();
+      var px=((e.clientX-r.left)/r.width-.5)*2, py=((e.clientY-r.top)/r.height-.5)*2;
+      panel.style.transition='transform .08s linear';
+      panel.style.transform='perspective(1100px) rotateY('+(px*5).toFixed(2)+'deg) rotateX('+(-py*5).toFixed(2)+'deg) scale(1.012)';
+    });
+    portal.addEventListener('pointerleave',function(){
+      panel.style.transition='transform .5s cubic-bezier(.2,.8,.2,1)';
+      panel.style.transform='perspective(1100px) rotateY(0deg) rotateX(0deg) scale(1)';
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
