@@ -1234,7 +1234,7 @@
     const CLEAR_TO_UNLOCK = reduced?260:650;                 /* 正解表示 → 解放開始までの待ち（reducedは短縮） */
     const UNLOCK_T = reduced
       ? {achieve:0, flow:0, open:0, card:900}
-      : {achieve:300, flow:620, open:1020, card:1420};       /* シーケンス開始からの各段階（ms） */
+      : {achieve:300, flow:620, open:1020, card:2200};       /* シーケンス開始からの各段階（ms） */
     let acquireLock=false;                                   /* 解放処理の多重実行ガード */
     function restoreOverlayChrome(){
       overlay.style.background='rgba(3,6,10,.78)';
@@ -1276,9 +1276,12 @@
       o=o||{};
       const newly=(o.newlyAvailableIds||[]).slice();
       const rep=newly[0]||null;
+      const returnScroll={x:window.scrollX,y:window.scrollY};
       /* モバイル／集中モードでは実ツリーが隠れている → map-open で実ツリーを前面に出す（疑似画像にしない）。 */
       const hadMapOpen=document.body.classList.contains('map-open');
       document.body.classList.add('map-open');
+      /* ツリー内のパンだけでなく、ページ上のツリー領域自体もウィンドウ中央へ出す。 */
+      viewport.scrollIntoView({behavior:'auto',block:'center',inline:'nearest'});
       /* 1-3. モーダルを退場させ、暗幕とblurを外して実ツリーを見せる */
       modal.style.transition=reduced?'none':'opacity .32s ease, transform .32s ease';
       modal.style.opacity='0'; modal.style.transform='scale(.96)';
@@ -1295,7 +1298,7 @@
       /* 8. 次ノードがLOCKED→利用可能へ：強調パルス（状態自体は refresh 済み） */
       const open=()=>{ refresh(); newly.forEach(nid=>{ const e=els[nid]; if(e&&!reduced)e.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.12)',filter:'brightness(1.7)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:760,easing:'ease-out'}); }); };
       /* 9. 結果カードへ：暗幕を戻し、ロック解除して継続 */
-      const card=()=>{ if(!hadMapOpen)document.body.classList.remove('map-open'); restoreOverlayChrome(); acquireLock=false; unlockTransitioning=false; showOverlay(); if(o.onComplete)o.onComplete(); };
+      const card=()=>{ if(!hadMapOpen){ document.body.classList.remove('map-open'); window.scrollTo({left:returnScroll.x,top:returnScroll.y,behavior:'auto'}); } restoreOverlayChrome(); acquireLock=false; unlockTransitioning=false; showOverlay(); if(o.onComplete)o.onComplete(); };
       if(reduced){ achieve(); flow(); open(); setTimeout(card,t.card); return; }
       setTimeout(achieve,t.achieve);
       setTimeout(flow,t.flow);
