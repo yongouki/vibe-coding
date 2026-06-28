@@ -28,6 +28,16 @@
     body.map-open #treeHint{display:block!important}
     body.map-open #dashboard{display:none!important}
   }
+  /* 集中モード：仮ゴールがある間は「現在地カード／ランナー」を主役にし、地図・記録を退避 */
+  body.focus-mode #examples,body.focus-mode #stackGuide{display:none!important}
+  body.focus-mode #dashboard,body.focus-mode #legend,body.focus-mode #treeHint{display:none!important}
+  @media(min-width:641px){
+    body.focus-mode #mobileNav{display:block!important}
+    body.focus-mode #viewport,body.focus-mode #themeSwitch{display:none!important}
+    body.focus-mode.map-open #viewport{display:block!important}
+    body.focus-mode.map-open #mobileNav{display:none!important}
+    body.focus-mode.map-open #mapBack{display:inline-flex!important}
+  }
 </style>
 </head>
 <body>
@@ -224,10 +234,14 @@
       "collab":{q:"AIへの最初の頼み方として、いちばん伝わりやすいのは？",opts:["いい感じに作っておいて","押すと結果を1つ表示して。保存やログインはまだ不要","最新技術で本格的に作って"],a:1,why:"何をして、何を今回はやらないかを具体的に伝えると、AIは迷いません。",hint:"AIが勝手に判断せずに済む、具体的な指示はどれ？"},
       "task":{q:"最初にAIへ頼む一歩として、ちょうどいいのは？",opts:["まず見出し・結果欄・ボタンを画面に出し、ブラウザで開けるか確認する","デザイン・保存・公開・ログインまで一度に完成させる","将来必要そうなデータベースを先に設計する"],a:0,why:"一度に一つだけ作って、その都度ブラウザで確認する。小さく確かめながら進めます。",hint:"一回で確認できる、小さな一歩はどれ？"}
     };
+    /* 解放前チェックを全非最終スキルへ割り当てる：BASIC優先、無ければHARDを解放前チェックに流用。
+       BASICとHARDの両方を持つスキルだけ、HARDを習得後チャレンジとして残す（同じ問題を二度出さない）。 */
     SKILLS.forEach(s=>{
-      if(BASIC_QUIZZES[s.id])s.basic=BASIC_QUIZZES[s.id];   /* 30秒チェック（解放前の軽い1問） */
-      if(HARD_QUIZZES[s.id])s.challenge=HARD_QUIZZES[s.id]; /* 実践チャレンジ（習得後の任意問題） */
-      s.quiz=s.challenge||s.basic||null;                    /* おさらいの題材：あれば実践、無ければ基本 */
+      if(s.final)return;
+      s.basic=BASIC_QUIZZES[s.id]||HARD_QUIZZES[s.id]||null;            /* 解放前の理解度チェック（1問） */
+      s.challenge=(BASIC_QUIZZES[s.id]&&HARD_QUIZZES[s.id])?HARD_QUIZZES[s.id]:null; /* 習得後の任意チャレンジ */
+      s.quiz=s.challenge||s.basic||null;                               /* おさらいの題材 */
+      if(!s.basic)console.warn('[skill-tree] 解放前チェックが未割当の非最終スキル:',s.id);
     });
 
     /* 15分ミッション：習得直後に「今すぐ作れる小さなもの」＋AIへ渡すコピペ依頼文を出す。 */
@@ -438,7 +452,15 @@
     /* 目指している作品は「作例」単位で持つ＝同じスキルへ向かう別作例を区別できる。 */
     let activeTarget=null;
     try{const g=JSON.parse(localStorage.getItem(GKEY)||"null");if(g&&g.skillId&&MAP[g.skillId])activeTarget=g;}catch(e){}
-    function setTarget(t){activeTarget=(t&&t.skillId&&MAP[t.skillId])?t:null;try{if(activeTarget)localStorage.setItem(GKEY,JSON.stringify(activeTarget));else localStorage.removeItem(GKEY);}catch(e){}}
+    function setTarget(t){
+      const prev=activeTarget, nt=(t&&t.skillId&&MAP[t.skillId])?t:null;
+      if(nt){ nt.notes = (prev&&prev.notes&&prev.exampleId&&prev.exampleId===nt.exampleId) ? prev.notes : (nt.notes||{}); }
+      activeTarget=nt;
+      try{if(activeTarget)localStorage.setItem(GKEY,JSON.stringify(activeTarget));else localStorage.removeItem(GKEY);}catch(e){}
+    }
+    const getNote=id=>(activeTarget&&activeTarget.notes&&activeTarget.notes[id])||null;
+    function saveNote(id,data){ if(!activeTarget)return; if(!activeTarget.notes)activeTarget.notes={}; activeTarget.notes[id]=data;
+      try{localStorage.setItem(GKEY,JSON.stringify(activeTarget));}catch(e){} }
     /* 既存 progress.v1 → log.v1 への一度きりの移行。過去の正確な時刻が無い分は migrated 印を付ける。 */
     try{
       if(!prog.logMigrated){
@@ -609,18 +631,32 @@
         const passed=MILESTONES.filter(m=>m.test(acquired));
         const stageLabel=passed.length?passed[passed.length-1].label:'まず目的から';
         const est=ns.skill?(ns.skill.mission?'約5分で要点 ＋ 15分ミッション':'約5分で要点をつかむ'):'';
+        const goal=(activeTarget&&MAP[activeTarget.skillId])?activeTarget:null;
+        const remain=goal?unmetPath(goal.skillId).length:0;
+        const ghost="flex:1;padding:11px 13px;border-radius:11px;cursor:pointer;font-weight:650;border:1px solid #304156;background:transparent;color:#91a3b8;font-family:inherit;font-size:13px;transition:.2s";
+        const goalBlock=goal?`<div style="margin:0 0 14px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--common) 30%,#26364a);border-radius:12px;background:color-mix(in srgb,var(--common) 7%,#0b131e)"><div style="font-family:${MONO};font-size:9px;letter-spacing:.14em;color:#71869e">目指す作品</div><div style="margin-top:3px;color:#e7eef6;font-size:15px;font-weight:800;line-height:1.4">${goal.title}${remain?`<span style="margin-left:8px;font-size:11px;font-weight:600;color:#8aa0b3">あと ${remain} スキル</span>`:''}</div></div>`:'';
+        const noteIds=goal&&activeTarget.notes?Object.keys(activeTarget.notes).filter(id=>APPLY[id]&&activeTarget.notes[id]):[];
+        const notesBlock=noteIds.length?`<details style="margin:0 0 14px"><summary style="cursor:pointer;color:#8da4bc;font-size:12px;padding:6px 2px">▸ 作品ノート（${noteIds.length}）</summary><div style="margin-top:8px;display:grid;gap:7px">${noteIds.map(id=>`<div style="padding:9px 11px;border:1px solid #26364a;border-radius:9px;background:#0b131e"><div style="font-size:10px;color:#71869e;font-family:${MONO}">${MAP[id].name}</div><div style="margin-top:3px;color:#cdd8e6;font-size:12px;line-height:1.6">${esc(APPLY[id].summary(activeTarget.notes[id]))}</div></div>`).join('')}</div></details>`:'';
+        const cta=goal?'次へ進む →':(acquired.size?'続きから始める':(ns.skill?'始める':'作りたいものを選ぶ'));
         el.innerHTML=`
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:13px;color:#86e3c0;font-size:10px;letter-spacing:.15em;font-family:${MONO}"><span style="width:6px;height:6px;border-radius:50%;background:var(--quality);box-shadow:0 0 8px var(--quality)"></span>${acquired.size?'続きはここから':'ここから始める'}</div>
+          ${goalBlock}${notesBlock}
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:13px;color:#86e3c0;font-size:10px;letter-spacing:.15em;font-family:${MONO}"><span style="width:6px;height:6px;border-radius:50%;background:var(--quality);box-shadow:0 0 8px var(--quality)"></span>${goal?'このルートを進む':(acquired.size?'続きはここから':'ここから始める')}</div>
           <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">現在地</div>
           <div style="margin:4px 0 16px;color:var(--quality);font-size:17px;font-weight:800">${stageLabel}（${passed.length}/${MILESTONES.length}段階）</div>
           <div style="color:#71869e;font-size:10px;letter-spacing:.16em;font-family:${MONO}">次にやること</div>
           <div style="margin:4px 0 2px;color:#e3ebf5;font-size:18px;font-weight:800;line-height:1.4">${ns.label}</div>
           ${ns.hint?`<div style="color:#8294aa;font-size:12px">${ns.hint}</div>`:''}
           ${est?`<div style="margin-top:4px;color:#667c94;font-size:12px">${est}</div>`:''}
-          <button data-mnext style="${css.primary};margin-top:18px">${acquired.size?'続きから始める':(ns.skill?'始める':'作りたいものを選ぶ')}</button>
-          <button data-mmap style="${css.secondary}">全体マップを見る</button>`;
-        el.querySelector('[data-mnext]').onclick=ns.run;
+          <button data-mnext style="${css.primary};margin-top:18px">${cta}</button>
+          <div style="display:flex;gap:9px;margin-top:9px">
+            <button data-mmap style="${ghost}">全体マップ</button>
+            ${goal?`<button data-mgoal style="${ghost}">作品を変更</button>`:''}
+          </div>
+          ${goal?`<button data-mhelp style="width:100%;margin-top:9px;padding:10px 13px;border:1px dashed color-mix(in srgb,var(--common) 40%,#34475c);border-radius:11px;background:transparent;color:color-mix(in srgb,var(--common) 72%,#9fb2c4);cursor:pointer;font-weight:650;font-size:12px;font-family:inherit">うまくいかないとき → AIに助けてもらう</button>`:''}`;
+        el.querySelector('[data-mnext]').onclick=()=>{ if(goal&&ns.skill){startRunner(ns.skill.id);} else ns.run(); };
         el.querySelector('[data-mmap]').onclick=()=>{document.body.classList.add('map-open');requestAnimationFrame(()=>{recenter();if(window.innerWidth>640)viewport.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});});};
+        const mg=el.querySelector('[data-mgoal]');if(mg)mg.onclick=()=>renderExamples();
+        const mh=el.querySelector('[data-mhelp]');if(mh)mh.onclick=()=>{runner=null;renderRescue(nextStep().skill||null);};
       }
     }
     function refresh(){
@@ -638,6 +674,8 @@
       q('#stageLabel').textContent=stage?`${passed[passed.length-1].label}（${stage}/${MILESTONES.length}段階）`:'まず目的から';
       q('#fill').style.width=Math.round(stage/MILESTONES.length*100)+'%';
       const pb=q('#progbar');if(pb){pb.setAttribute('aria-valuenow',String(stage));pb.setAttribute('aria-valuetext',stage?`${passed[passed.length-1].label}（${stage}/${MILESTONES.length}段階）`:'まだ始まり');}
+      const targetInProgress=!!(activeTarget&&MAP[activeTarget.skillId]&&!acquired.has(activeTarget.skillId));
+      document.body.classList.toggle('focus-mode',targetInProgress);
       renderMobileNav();
       renderDashboard();
     }
@@ -660,8 +698,11 @@
       if(s.anyOf){const ok=(s.anyOf||[]).some(id=>acquired.has(id));rows.push(`<div style="display:flex;gap:8px;align-items:center;margin-top:6px;color:${ok?'#70dcb7':'#7e91a7'};font-size:12px"><i style="font-style:normal;width:14px;text-align:center">${ok?'✓':'○'}</i><span>次のどれか：${s.anyOf.map(id=>MAP[id].name).join('／')}</span></div>`);}
       return `<div style="margin:2px 0 18px;padding:13px 14px;border:1px solid #26364a;border-radius:11px;background:#0b131e"><h3 style="margin:0 0 8px;color:#71869e;font-size:10px;letter-spacing:.12em">解放条件</h3>${rows.join('')}</div>`;
     }
-    const learnBlock=s=>{const u=LESSON_URLS[s.id];return u?`<a class="learn" href="${u}" style="${css.learn}">もっと詳しく学ぶ →</a><p style="margin:-10px 0 16px;color:#667c94;font-size:11px;line-height:1.6;text-align:center">じっくり読むページへ移動します。読み終えたら、ページ下のボタンからそのまま${s.basic?'チェック':'解放'}まで進めます。</p>`:`<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">まずはこの画面で、3分で要点をつかもう</div>`;};
+    /* 詳細レッスンへの導線。未習得＝「もっと学ぶ」、習得済み＝「もう一度学ぶ」。出口は必ず理解度チェック。 */
+    const learnBlock=s=>{const u=LESSON_URLS[s.id];if(!u)return `<div style="margin:2px 0 14px;padding:9px 13px;border-radius:10px;background:#0c1622;border:1px solid #1d2a3a;color:#8da4bc;font-size:11px;letter-spacing:.04em">まずはこの画面で、3分で要点をつかもう</div>`;const got=acquired.has(s.id);const label=got?'もう一度学ぶ →':'もっと学ぶ →';return `<a class="learn" href="${u}" style="${css.learn}">${label}</a><p style="margin:-10px 0 16px;color:#667c94;font-size:11px;line-height:1.6;text-align:center">じっくり読むページへ移動します。読み終えたら、ページ下の「理解度チェックへ」からそのまま進めます。</p>`;};
     const note=t=>`<p style="margin:12px 0 0;color:#667c94;font-size:11px;line-height:1.6;text-align:center">${t}</p>`;
+    /* 主役アクションを1つに絞り、寄り道（AIへの言い方・相談・前提）は折りたたみへ */
+    const moreBlock=(...parts)=>{const inner=parts.filter(Boolean).join('');return inner?`<details style="margin-top:14px"><summary style="cursor:pointer;color:#8da4bc;font-size:12px;padding:7px 2px">▸ もっと（AIへの言い方・相談・前提）</summary><div style="margin-top:4px">${inner}</div></details>`:'';};
     const missionBlock=(s,allowBuilt)=>{ if(!s.mission)return "";
       const built=logBuilt(),did=!!built[s.id];
       const buildUI=!allowBuilt?'':(did
@@ -805,58 +846,71 @@
     function renderLocked(s){
       const path=unmetPath(s.id),first=path.find(id=>id!==s.id&&available(MAP[id]));
       const startBtn=first?`<button data-startfirst style="${css.primary}">最初の「${MAP[first].name}」から始める</button>`:"";
-      modal.innerHTML=head(s,"LOCKED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${reqRows(s)}${startBtn}${sayBlock(s)}${learnBlock(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`;
+      modal.innerHTML=head(s,"LOCKED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${reqRows(s)}${learnBlock(s)}${startBtn}${moreBlock(sayBlock(s),consultBlock(s))}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`;
       bindClose();addHovers();wireExtras(s);
       const sf=q('#modal [data-startfirst]');if(sf)sf.onclick=()=>{closeModal();focusNode(first);openSkill(MAP[first]);};
       q('#modal [data-back]').onclick=closeModal;
     }
-    function renderDone(s){ const challengeBtn=s.challenge?`<button data-challenge style="${css.secondary}">実践チャレンジに挑戦（任意）</button>`:''; modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${missionBlock(s,true)}${challengeBtn}${desireBlock(s)}${reqRows(s)}${consultBlock(s)}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);const ch=q('#modal [data-challenge]');if(ch)ch.onclick=()=>renderQuiz(s,s.challenge,{mode:'challenge'});q('#modal [data-back]').onclick=closeModal; }
+    function renderDone(s){ const challengeBtn=s.challenge?`<button data-challenge style="${css.secondary}">実践チャレンジに挑戦（任意）</button>`:''; modal.innerHTML=head(s,"MASTERED")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${missionBlock(s,true)}${desireBlock(s)}${learnBlock(s)}${moreBlock(sayBlock(s),challengeBtn,reqRows(s),consultBlock(s))}<button data-back style="${css.secondary}">ツリーに戻る</button></div>`; bindClose();addHovers();wireExtras(s);const ch=q('#modal [data-challenge]');if(ch)ch.onclick=()=>renderQuiz(s,s.challenge,{mode:'challenge'});q('#modal [data-back]').onclick=closeModal; }
     function renderLearn(s){
-      /* 解放は試験で止めない。基本ノードは軽い30秒チェック、それ以外はそのまま解放。実践チャレンジは習得後に回す。 */
-      const progression=s.basic?(s.entry?"まず軽いチェックから。むずかしくありません。":"30秒チェックを抜けると解放できます。"):hasDependent(s.id)?"解放すると、上につながるスキルが見えてきます。":"専門化スキルです。必要になったときに選べます。";
+      /* 解放前に必ず理解度チェック（1問）。学んだだけでは解放しない。問題欠落はデータ不備として止める。 */
+      const progression=s.entry?"まず軽いチェックから。むずかしくありません。":"理解度チェックを1問クリアすると解放できます。";
       const actions=s.basic
-        ? `<button data-toquiz style="${css.primary}">${s.entry?'30秒チェックで始める':'30秒チェックへ'}</button>`
-        : `<button data-acquire style="${css.primary}">${s.entry?'ここから始める（解放）':'このルートから始める'}</button>`;
-      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"NEXT STEP":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${sayBlock(s)}${reqRows(s)}${actions}${consultBlock(s)}${note(progression)}</div>`;
+        ? `<button data-toquiz style="${css.primary}">${s.entry?'理解度チェックで始める':'理解度チェックへ →'}</button>`
+        : `<div style="margin:2px 0 6px;padding:11px 13px;border:1px solid var(--danger);border-radius:10px;background:#2b1518;color:#ffc1bd;font-size:12px;line-height:1.6">この項目の理解度チェックが見つかりません（データ不備）。時間をおいて開き直してください。</div>`;
+      modal.innerHTML=head(s,s.entry?"ENTRANCE":hasDependent(s.id)?"NEXT STEP":"OPTIONAL")+`<div style="padding:21px 24px 24px">${bodyIntro(s)}${learnBlock(s)}${actions}${note(progression)}${moreBlock(sayBlock(s),reqRows(s),consultBlock(s))}</div>`;
       bindClose();addHovers();wireExtras(s);
-      const aq=q('#modal [data-acquire]');if(aq)aq.onclick=()=>acquire(s);
       const tq=q('#modal [data-toquiz]');if(tq)tq.onclick=()=>renderQuiz(s,s.basic,{mode:'unlock'});
     }
-    /* mode: 'unlock'（解放前の30秒チェック）／'review'（今日のおさらい）／'challenge'（習得後の実践チャレンジ・任意） */
+    /* mode: 'unlock'（解放前チェック→正解で追加クリックなしに自動解放）／'review'（今日のおさらい）／'challenge'（習得後の任意） */
+    let unlockTransitioning=false;
     function renderQuiz(s,quiz,opts){
       opts=opts||{}; const mode=opts.mode||'unlock';
-      quiz=quiz||s.quiz; if(!quiz)return;
-      const isReview=mode==='review', isChallenge=mode==='challenge';
+      quiz=quiz||s.quiz; if(!quiz){ if(mode==='unlock')console.warn('[skill-tree] 解放前チェックの問題なし:',s.id); return; }
+      const isReview=mode==='review', isChallenge=mode==='challenge', isUnlock=mode==='unlock';
       const shown=quiz.opts.map((text,i)=>({text,correct:i===quiz.a}));
       for(let i=shown.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shown[i],shown[j]]=[shown[j],shown[i]];}
-      const passLabel=isReview?'おさらいを完了する':isChallenge?'クリアにする':'習得する';
-      const backLabel=(isReview||isChallenge)?'スキルの詳細に戻る':'解説に戻る';
+      const passLabel=isReview?'おさらいを完了する':'クリアにする';
+      const backLabel=isUnlock?'もう一度学ぶ':(isReview||isChallenge)?'スキルの詳細に戻る':'解説に戻る';
       const intro=isReview
         ? `<p style="margin:0 0 12px;color:#86e3c0;font-size:11px;letter-spacing:.04em">今日のおさらい — 一度習得した内容を、忘れないうちにもう一度。</p>`
         : isChallenge
           ? `<p style="margin:0 0 12px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:11px;letter-spacing:.04em">実践チャレンジ — 現実に近い状況で判断してみよう。間違えても習得は外れません。</p>`
           : '';
       const badgeLabel=(isReview||isChallenge)?'SCENARIO':'CHECK';
-      modal.innerHTML=head(s,isReview?"REVIEW":isChallenge?"CHALLENGE":"CHECK")+`<div style="padding:21px 24px 24px">${intro}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">${badgeLabel}</span>${quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb style="margin:12px 0 0"></div><div style="margin-top:17px"><button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">${passLabel}</button><button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">${backLabel}</button></div></div>`;
+      const passBtn=(isReview||isChallenge)?`<button data-pass disabled style="${css.primary};opacity:.42;cursor:not-allowed">${passLabel}</button>`:'';
+      modal.innerHTML=head(s,isReview?"REVIEW":isChallenge?"CHALLENGE":"CHECK")+`<div style="padding:21px 24px 24px">${intro}<p style="margin:7px 0 12px;color:#e3ebf5;font-size:14px;font-weight:700;line-height:1.7"><span style="display:inline-block;margin:0 8px 5px 0;padding:3px 8px;border:1px solid color-mix(in srgb,var(--accent) 46%,#29394c);border-radius:99px;color:color-mix(in srgb,var(--accent) 72%,white);font-size:8px;letter-spacing:.13em;font-family:${MONO};vertical-align:2px">${badgeLabel}</span>${quiz.q}</p><div style="display:grid;gap:8px">${shown.map(o=>`<button data-opt data-correct="${o.correct}" style="${css.option}">${o.text}</button>`).join('')}</div><div data-fb role="status" aria-live="polite" style="margin:12px 0 0"></div><div style="margin-top:17px">${passBtn}<button data-retry hidden style="${css.secondary}">もう一度挑戦</button><button data-backlearn style="${css.secondary}">${backLabel}</button></div></div>`;
       bindClose();addHovers();
-      const pass=q('#modal [data-pass]'),retry=q('#modal [data-retry]'),fb=q('#modal [data-fb]');
+      const pass=q('#modal [data-pass]'),retry=q('#modal [data-retry]'),fb=q('#modal [data-fb]'),backBtn=q('#modal [data-backlearn]');
+      let resolved=false; /* 二重発火ガード：正解確定後の再クリック・タイマー重複を防ぐ */
       qa('#modal [data-opt]').forEach(o=>o.onclick=()=>{
+        if(resolved)return;
         qa('#modal [data-opt]').forEach(x=>{x.disabled=true;x.dataset.answered="1";if(x.dataset.correct==="true"){x.style.borderColor='var(--quality)';x.style.background='#0d2a22';x.style.color='#a8f1d5';}});
         if(o.dataset.correct==="true"){
-          pass.disabled=false;pass.style.opacity='1';pass.style.cursor='pointer';
-          fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`+((mode==='unlock')?missionBlock(s):'');
-          if(mode==='unlock')wireExtras(s);
+          if(isUnlock){
+            /* 正解 → 追加クリックなしで解放シーケンスへ。正解表示を見失わないよう少し待つ。 */
+            resolved=true;
+            unlockTransitioning=true;
+            if(retry)retry.hidden=true; if(backBtn)backBtn.style.display='none';
+            const closeBtn=q('#modal [data-close]');
+            if(closeBtn){closeBtn.disabled=true;closeBtn.setAttribute('aria-disabled','true');closeBtn.style.opacity='.35';closeBtn.style.cursor='default';}
+            fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${quiz.why||"状況に対して最も再現性の高い判断です。"}</div><div style="margin-top:11px;text-align:center;font-family:${MONO};letter-spacing:.22em;color:var(--quality);font-weight:800;font-size:16px">✓ CHECK CLEAR</div><div style="margin-top:4px;text-align:center;color:#8aa0b3;font-size:11px">スキルツリーに反映します…</div>`;
+            const go=opts.onPass||(()=>acquire(s));
+            setTimeout(go,CLEAR_TO_UNLOCK);
+          }else{
+            pass.disabled=false;pass.style.opacity='1';pass.style.cursor='pointer';
+            fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#0d2a22;color:#96e8ca">正解。${quiz.why||"状況に対して最も再現性の高い判断です。"}</div>`;
+          }
         }else{
-          o.style.borderColor='var(--danger)';o.style.background='#2b1518';o.style.color='#ffc1bd';retry.hidden=false;
+          o.style.borderColor='var(--danger)';o.style.background='#2b1518';o.style.color='#ffc1bd';if(retry)retry.hidden=false;
           fb.innerHTML=`<div style="padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;background:#2b1518;color:#ffaaa4">おしい。緑が最適解です。${quiz.why||""}${quiz.hint?" ヒント："+quiz.hint:""}</div>`;
         }
       });
-      pass.onclick=()=>{ if(pass.disabled)return;
+      if(pass)pass.onclick=()=>{ if(pass.disabled)return;
         if(isReview){ logEvent('review',s.id);renderDashboard();toast('今日のおさらい完了！また明日');closeModal(); }
-        else if(isChallenge){ logEvent('challenge',s.id);toast('実践チャレンジ クリア！');renderDone(s); }
-        else acquire(s); };
-      retry.onclick=()=>renderQuiz(s,quiz,opts);
-      q('#modal [data-backlearn]').onclick=()=>{ (isReview||isChallenge)?renderDone(s):renderLearn(s); };
+        else if(isChallenge){ logEvent('challenge',s.id);toast('実践チャレンジ クリア！');renderDone(s); } };
+      if(retry)retry.onclick=()=>renderQuiz(s,quiz,opts);
+      backBtn.onclick=()=>{ if(isReview||isChallenge){renderDone(s);} else if(runner&&runner.skillId===s.id){runner.phase='learn';renderRunLearn(s);} else {renderLearn(s);} };
     }
     function renderFinal(s){
       const items=["作りたいものと完成条件を言葉にした","実装を確認できる小さなタスクに分けた","AIが生成したコードと差分を確認した","実際に動かし、失敗条件もテストした","変更を保存し、他の人が試せる状態にした","結果を見て、改善を一つ加えた"];
@@ -871,7 +925,184 @@
       modal.innerHTML=head(s,"NEXT")+`<div style="padding:21px 24px 24px"><p style="margin:0 0 4px;color:#cbd6e3;font-size:14px;line-height:1.85"><b style="color:#fff">${s.name}</b> を習得！ 次の一歩を選ぼう。</p>${desireBlock(s)}<button data-skip style="${css.secondary}">あとで決める（ツリーへ）</button></div>`;
       bindClose();addHovers();wireExtras(s);q('#modal [data-skip]').onclick=closeModal;
     }
+
+    /* ── apply：学んだことを「自分の作品」に当てはめ、project.notes に蓄積する ── */
+    const esc=v=>(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    function buildBrief(){
+      const g=getNote('goal')||{}, sc=getNote('scope')||{}, proj=(activeTarget&&activeTarget.title)||'作りたいもの';
+      return `あなたは初心者の制作を手伝う開発パートナーです。一度に一つずつ、確認しながら進めてください。\n\n【作りたいもの】${proj}\n【誰のため】${g.who||'（未記入）'}\n【何をする】${g.what||'（未記入）'}\n【完成の条件】${g.done||'（未記入）'}\n【今回つくる範囲】${sc.now||'（未記入）'}\n【今回はつくらない】${sc.later||'（なし）'}\n\nまず、この内容で作る「最初の最小の一歩」だけを提案してください。`;
+    }
+    const APPLY={
+      goal:{intro:'AIに「どこまで作れば完成か」を伝えられるよう、3つだけ言葉にします。',
+        fields:[
+          {key:'who',kind:'text',label:'誰のため',ph:'例：自分と、たまに見にくる友達'},
+          {key:'what',kind:'text',label:'何をする',ph:'例：自己紹介と連絡先を見せる'},
+          {key:'done',kind:'area',label:'これが見えたら完成',ph:'例：写真・自己紹介文・連絡ボタンが表示される'}],
+        summary:n=>`${n.who||'？'}のために、${n.what||'？'}。完成＝${n.done||'？'}`},
+      scope:{intro:'最初の一歩を小さく。今回つくるものと、あとに回すものを分けます。',
+        fields:[
+          {key:'now',kind:'area',label:'今回つくる（最小）',ph:'例：1ページに写真と自己紹介文だけ'},
+          {key:'later',kind:'area',label:'あとでつくる',ph:'例：問い合わせフォーム、ギャラリー'}],
+        summary:n=>`今回：${n.now||'？'} ／ あとで：${n.later||'—'}`},
+      collab:{intro:'ここまでの内容から、あなたの作品専用のAI依頼文をつくります。書き換えてOK。',
+        saveLabel:'依頼文を保存して進む →',
+        fields:[{key:'brief',kind:'gen',label:'AIへの依頼文',build:buildBrief}],
+        summary:n=>'自分の作品専用のAI依頼文'},
+      task:{intro:'完成までを、AIに一つずつ頼める小さな手順に分けます（3〜5個）。',
+        fields:[{key:'list',kind:'lines',label:'やることリスト（1行に1つ）',ph:'1ページの骨組みを作る\n写真を表示する\n自己紹介文を入れる\n連絡ボタンを付ける'}],
+        summary:n=>{const it=(n.list||'').split('\n').map(x=>x.trim()).filter(Boolean);return it.length?`${it.length}個の手順：${it.join(' / ')}`:'手順リスト';}}
+    };
+    function applyFieldHTML(f,val){
+      const lab=`<label style="display:block;margin:14px 0 5px;color:#8da4bc;font-size:11px;letter-spacing:.04em">${f.label}</label>`;
+      const st="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.6 inherit";
+      if(f.kind==='text')return `${lab}<input data-af="${f.key}" value="${esc(val)}" placeholder="${esc(f.ph)}" style="${st}">`;
+      const rows=f.kind==='gen'?7:f.kind==='lines'?5:2;
+      return `${lab}<textarea data-af="${f.key}" rows="${rows}" placeholder="${esc(f.ph)}" style="${st};resize:vertical">${esc(val)}</textarea>`;
+    }
+
+    /* ── runner：集中モードの状態機械（学ぶ → 確認 → 解放 → 次へ）──
+       1スキルを4フェーズで運ぶ。どの画面でも主ボタンは常に1つ。
+       phase: 'learn'（要点）→ 'check'（s.basic の1問）→ 'reveal'（増えたもの＋次へ）。
+       s.basic を持たないスキルは learn から直接 reveal。 */
+    let runner=null;
+    const inProject=()=>!!(activeTarget&&MAP[activeTarget.skillId]);
+    function startRunner(id){
+      const s=MAP[id]; if(!s){closeModal();return;}
+      if(acquired.has(id)){ const ns=nextStep(); if(ns.skill&&ns.skill.id!==id){startRunner(ns.skill.id);return;} runner=null; if(ns.run)ns.run(); else closeModal(); return; }
+      if(!available(s)){ runner=null; openSkill(s); return; }   /* 前提未達 → 通常モーダルが道筋を説明 */
+      if(s.final){ runner=null; showOverlay();setModalShell(s);renderFinal(s); return; }
+      runner={skillId:id,phase:'learn'};
+      showOverlay();setModalShell(s);renderRunner();
+    }
+    function renderRunner(){ const s=MAP[runner&&runner.skillId]; if(!s)return;
+      if(runner.phase==='apply')return renderRunApply(s);
+      if(runner.phase==='check')return renderRunCheck(s);
+      if(runner.phase==='reveal')return renderRunReveal(s);
+      return renderRunLearn(s);
+    }
+    const runTotal=s=>1+(APPLY[s.id]?1:0)+(s.basic?1:0);
+    const runStep=(label,n,total)=>`<div style="display:flex;align-items:center;gap:7px;margin-bottom:13px;color:color-mix(in srgb,var(--accent) 70%,#7d90a6);font-size:10px;letter-spacing:.14em;font-family:${MONO}"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>${label}　STEP ${n}/${total}</div>`;
+    function renderRunLearn(s){
+      setModalShell(s);
+      const hasApply=!!APPLY[s.id];
+      /* 学んだだけでは解放しない。必ず apply か理解度チェックへ前進する。 */
+      const fwd=`<button data-rnext style="${css.primary}">${hasApply?'自分の作品に当てはめる →':(LESSON_URLS[s.id]?'読んだ — 理解度チェックへ →':'理解度チェックへ →')}</button>`;
+      modal.innerHTML=head(s,"LEARN")+`<div style="padding:21px 24px 24px">${runStep('まず知る',1,runTotal(s))}${bodyIntro(s)}${learnBlock(s)}${fwd}${note(hasApply?'要点をつかんだら、自分の作品に当てはめます。':'要点をつかんだら、1問だけ確認して解放します。')}${moreBlock(sayBlock(s),reqRows(s),consultBlock(s))}</div>`;
+      bindClose();addHovers();wireExtras(s);
+      const n=q('#modal [data-rnext]');if(n)n.onclick=()=>{ if(hasApply){runner.phase='apply';renderRunApply(s);} else {runner.phase='check';renderRunCheck(s);} };
+    }
+    function advanceFromApply(s){ if(s.basic){runner.phase='check';renderRunCheck(s);} else {runner.phase='reveal';acquire(s,{then:meta=>renderRunReveal(s,meta)});} }
+    function renderRunApply(s){
+      const spec=APPLY[s.id]; if(!spec){return advanceFromApply(s);}
+      setModalShell(s);
+      const saved=getNote(s.id)||{};
+      const fields=spec.fields.map(f=>{let val=saved[f.key];if((val==null||val==='')&&f.kind==='gen'&&f.build)val=f.build();return applyFieldHTML(f,val);}).join('');
+      const hasGen=spec.fields.some(f=>f.kind==='gen');
+      modal.innerHTML=head(s,"APPLY")+`<div style="padding:21px 24px 24px">${runStep('自分ごとにする',2,runTotal(s))}<p style="margin:0 0 4px;color:#cbd6e3;font-size:13px;line-height:1.8">${spec.intro||''}</p>${fields}<button data-asave style="${css.primary};margin-top:16px">${spec.saveLabel||'作品ノートに保存して進む →'}</button>${hasGen?`<button data-acopy style="${css.secondary}">依頼文をコピー</button>`:''}<button data-askip style="${css.secondary}">あとで記入する</button></div>`;
+      bindClose();addHovers();
+      const collect=()=>{const o={};qa('#modal [data-af]').forEach(el=>o[el.dataset.af]=el.value.trim());return o;};
+      q('#modal [data-asave]').onclick=()=>{ saveNote(s.id,collect()); renderDashboard(); toast('作品ノートに保存しました'); advanceFromApply(s); };
+      const sk=q('#modal [data-askip]');if(sk)sk.onclick=()=>advanceFromApply(s);
+      const cp=q('#modal [data-acopy]');if(cp){const gk=spec.fields.find(f=>f.kind==='gen').key;cp.onclick=()=>copyText(collect()[gk]||'','依頼文をコピーしました');}
+    }
+    function renderRunCheck(s){
+      /* 解放前チェックが無いのはデータ不備。直接解放はせず学習へ戻して安全に止める。 */
+      if(!s.basic){ console.warn('[skill-tree] 解放前チェックなし（解放を保留）:',s.id); runner.phase='learn'; return renderRunLearn(s); }
+      setModalShell(s);
+      renderQuiz(s,s.basic,{mode:'unlock',onPass:()=>{runner.phase='reveal';acquire(s,{then:meta=>renderRunReveal(s,meta)});}});
+    }
+    function renderRunReveal(s,meta){
+      meta=meta||{};
+      setModalShell(s);
+      const goal=inProject()?activeTarget:null;
+      const remain=goal?unmetPath(goal.skillId).length:0;
+      const ns=nextStep();
+      const cap=`<div style="padding:13px 14px;border:1px solid color-mix(in srgb,var(--quality) 30%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--quality) 7%,#0c1622);color:#cdd8e6;font-size:13px;line-height:1.7">いま作れるもの → <b style="color:#bfe7d6">${stackPattern()}</b></div>`;
+      const milestone=meta.milestoneStage?MILESTONES[meta.milestoneStage-1]:null;
+      const milestoneBlock=milestone?`<div style="margin:0 0 13px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--quality) 34%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--quality) 8%,#0c1622);text-align:center"><div style="font-family:${MONO};font-size:9px;letter-spacing:.14em;color:color-mix(in srgb,var(--quality) 72%,#7d90a6)">STAGE ${meta.milestoneStage} / ${MILESTONES.length} CLEARED</div><div style="margin-top:5px;color:#e7eef6;font-size:15px;font-weight:800">${milestone.label}</div></div>`:'';
+      const goalProg=goal?`<p style="margin:11px 0 0;color:#9fb2c4;font-size:12.5px;line-height:1.6">「<b style="color:#e7eef6">${goal.title}</b>」まで${remain?` あと <b style="color:#bfe7d6">${remain}</b> スキル`:' 必要なスキルがそろいました'}</p>`:'';
+      const nt=getNote(s.id), spec=APPLY[s.id];
+      const noteEcho=(nt&&spec)?`<div style="margin:13px 0 0;padding:12px 14px;border:1px solid color-mix(in srgb,var(--common) 30%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--common) 7%,#0b131e)"><div style="font-family:${MONO};font-size:9px;letter-spacing:.13em;color:color-mix(in srgb,var(--common) 70%,#7d90a6)">＋ 作品ノートに追加</div><p style="margin:5px 0 0;color:#dce7f2;font-size:13px;line-height:1.7">${esc(spec.summary(nt))}</p></div>`:'';
+      const done=goal&&remain===0;
+      const recapRows=Object.keys(APPLY).filter(id=>getNote(id)).map(id=>`<div style="display:flex;gap:8px;margin-top:6px"><span style="color:var(--quality);font-size:9px;line-height:1.9">◆</span><span style="color:#cdd8e6;font-size:12px;line-height:1.6"><b style="color:#e7eef6">${MAP[id].name}</b>：${esc(APPLY[id].summary(getNote(id)))}</span></div>`).join('');
+      const completeBlock=done?`<div style="margin:14px 0 0;padding:14px 15px;border:1px solid color-mix(in srgb,var(--quality) 34%,#26364a);border-radius:12px;background:color-mix(in srgb,var(--quality) 8%,#0c1622)"><div style="font-family:${MONO};font-size:9px;letter-spacing:.14em;color:color-mix(in srgb,var(--quality) 72%,#7d90a6)">PROJECT READY</div><p style="margin:6px 0 2px;color:#e7eef6;font-size:15px;font-weight:800">「${esc(goal.title)}」の設計図がそろいました</p>${recapRows}<button data-pcopy style="${css.secondary};margin-top:12px">設計図をまとめてAIへコピー</button></div>`:'';
+      let forward;
+      if(s.desire){ forward=desireBlock(s); }
+      else if(done){ forward=`<button data-rbuild style="${css.primary}">この設計図で作りはじめる →</button>`; }
+      else if(ns.skill){ forward=`<button data-rnext style="${css.primary}">次のスキルへ：${ns.skill.name} →</button>`; }
+      else { forward=`<button data-rclose style="${css.primary}">ツリーへ戻る</button>`; }
+      modal.innerHTML=head(s,"UNLOCKED")+`<div style="padding:22px 24px 24px">
+        <div style="text-align:center;margin-bottom:14px"><div style="font-family:${MONO};font-size:9px;letter-spacing:.16em;color:color-mix(in srgb,var(--quality) 72%,#7d90a6)">UNLOCKED</div><p style="margin:6px 0 0;font-size:19px;font-weight:850;color:#e7eef6">${s.name} を解放！</p></div>
+        ${milestoneBlock}${cap}${goalProg}${noteEcho}${completeBlock}${missionBlock(s,true)}
+        <div style="margin-top:16px">${forward}</div>
+        ${rescueLink}
+        ${moreBlock(sayBlock(s),reqRows(s),consultBlock(s))}</div>`;
+      bindClose();addHovers();wireExtras(s);
+      const nx=q('#modal [data-rnext]');if(nx)nx.onclick=()=>{const t=nextStep();if(t.skill)startRunner(t.skill.id);else closeModal();};
+      const bd=q('#modal [data-rbuild]');if(bd)bd.onclick=closeModal;
+      const rc=q('#modal [data-rclose]');if(rc)rc.onclick=closeModal;
+      const pc=q('#modal [data-pcopy]');if(pc)pc.onclick=()=>copyText(projectBrief(),'作品の設計図をまとめてコピーしました');
+      wireRescue(s);
+      /* 演出後は主役の前進ボタン（次のスキルへ等）へフォーカスを移す。modalObserver の既定（閉じる）を上書き。 */
+      const focusTarget=q('#modal [data-rnext]')||q('#modal [data-rbuild]')||q('#modal [data-rclose]');
+      if(focusTarget)requestAnimationFrame(()=>requestAnimationFrame(()=>{try{focusTarget.focus();}catch(e){}}));
+    }
+
+    /* ── rescue：詰まったとき、project.notes の文脈ごとAIへ渡す伴走 ── */
+    function projectContext(){
+      const g=getNote('goal')||{}, sc=getNote('scope')||{}, skills=currentStackSkills().map(x=>x.tag);
+      return {proj:(activeTarget&&activeTarget.title)||'作っているもの', done:g.done||'（未設定）', now:sc.now||'（未設定）', skills:skills.length?skills.join('、'):'まだ少しだけ'};
+    }
+    const RESCUE_MODES={
+      smaller:{label:'もっと小さく',ask:'いまの目標を、今日中に確実に動く「最小の一歩」まで小さく分けてください。まず最初の一歩だけを示してください。'},
+      cause:{label:'原因を一緒に探す',ask:'この結果になる原因の候補を可能性の高い順に挙げ、まず1つ目だけ「確認する方法」を教えてください。一度に複数を直さないでください。'},
+      next:{label:'次の一手',ask:'次に試すべき具体的な操作を1つだけ、理由を一言そえて教えてください。'}
+    };
+    function rescuePrompt(s,mode,did,exp,act){
+      const c=projectContext(), m=RESCUE_MODES[mode]||RESCUE_MODES.next;
+      return `あなたは初心者の制作を伴走する開発パートナーです。\n大切なお願い：一度に一つだけ直してください。一気に書き換えず、不明点は先に質問してください。\n\n【作っているもの】${c.proj}\n【完成の条件】${c.done}\n【今回つくる範囲】${c.now}\n【いま使える技術】${c.skills}\n【取り組んでいること】${s?s.name:'制作'}\n【いま試したこと】${did||'（未記入）'}\n【期待した結果】${exp||'（未記入）'}\n【実際の結果・エラー】${act||'（未記入）'}\n\n【お願い】${m.ask}`;
+    }
+    function projectBrief(){
+      const t=getNote('task'), base=buildBrief();
+      const tasks=t&&t.list?('\n\n【やること】\n'+t.list.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>'- '+x).join('\n')):'';
+      return base+tasks;
+    }
+    const rescueLink=`<button data-rescue style="width:100%;margin:12px 0 0;padding:10px 13px;border:1px dashed color-mix(in srgb,var(--common) 40%,#34475c);border-radius:11px;background:transparent;color:color-mix(in srgb,var(--common) 72%,#9fb2c4);cursor:pointer;font-weight:650;font-size:12px;font-family:inherit">うまくいかないとき → AIに助けてもらう</button>`;
+    function wireRescue(s){const b=q('#modal [data-rescue]');if(b)b.onclick=()=>renderRescue(s);}
+    function renderRescue(s,preset){
+      const wasOpen=overlay.style.display==='flex';
+      const back=(runner&&wasOpen)?(()=>renderRunner()):closeModal;
+      const shell={kind:'common',tag:'STUCK?',name:'AIに助けてもらう'};
+      showOverlay();setModalShell(shell);
+      let mode=preset||'next';
+      const c=projectContext();
+      const fld="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #304156;border-radius:9px;background:#0e1722;color:#dce7f2;font:13px/1.6 inherit;resize:vertical";
+      const lab="display:block;margin:13px 0 5px;color:#8da4bc;font-size:11px;letter-spacing:.04em";
+      const modeBtns=Object.entries(RESCUE_MODES).map(([k,v])=>`<button data-mode="${k}" style="flex:1;padding:9px 8px;border:1px solid #2c3c50;border-radius:9px;background:#101a27;color:#bac8d8;cursor:pointer;font-size:11.5px;font-weight:650;font-family:inherit">${v.label}</button>`).join('');
+      modal.innerHTML=head(shell,'RESCUE')+`<div style="padding:21px 24px 24px">
+        <p style="margin:0 0 12px;color:#cbd6e3;font-size:13px;line-height:1.8">詰まっても大丈夫。今の状況をAIに渡して、<b style="color:#fff">一度に一つだけ</b>直してもらいます。</p>
+        <div style="padding:11px 13px;border:1px solid #26364a;border-radius:10px;background:#0b131e;color:#9fb2c4;font-size:12px;line-height:1.7">作品：<b style="color:#dce7f2">${esc(c.proj)}</b><br>完成の条件：${esc(c.done)}</div>
+        <div style="${lab}">どう助けてほしい？</div>
+        <div data-modes style="display:flex;gap:7px">${modeBtns}</div>
+        <label style="${lab}">いま試したこと</label><textarea data-r-did rows="2" placeholder="例：画像を表示しようとした" style="${fld}"></textarea>
+        <label style="${lab}">期待した結果</label><textarea data-r-exp rows="2" placeholder="例：写真が画面に出る" style="${fld}"></textarea>
+        <label style="${lab}">実際の結果・エラー</label><textarea data-r-act rows="2" placeholder="例：枠だけ出て画像が出ない／赤い文字のエラー" style="${fld}"></textarea>
+        <button data-r-copy style="${css.primary};margin-top:15px">相談文をコピー</button>
+        <div style="display:flex;gap:9px;margin-top:9px"><button data-r-gpt style="flex:1;padding:11px 10px;border:1px solid #2c3c50;border-radius:10px;background:#0e1722;color:#cdd9e7;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">ChatGPTを開く ↗</button><button data-r-claude style="flex:1;padding:11px 10px;border:1px solid #2c3c50;border-radius:10px;background:#0e1722;color:#cdd9e7;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">Claudeを開く ↗</button></div>
+        <button data-r-back style="${css.secondary}">${(runner&&wasOpen)?'制作にもどる':'とじる'}</button>
+        ${note('「おすすめ教えて」ではなく、現状とエラーを具体的に渡すほど、AIの助けは正確になります。')}</div>`;
+      bindClose();addHovers();
+      const setMode=k=>{mode=k;qa('#modal [data-mode]').forEach(b=>{const on=b.dataset.mode===k;b.style.borderColor=on?'var(--common)':'#2c3c50';b.style.background=on?'color-mix(in srgb,var(--common) 14%,#101a27)':'#101a27';b.style.color=on?'#e7eef6':'#bac8d8';});};
+      qa('#modal [data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode)); setMode(mode);
+      const build=()=>rescuePrompt(s,mode,q('#modal [data-r-did]').value.trim(),q('#modal [data-r-exp]').value.trim(),q('#modal [data-r-act]').value.trim());
+      q('#modal [data-r-copy]').onclick=()=>copyText(build(),'相談文をコピーしました');
+      const handoff=url=>{copyText(build(),'相談文をコピーしました。開いたタブに貼り付け（Ctrl/⌘+V）');window.open(url,'_blank','noopener');};
+      q('#modal [data-r-gpt]').onclick=()=>handoff('https://chatgpt.com/');
+      q('#modal [data-r-claude]').onclick=()=>handoff('https://claude.ai/new');
+      q('#modal [data-r-back]').onclick=back;
+    }
     function closeModal(){
+      if(unlockTransitioning)return;
       overlay.style.display='none';
       document.body.style.overflow='';
       const restore=previousFocus;previousFocus=null;
@@ -998,29 +1229,95 @@
       const tn=q('#dashboard [data-tgt-new]');if(tn)tn.onclick=()=>renderExamples();
     }
     function openDailyReview(){const s=todaysReview();if(!s)return;showOverlay();setModalShell(s);renderQuiz(s,s.quiz,{mode:'review'});}
-    function showStageModal(stage,after){
-      const m=MILESTONES[stage-1];if(!m){if(after)after();return;}
-      const shell={kind:'quality',tag:'MILESTONE',name:m.label};
-      showOverlay();setModalShell(shell);
-      modal.innerHTML=head(shell,`段階 ${stage}/${MILESTONES.length} 到達`)+`<div style="padding:22px 24px 24px">
-        <div style="text-align:center;margin:2px 0 16px"><p style="margin:0;color:#e7eef6;font-size:18px;font-weight:800">${m.label}</p><p style="margin:6px 0 0;color:#8294aa;font-size:11px;font-family:${MONO}">STAGE ${stage} / ${MILESTONES.length} CLEARED</p></div>
-        <div style="padding:13px 14px;border:1px solid color-mix(in srgb,var(--quality) 30%,#26364a);border-radius:11px;background:color-mix(in srgb,var(--quality) 7%,#0c1622);color:#cdd8e6;font-size:13px;line-height:1.7">いま作れるもの → <b style="color:#bfe7d6">${stackPattern()}</b></div>
-        <button data-cont style="${css.primary};margin-top:16px">続ける</button></div>`;
-      bindClose();addHovers();
-      const cont=()=>{if(after)after();else closeModal();};
-      const cb=q('#modal [data-cont]');if(cb)cb.onclick=cont;
-      const cl=q('#modal [data-close]');if(cl)cl.onclick=cont;
+    /* ── 解放演出：実ツリーを主役にするシーケンス ──
+       因果を「答えが通った → このノードを達成 → 光が次へ → 開けるものが増えた」の順で見せる。 */
+    const CLEAR_TO_UNLOCK = reduced?260:650;                 /* 正解表示 → 解放開始までの待ち（reducedは短縮） */
+    const UNLOCK_T = reduced
+      ? {achieve:0, flow:0, open:0, card:900}
+      : {achieve:300, flow:620, open:1020, card:1420};       /* シーケンス開始からの各段階（ms） */
+    let acquireLock=false;                                   /* 解放処理の多重実行ガード */
+    function restoreOverlayChrome(){
+      overlay.style.background='rgba(3,6,10,.78)';
+      overlay.style.backdropFilter='blur(5px)';overlay.style.webkitBackdropFilter='blur(5px)';
+      overlay.style.pointerEvents='';
+      modal.style.opacity='';modal.style.transform='';modal.style.transition='';
+    }
+    /* 現在ノードと代表的な次ノードが同時に見えるよう、2点の中間へパン・ズーム。 */
+    function focusBetween(aId,bId){
+      const a=MAP[aId]; if(!a)return;
+      const b=(bId&&MAP[bId])?MAP[bId]:null;
+      if(!b){focusNode(aId);return;}
+      const r=viewport.getBoundingClientRect();
+      const ah=a.final?52:44, bh=b.final?52:44, pad=140;
+      const minX=Math.min(a.x,b.x)-pad, maxX=Math.max(a.x,b.x)+pad;
+      const minY=Math.min(a.y+ah,b.y+bh)-pad, maxY=Math.max(a.y+ah,b.y+bh)+pad;
+      const cx=(minX+maxX)/2, cy=(minY+maxY)/2;
+      const sc=Math.min(r.width/(maxX-minX), r.height/(maxY-minY));
+      scale=clampS(Math.min(Math.max(sc,.5),1.05));
+      panX=r.width/2-cx*scale; panY=r.height/2-cy*scale; apply();
+    }
+    /* 今回開いた接続線だけを光が走る（既存エッジの data-from / data-to を使う）。 */
+    function runEdgeLight(fromId,toId,delay){
+      if(reduced)return;
+      const e=edgeEls.find(p=>p.dataset.from===fromId&&p.dataset.to===toId);
+      if(!e)return;
+      let len=240; try{len=e.getTotalLength()||240;}catch(_){}
+      const spark=e.cloneNode(false);
+      spark.removeAttribute('marker-end');
+      spark.style.cssText='fill:none;stroke:var(--quality);stroke-width:3.6;opacity:.95;stroke-linecap:round;filter:drop-shadow(0 0 7px var(--quality))';
+      spark.style.strokeDasharray=(len*0.16)+' '+(len*1.2);
+      spark.style.strokeDashoffset=String(len);
+      svg.appendChild(spark);
+      const anim=spark.animate([{strokeDashoffset:len},{strokeDashoffset:-len*0.16}],{duration:reduced?220:560,delay:delay||0,easing:'ease-in-out',fill:'forwards'});
+      anim.onfinish=()=>spark.remove();
+    }
+    /* 解放シーケンス本体。acquire 内にDOM操作を詰め込まず、ここへ独立させる。 */
+    function playUnlockSequence(s,o){
+      o=o||{};
+      const newly=(o.newlyAvailableIds||[]).slice();
+      const rep=newly[0]||null;
+      /* モバイル／集中モードでは実ツリーが隠れている → map-open で実ツリーを前面に出す（疑似画像にしない）。 */
+      const hadMapOpen=document.body.classList.contains('map-open');
+      document.body.classList.add('map-open');
+      /* 1-3. モーダルを退場させ、暗幕とblurを外して実ツリーを見せる */
+      modal.style.transition=reduced?'none':'opacity .32s ease, transform .32s ease';
+      modal.style.opacity='0'; modal.style.transform='scale(.96)';
+      overlay.style.background='transparent';
+      overlay.style.backdropFilter='none'; overlay.style.webkitBackdropFilter='none';
+      overlay.style.pointerEvents='none';
+      /* 4-5. 取得前の見た目を保ったまま、現在ノードと代表的な次ノードへフォーカス */
+      focusBetween(s.id,rep);
+      const t=UNLOCK_T;
+      /* 6. 現在ノード達成（リング＋発光） */
+      const achieve=()=>{ styleNode(s); const e=els[s.id]; if(e){ celebrate(s); if(!reduced)e.animate([{filter:'brightness(1)'},{filter:'brightness(1.95)'},{filter:'brightness(1)'}],{duration:700,easing:'ease-out'}); } };
+      /* 7. 接続線を光が走る */
+      const flow=()=>newly.forEach((nid,i)=>runEdgeLight(s.id,nid,i*120));
+      /* 8. 次ノードがLOCKED→利用可能へ：強調パルス（状態自体は refresh 済み） */
+      const open=()=>{ refresh(); newly.forEach(nid=>{ const e=els[nid]; if(e&&!reduced)e.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.12)',filter:'brightness(1.7)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:760,easing:'ease-out'}); }); };
+      /* 9. 結果カードへ：暗幕を戻し、ロック解除して継続 */
+      const card=()=>{ if(!hadMapOpen)document.body.classList.remove('map-open'); restoreOverlayChrome(); acquireLock=false; unlockTransitioning=false; showOverlay(); if(o.onComplete)o.onComplete(); };
+      if(reduced){ achieve(); flow(); open(); setTimeout(card,t.card); return; }
+      setTimeout(achieve,t.achieve);
+      setTimeout(flow,t.flow);
+      setTimeout(open,t.open);
+      setTimeout(card,t.card);
     }
 
-    function acquire(s){
+    function acquire(s,opts){ opts=opts||{};
+      if(acquireLock){unlockTransitioning=false;return;}      /* 多重解放を防ぐ。中断フラグは残さない（クローズ不能を回避） */
+      acquireLock=true;
+      const already=acquired.has(s.id);                      /* 既取得なら状態・ログを二重加算しない */
+      const beforeAvail=new Set(SKILLS.filter(available).map(x=>x.id));
       const before=MILESTONES.filter(m=>m.test(acquired)).length;
-      acquired.add(s.id);recommendedPath.delete(s.id);save();logEvent('acquire',s.id);
+      if(!already){ acquired.add(s.id);recommendedPath.delete(s.id);save();logEvent('acquire',s.id); }
       const after=MILESTONES.filter(m=>m.test(acquired)).length;
-      refresh();celebrate(s);
+      /* 取得前後の available() を比較して、今回新しく開いたノードを求める。 */
+      const newlyAvailableIds=SKILLS.filter(available).map(x=>x.id).filter(id=>!beforeAvail.has(id));
       toast(s.final?"到達！ バイブコーディングを習得しました":"習得！ 上のスキルに光が伝わりました");
-      const cont = s.desire ? (()=>renderDesire(s)) : (()=>closeModal());
-      if(after>before && after>(prog.maxStage||0)){ prog.maxStage=after;saveProg();showStageModal(after,cont); }
-      else cont();
+      const milestoneStage=(!already&&after>before&&after>(prog.maxStage||0))?after:0;
+      if(milestoneStage){prog.maxStage=milestoneStage;saveProg();}
+      const finish=()=>{const meta={milestoneStage};if(opts.then)opts.then(meta);else renderRunReveal(s,meta);};
+      playUnlockSequence(s,{newlyAvailableIds:newlyAvailableIds,onComplete:finish});
     }
     let toastTimer; function toast(msg){const t=q('#toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translate(-50%,0)';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translate(-50%,18px)';},2200);}
 
@@ -1071,7 +1368,9 @@
       if(!m)return false;
       var s=MAP[m[2]]; if(!s)return false;
       focusNode(s.id);
-      if(m[1]==='check'&&!acquired.has(s.id)&&s.basic){ showOverlay();setModalShell(s);renderQuiz(s,s.basic,{mode:'unlock'}); }
+      /* #check- は前提を満たした未習得スキルのみ理解度チェックを直接開く。
+         前提未達なら openSkill が解放条件（道筋）を説明する＝チェック未通過での解放を防ぐ。 */
+      if(m[1]==='check'&&!acquired.has(s.id)&&available(s)&&s.basic){ showOverlay();setModalShell(s);renderQuiz(s,s.basic,{mode:'unlock'}); }
       else openSkill(s);
       try{history.replaceState({},'',location.pathname+location.search);}catch(e){}
       return true;
